@@ -8,6 +8,8 @@ import java.io.IOException;
 
 import succursale.ActiveFileServer;
 
+//todo filewatcher
+
 public class FileManager {
 
 	private File[] listeFichiers;
@@ -20,7 +22,6 @@ public class FileManager {
 	public FileManager() {
 
 		File test = new File(localDir);
-		System.out.println("temp");
 
 		if (!test.exists()) {
 			boolean success;
@@ -185,10 +186,8 @@ public class FileManager {
 		boolean done = false;
 		int cpt = 0;
 		while (done == false && cpt < listeFichiers.length) {
-			System.out.println(listeFichiers[cpt].getName());
 			if (filename.equals(listeFichiers[cpt].getName())) {
 				fichier = listeFichiers[cpt];
-				System.out.println("lel");
 			}
 			cpt++;
 		}
