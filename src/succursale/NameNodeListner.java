@@ -1,7 +1,6 @@
 package succursale;
 
 import Banque.FileServer;
-import succursale.Transaction.TransactionDispatcher;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -126,12 +125,12 @@ public class NameNodeListner implements Runnable{
                 ).start();
                 firstRun=false;
                 System.out.println("Starting transactionDispatcher");
-
-                TransactionDispatcher transactionDispatcher =new TransactionDispatcher();
+/*
                 ActiveFileServer.getInstance().setTransactionDispatcher(transactionDispatcher);
                 new Thread(
                         transactionDispatcher
                 ).start();
+                */
 
             }
 
