@@ -1,8 +1,6 @@
 package succursale;
 
 import Banque.FileServer;
-import snapshot.ChandyManager;
-import succursale.Transaction.TransactionDispatcher;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,10 +12,8 @@ public class ActiveFileServer {
 
 
     FileServer thisSuccrusale;
-    TransactionDispatcher transactionDispatcher;
     static HashMap<Integer, FileServerClient> listeSuccursale=new HashMap<Integer, FileServerClient>();
     private String portNumber;
-    private ChandyManager chandyManager;
     private int montantBanque;
 
 
@@ -28,7 +24,6 @@ public class ActiveFileServer {
     static ActiveFileServer instance;
 
     private ActiveFileServer(){
-        chandyManager=new ChandyManager();
     }
 
     public static ActiveFileServer getInstance(){
@@ -74,14 +69,6 @@ public class ActiveFileServer {
         return thisSuccrusale;
     }
 
-    public TransactionDispatcher getTransactionDispatcher() {
-        return transactionDispatcher;
-    }
-
-    public void setTransactionDispatcher(TransactionDispatcher transactionDispatcher) {
-        this.transactionDispatcher = transactionDispatcher;
-    }
-
     public static void setListeSuccursale(HashMap<Integer, FileServerClient> listeSuccursale) {
         ActiveFileServer.listeSuccursale = listeSuccursale;
     }
@@ -96,14 +83,6 @@ public class ActiveFileServer {
 
     public void setPortNumber(String portNumber) {
         this.portNumber = portNumber;
-    }
-
-    public ChandyManager getChandyManager() {
-        return chandyManager;
-    }
-
-    public void setChandyManager(ChandyManager chandyManager) {
-        this.chandyManager = chandyManager;
     }
 
     public int getMontantBanque() {
