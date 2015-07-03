@@ -8,21 +8,29 @@ import java.io.IOException;
 
 import succursale.ActiveFileServer;
 
-//todo filewatcher
-
+/***
+ * la classe FileManager permet de monitorer les changements sur le dossier
+ * files, ainsi que s'updater si des changements sont apportés manuellement, à
+ * l'aide de FileWatcher
+ * 
+ * @author Marc
+ *
+ */
 public class FileManager {
 
 	private File[] listeFichiers;
+	private static FileManager instance;
 	String localDir = System.getProperty("user.dir") + "\\files";
 
-	/**
-	 * constructeur par défaut, va se construire en listant les items
-	 * disponibles
+	/***
+	 * constructeur par défaut, appelé lors du getInstance s'il est null
 	 */
-	public FileManager() {
+	private FileManager() {
 
 		File test = new File(localDir);
-
+		// démarrage du fileWatcher pour monitorer les changements du dossier, le constructeur se charge de démarrer un thread
+		FileWatcher fw = new FileWatcher(localDir);
+		System.out.println(" not stuck");
 		if (!test.exists()) {
 			boolean success;
 			try {
@@ -47,6 +55,28 @@ public class FileManager {
 		}
 
 	}
+
+	/**
+	 * singleton pour s'approprier l'instance du FileManager (puisqu'elle peut
+	 * etre rapellée par FileWatcher
+	 * 
+	 * @return
+	 */
+	public static FileManager getInstance() {
+		if (instance == null) {
+			synchronized (FileManager.class) {
+				if (instance == null) {
+					instance = new FileManager();
+				}
+			}
+		}
+		return instance;
+	}
+
+	/**
+	 * constructeur par défaut, va se construire en listant les items
+	 * disponibles
+	 */
 
 	/**
 	 * méthode pour synchronizer les fichiers du répertoire local avec les
@@ -160,9 +190,9 @@ public class FileManager {
 	 */
 	public synchronized boolean creerFichier(byte[] fichier, String fileName) {
 
-		String fullfilename = localDir + "\\" +  fileName;
+		String fullfilename = localDir + "\\" + fileName;
 		try {
-			FileOutputStream fos = new FileOutputStream(fullfilename); 
+			FileOutputStream fos = new FileOutputStream(fullfilename);
 			fos.write(fichier);
 			fos.close();
 
@@ -175,12 +205,15 @@ public class FileManager {
 		updatelisteFichiers();
 		return true;
 	}
+
 	/**
 	 * permet de récupérer un fichier local selon son nom
-	 * @param filename nom du fichier à récupérer
+	 * 
+	 * @param filename
+	 *            nom du fichier à récupérer
 	 * @return File du fichier, null si le fichier est inexistant
 	 */
-	public File getFichier(String filename){
+	public File getFichier(String filename) {
 		File fichier = null;
 		updatelisteFichiers();
 		boolean done = false;

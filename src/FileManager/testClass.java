@@ -5,7 +5,7 @@ import java.io.File;
 public class testClass {
 	public static void main (String[] args) {
 		//test création fileManager
-		FileManager fm = new FileManager();
+		FileManager fm = FileManager.getInstance();
 		System.out.println(fm.getNbFichiers());
 		
 		//test écriture
