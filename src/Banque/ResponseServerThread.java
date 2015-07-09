@@ -1,7 +1,7 @@
 package Banque;
 
-import succursale.Transaction.Message;
-import succursale.Transaction.NewFileServerMessage;
+import succursale.Message.Message;
+import succursale.Message.NewFileServerMessage;
 
 import java.io.*;
 import java.net.Socket;

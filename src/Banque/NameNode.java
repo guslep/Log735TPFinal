@@ -1,7 +1,6 @@
 package Banque;
 
-import succursale.Transaction.UpdateListFileServer;
-import sun.misc.Lock;
+import succursale.Message.UpdateListFileServer;
 
 import java.util.ArrayList;
 import java.util.Iterator;
