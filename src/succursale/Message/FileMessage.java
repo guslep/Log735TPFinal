@@ -1,4 +1,4 @@
-package succursale.Transaction;
+package succursale.Message;
 
 import java.io.Serializable;
 /***
@@ -8,15 +8,13 @@ import java.io.Serializable;
  */
 public class FileMessage extends Message implements Serializable{
 	private byte[] byteArray;
-	private String filename; 
-	private int fileSize;
+	private String filename;
 	private int position;
 	
 	
-	public FileMessage(byte[] byteArray, String filename, int fileSize, int position){
+	public FileMessage(byte[] byteArray, String filename, int position){
 		this.byteArray = byteArray;
 		this.filename = filename;
-		this.fileSize = fileSize;
 		this.position = position;
 	}
 	
@@ -26,9 +24,6 @@ public class FileMessage extends Message implements Serializable{
 	}
 	public byte[] getByteArray(){
 		return byteArray;
-	}
-	public int getFileSize() {
-		return fileSize;
 	}
 	public int getPosition() {
 		return position;

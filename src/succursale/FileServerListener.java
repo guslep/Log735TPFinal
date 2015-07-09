@@ -7,9 +7,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import succursale.Transaction.FileMessage;
-import succursale.Transaction.Message;
-import succursale.Transaction.UpdateListFileServer;
+import succursale.Message.FileMessage;
+import succursale.Message.Message;
+import succursale.Message.MessageNewFile;
+import succursale.Message.UpdateListFileServer;
 
 /**
  * Classe permettant d'envoyer des messages d'exécution pour les autres serveurs
@@ -56,13 +57,22 @@ public class FileServerListener {
 				listeBytes.add(bytesSplit);
 			}
 			
+			//new
+			MessageNewFile mnf = new MessageNewFile(fileSize, filename);
+			ActiveFileServer afs = ActiveFileServer.getInstance();
+			afs.pushToAll(mnf);
+			
+			
 			// création des messages pour les différents byte array(FileMessage)
 			for(int i = 0; i< listeBytes.size(); i++){
 				
-				FileMessage messageEnvoi = new FileMessage(listeBytes.get(i), filename, fileSize, (i*NBBYTEPARMESSAGE));
+				FileMessage messageEnvoi = new FileMessage(listeBytes.get(i), filename, (i*NBBYTEPARMESSAGE));
 				
 				// ActiveFileServer.pushtoall()
-				ActiveFileServer afs = ActiveFileServer.getInstance();
+				afs = ActiveFileServer.getInstance();
+				
+				
+				
 				afs.pushToAll(messageEnvoi);
 				
 			}
