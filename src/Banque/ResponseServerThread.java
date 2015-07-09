@@ -1,5 +1,6 @@
 package Banque;
 
+import serverStatus.MessageServerStatus;
 import succursale.Message.Message;
 import succursale.Message.NewFileServerMessage;
 
@@ -39,6 +40,10 @@ public class ResponseServerThread implements Runnable{
                       fileServer.setSuccursaleIPAdresse(sucursaleSocket.getInetAddress());
                         nameNode.addSucursale(fileServer);
 
+                    }else if (MessageServerStatus.class.isInstance(messageReceived)){
+                    	MessageServerStatus currentServerStatus = (MessageServerStatus)messageReceived;
+                    	System.out.println("CPU AVAILABILITY: " + currentServerStatus.getCpuAvailabilty() + "%");
+                    	System.out.println("RAM AVAILABILITY: " + currentServerStatus.getRamAvailability() + "GB");
                     }
 
 

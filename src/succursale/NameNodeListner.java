@@ -5,7 +5,6 @@ import succursale.Message.Message;
 import succursale.Message.NewFileServerMessage;
 import succursale.Message.UpdateListFileServer;
 
-
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -182,6 +181,13 @@ public class NameNodeListner implements Runnable{
 
 
     }
-
+    
+    public void sendMessage(Message currentMessage){
+    	 try {
+    		 out.writeObject(currentMessage);
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+    }
 
 }
