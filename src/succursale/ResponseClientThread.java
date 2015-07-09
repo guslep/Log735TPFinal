@@ -5,7 +5,6 @@ import succursale.Message.FileMessage;
 import succursale.Message.Message;
 import succursale.Message.MessageNewFile;
 import succursale.Message.SynchMessage;
-import sun.net.ConnectionResetException;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -86,50 +85,46 @@ public class ResponseClientThread implements Runnable {
 	}
 
 	@Override
-    public void run() {
+	public void run() {
 
-        System.out.println ("connexion reussie");
-        System.out.println ("Attente de l'entree.....");
+		System.out.println("connexion reussie");
+		System.out.println("Attente de l'entree.....");
 
+		Message messageReceived;
+		try {
 
+			while ((messageReceived = (Message) messageReader.readObject()) != null) {
+				System.out.println("message de type " + messageReceived);
+				if (MessageNewFile.class.isInstance(messageReceived)) {
+					TransitFile transit = new TransitFile(this,
+							((MessageNewFile) messageReceived).getFileName(),
+							((MessageNewFile) messageReceived).getFileLength());
+					fileBeingWritten.put(transit.getNom(), transit);
+				} else if (FileMessage.class.isInstance(messageReceived)) {
+					FileMessage msg = (FileMessage) messageReceived;
+					fileBeingWritten.get(msg.getFileName()).addByte(
+							msg.getByteArray(), msg.getPosition());
+				}
 
-        Message messageReceived;
-        try {
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("erreur dans l'objet");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
-            while ((messageReceived =(Message)messageReader.readObject() ) != null)
-            {
-            	System.out.println("message de type " + messageReceived);
-                if(MessageNewFile.class.isInstance(messageReceived)){
-                    TransitFile transit=new TransitFile(this,((MessageNewFile)messageReceived).getFileName(),((MessageNewFile)messageReceived).getFileLength());
-                    fileBeingWritten.put(transit.getNom(),transit);
-                }
-                else if(FileMessage.class.isInstance(messageReceived)){
-                	FileMessage msg = (FileMessage) messageReceived;
-                	fileBeingWritten.get(msg.getFileName()).addByte(msg.getByteArray(), msg.getPosition());
-                }
-
-            }
-        } catch (ConnectionResetException e){
-            e.printStackTrace();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("erreur dans l'objet");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-    }
+	}
 
 	/**
 	 * envoie une message à une succursale
 	 * 
 	 * @param messageTosSend
 	 */
-	public void sendMessage(Message messageTosSend) {
+	public synchronized void sendMessage(Message messageTosSend) {
 
 		try {
-
+			System.out.println("heyyheyyyyheyyyycrash");
 			messageSender.writeObject(messageTosSend);
 		} catch (IOException e) {
 			e.printStackTrace();

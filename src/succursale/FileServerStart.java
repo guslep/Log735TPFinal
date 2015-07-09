@@ -76,8 +76,8 @@ import serverStatus.AutoServerStatus;
 
 
 
-        
-        new Thread(new AutoServerStatus(nameNode)).start() ;
+        // pour débug ça crash <3
+//        new Thread(new AutoServerStatus(nameNode)).start() ;
 		
 
         //TODO Deplacer ce code la dans le BanqueCOnnector
