@@ -1,9 +1,9 @@
 package Banque;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import succursale.Transaction.Message;
+import succursale.Transaction.NewFileServerMessage;
+
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -13,7 +13,7 @@ public class ResponseServerThread implements Runnable{
 
     private Socket sucursaleSocket;
     private NameNode nameNode;
-    PrintWriter out = null;
+    ObjectOutputStream out = null;
 
         // the thread will wait for client input and send it back in uppercase
     @Override
@@ -23,20 +23,38 @@ public class ResponseServerThread implements Runnable{
 
 
         try {
-            out = new PrintWriter(sucursaleSocket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader( sucursaleSocket.getInputStream()));
+            out = new ObjectOutputStream(sucursaleSocket.getOutputStream());
+
+            ObjectInputStream in = new ObjectInputStream(( sucursaleSocket.getInputStream()));
 
             String inputLine;
 
+            Message messageReceived;
+            try {
+                while ((messageReceived =(Message)in.readObject() ) != null)
+                {
+                    if(NewFileServerMessage.class.isInstance(messageReceived))
+                    {
+                        FileServer fileServer= ((NewFileServerMessage)messageReceived).getFileServer();
+                      fileServer.setSuccursaleIPAdresse(sucursaleSocket.getInetAddress());
+                        nameNode.addSucursale(fileServer);
 
-            while ((inputLine = in.readLine()) != null)
-            {
-                System.out.println ("Serveur: " + inputLine);
-               String succursaleValue[]=inputLine.split(",");
-                nameNode.addSucursale(new FileServer(sucursaleSocket.getInetAddress(),Integer.parseInt(succursaleValue[0]),succursaleValue[1],succursaleValue[2]));
+                    }
 
 
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
+
+
+
+
+
+
 
             out.close();
             in.close();
@@ -48,9 +66,9 @@ public class ResponseServerThread implements Runnable{
 
 
     }
-    public void sendMessage(String message){
+    public void sendMessage(Message message){
         try {
-            out.println(message);
+            out.writeObject(message);
         } catch (Exception e) {
             e.printStackTrace();
         }

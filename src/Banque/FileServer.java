@@ -14,7 +14,7 @@ public class FileServer implements Serializable {
 
     private int id;
 
-    private transient   InetAddress succursaleIPAdresse;
+    private    InetAddress succursaleIPAdresse;
     private int montant;
     private String nom;
     private String port;
@@ -60,6 +60,11 @@ public class FileServer implements Serializable {
     public String getNom() {
         return nom;
     }
+
+    public void setSuccursaleIPAdresse(InetAddress succursaleIPAdresse) {
+        this.succursaleIPAdresse = succursaleIPAdresse;
+    }
+
     public String toString(){
 
         return id+","+nom+","+montant+","+succursaleIPAdresse.getHostAddress()+","+port;

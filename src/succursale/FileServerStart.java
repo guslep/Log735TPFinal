@@ -2,6 +2,8 @@ package succursale;
 
 
 
+import Banque.FileServer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,6 +22,7 @@ import java.util.Random;
         String serverHostname;
 //        TODO une fois que ca marche mettre client en singleton et sortir le while immence et le mettre dans un autre thread
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+
         String portNumber;
         //nom de la succursale
         String succursaleName;
@@ -58,6 +61,8 @@ import java.util.Random;
         }
 
         ActiveFileServer.getInstance().setPortNumber(portNumber);
+        ActiveFileServer.getInstance().setThisSuccrusale(new FileServer(null,montant,succursaleName,portNumber));
+
 
         new Thread(
                 new NameNodeListner(serverHostname,montant,succursaleName,portNumber)
