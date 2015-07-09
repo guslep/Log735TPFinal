@@ -21,6 +21,7 @@ public class ResponseClientThread implements Runnable{
     Socket echoSocket = null;
 
     ObjectInputStream messageReader ;
+
     public ResponseClientThread(Socket sucursaleSocket) {
 
         echoSocket = sucursaleSocket;

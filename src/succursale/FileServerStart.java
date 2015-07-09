@@ -61,7 +61,7 @@ import java.util.Random;
         }
 
         ActiveFileServer.getInstance().setPortNumber(portNumber);
-        ActiveFileServer.getInstance().setThisSuccrusale(new FileServer(null,montant,succursaleName,portNumber));
+        ActiveFileServer.getInstance().setThisFileServer(new FileServer(null, montant, succursaleName, portNumber));
 
 
         new Thread(
