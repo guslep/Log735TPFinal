@@ -5,6 +5,7 @@ import succursale.Message.FileMessage;
 import succursale.Message.Message;
 import succursale.Message.MessageNewFile;
 import succursale.Message.SynchMessage;
+import sun.net.ConnectionResetException;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -106,9 +107,11 @@ public class ResponseClientThread implements Runnable {
                 	FileMessage msg = (FileMessage) messageReceived;
                 	fileBeingWritten.get(msg.getFileName()).addByte(msg.getByteArray(), msg.getPosition());
                 }
-                
 
             }
+        } catch (ConnectionResetException e){
+            e.printStackTrace();
+
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("erreur dans l'objet");
