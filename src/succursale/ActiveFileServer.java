@@ -2,7 +2,7 @@ package succursale;
 
 import Banque.FileServer;
 
-import succursale.Message.AsyncMessageSender;
+
 import succursale.Message.Message;
 
 import java.util.HashMap;
@@ -87,12 +87,12 @@ public class ActiveFileServer {
 
 	public void pushToAll(Message message) {
 		Iterator iter = listeSuccursale.entrySet().iterator();
-		System.out.println("avant l'itérateur du message");
+		System.out.println("avant l'itï¿½rateur du message");
 		while (iter.hasNext()) {
 			Map.Entry pair = (Map.Entry) iter.next();
 			FileServerClient currentClient = (FileServerClient) pair.getValue();
-			new Thread(new AsyncMessageSender(message,
-					currentClient.getConnectionThread())).start();
+			currentClient.getConnectionThread().sendMessage(message);
+
 
 		}
 	}

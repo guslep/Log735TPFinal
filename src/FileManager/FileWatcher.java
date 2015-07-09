@@ -16,11 +16,11 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 
 /***
- * Cette classe est utilisée pour updater automatiquement les listes du
+ * Cette classe est utilisï¿½e pour updater automatiquement les listes du
  * FileManager, advenant le cas ou des modifications sont faites manuellement
  * dans le dossier
  * 
- * exemple tiré de http://www.thecoderscorner.com/team-blog/java-and-jvm/java-nio/36-watching-files-in-java-7-with-watchservice
+ * exemple tirï¿½ de http://www.thecoderscorner.com/team-blog/java-and-jvm/java-nio/36-watching-files-in-java-7-with-watchservice
  * 
  * @author Marc
  *
@@ -35,7 +35,7 @@ public class FileWatcher  {
 	      
 	      System.out.println("directory " + path + " found");
 
-	      //Monitoring du dossier demandé en paramètre
+	      //Monitoring du dossier demandï¿½ en paramï¿½tre
 	      WatchService myWatcher = null;
 		try {
 			myWatcher = toWatch.getFileSystem().newWatchService();
@@ -88,7 +88,8 @@ public class FileWatcher  {
         					String filename = event.context().toString();
         					fm = FileManager.getInstance();
         					File nouveauFichier = fm.getFichier(filename); 
-        					FileServerListener.ajoutFichier(nouveauFichier, filename);
+        					FileServerListener envoieFichier=new FileServerListener(nouveauFichier, filename);
+
         					System.out.println("envoie du fichier " + filename);
         				}
         				else if(event.kind().toString().equals("ENTRY_DELETE")){
