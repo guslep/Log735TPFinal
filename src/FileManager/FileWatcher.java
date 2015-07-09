@@ -95,9 +95,9 @@ public class FileWatcher {
                         FileManager fm = FileManager.getInstance();
         				fm.updatelisteFichiers();
         				//remote create new files/folders
-        				
+
+    					String filename = event.context().toString();
         				if(event.kind().toString().equals("ENTRY_CREATE")){
-        					String filename = event.context().toString();
         					if(nomHashMap.containsKey(filename)){
         						nomHashMap.remove(filename);
         					}
@@ -109,7 +109,12 @@ public class FileWatcher {
         					}
         				}
         				else if(event.kind().toString().equals("ENTRY_DELETE")){
-        					// to do, remote delete
+        					fm = FileManager.getInstance();
+        					boolean existe = fm.fichierExiste(filename);
+        					if(existe){
+        						//TODO: envoie d'une commande de delete
+        						//fm.supprimerFichier(filename)
+        					}
         				}
         				
                     }

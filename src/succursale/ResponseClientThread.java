@@ -124,7 +124,6 @@ public class ResponseClientThread implements Runnable {
 	public synchronized void sendMessage(Message messageTosSend) {
 
 		try {
-			System.out.println("heyyheyyyyheyyyycrash");
 			messageSender.writeObject(messageTosSend);
 		} catch (IOException e) {
 			e.printStackTrace();
