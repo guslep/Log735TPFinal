@@ -1,8 +1,10 @@
 package succursale;
 
 import Banque.FileServer;
+
 import succursale.Transaction.AsyncMessageSender;
 import succursale.Transaction.Message;
+
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,6 +29,9 @@ public class ActiveFileServer {
 
     static ActiveFileServer instance;
 
+
+    private ActiveFileServer(){
+    }
 
 
     public static ActiveFileServer getInstance(){
@@ -73,7 +78,6 @@ public class ActiveFileServer {
     }
 
 
-
     public static void setListeSuccursale(HashMap<Integer, FileServerClient> listeSuccursale) {
         ActiveFileServer.listeSuccursale = listeSuccursale;
     }
@@ -92,12 +96,14 @@ public class ActiveFileServer {
 
 
 
+
    public void pushToAll(Message message){
 Iterator iter=listeSuccursale.entrySet().iterator();
        while (iter.hasNext()){
            Map.Entry pair = (Map.Entry)iter.next();
            FileServerClient currentClient=(FileServerClient)pair.getValue();
         new Thread(new AsyncMessageSender(message,currentClient.getConnectionThread())).start();
+
 
        }
    }
