@@ -19,7 +19,8 @@ public class TransitFile {
 
 
     public void addByte(byte[] byteArrayReceived,int position){
-        if(byteArrayReceived==null){
+       
+    	if(byteArrayReceived==null){
           writeFile();
         }
         else {

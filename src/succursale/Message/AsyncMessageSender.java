@@ -17,7 +17,15 @@ public class AsyncMessageSender implements Runnable
 
     @Override
     public void run() {
+    	
+        try{
+        	System.out.println(((FileMessage)messageTosend).getPosition()+'/'+((FileMessage)messageTosend).getFileName());
+        		
+        }catch(Exception e){
+        	
+        }
         connection.sendMessage(messageTosend);
+        
 
     }
 }

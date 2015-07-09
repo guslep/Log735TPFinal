@@ -25,7 +25,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
  * @author Marc
  *
  */
-public class FileWatcher {
+public class FileWatcher  {
 	
 	public FileWatcher(String path){
 		Path toWatch = Paths.get(path);
@@ -33,7 +33,7 @@ public class FileWatcher {
 	          System.out.println("Directory not found");
 	      }
 	      
-	      System.out.println("directory found");
+	      System.out.println("directory " + path + " found");
 
 	      //Monitoring du dossier demandé en paramètre
 	      WatchService myWatcher = null;
@@ -83,12 +83,15 @@ public class FileWatcher {
                         FileManager fm = FileManager.getInstance();
         				fm.updatelisteFichiers();
         				//remote create new files/folders
-        				if(event.kind().equals("ENTRY_CREATE")){
+        				
+        				if(event.kind().toString().equals("ENTRY_CREATE")){
         					String filename = event.context().toString();
+        					fm = FileManager.getInstance();
         					File nouveauFichier = fm.getFichier(filename); 
         					FileServerListener.ajoutFichier(nouveauFichier, filename);
+        					System.out.println("envoie du fichier " + filename);
         				}
-        				else if(event.kind().equals("ENTRY_DELETE")){
+        				else if(event.kind().toString().equals("ENTRY_DELETE")){
         					// to do, remote delete
         				}
         				
