@@ -2,8 +2,8 @@ package succursale;
 
 import Banque.FileServer;
 
-import succursale.Transaction.AsyncMessageSender;
-import succursale.Transaction.Message;
+import succursale.Message.AsyncMessageSender;
+import succursale.Message.Message;
 
 
 import java.util.HashMap;

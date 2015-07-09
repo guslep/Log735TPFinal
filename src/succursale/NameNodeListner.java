@@ -1,9 +1,9 @@
 package succursale;
 
 import Banque.FileServer;
-import succursale.Transaction.Message;
-import succursale.Transaction.NewFileServerMessage;
-import succursale.Transaction.UpdateListFileServer;
+import succursale.Message.Message;
+import succursale.Message.NewFileServerMessage;
+import succursale.Message.UpdateListFileServer;
 
 
 import java.io.*;

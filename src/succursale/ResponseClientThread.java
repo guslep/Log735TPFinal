@@ -1,8 +1,10 @@
 package succursale;
 
 
-import succursale.Transaction.Message;
-import succursale.Transaction.SynchMessage;
+import FileManager.TransitFile;
+import succursale.Message.Message;
+import succursale.Message.MessageNewFile;
+import succursale.Message.SynchMessage;
 
 
 import java.io.*;
@@ -21,6 +23,9 @@ public class ResponseClientThread implements Runnable{
     Socket echoSocket = null;
 
     ObjectInputStream messageReader ;
+    private HashMap<String, TransitFile> fileBeignWritten=new HashMap<String,TransitFile>();
+
+
 
     public ResponseClientThread(Socket sucursaleSocket) {
 
@@ -91,6 +96,11 @@ public class ResponseClientThread implements Runnable{
         try {
             while ((messageReceived =(Message)messageReader.readObject() ) != null)
             {
+                if(MessageNewFile.class.isInstance(messageReceived)){
+
+                    TransitFile transit=new TransitFile(this,((MessageNewFile)messageReceived).getFileName(),((MessageNewFile)messageReceived).getFileLength());
+                    fileBeignWritten.put(transit.getNom(),transit);
+                }
 
             }
         } catch (IOException e) {
@@ -113,6 +123,11 @@ public class ResponseClientThread implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void fileWasWritten(String fileName){
+
+        fileBeignWritten.remove(fileName);
     }
 
 }
