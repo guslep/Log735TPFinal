@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
 
+import serverStatus.AutoServerStatus;
+
 /**
  * Created by Gus on 6/11/2015.
  */
@@ -64,9 +66,9 @@ import java.util.Random;
         ActiveFileServer.getInstance().setPortNumber(portNumber);
         ActiveFileServer.getInstance().setThisFileServer(new FileServer(null, montant, succursaleName, portNumber));
 
-
+        	NameNodeListner nameNode;
         new Thread(
-                new NameNodeListner(serverHostname,montant,succursaleName,portNumber)
+                nameNode=new NameNodeListner(serverHostname,montant,succursaleName,portNumber)
         ).start();
 
         // really important
@@ -74,6 +76,9 @@ import java.util.Random;
 
 
 
+        
+        new Thread(new AutoServerStatus(nameNode)).start() ;
+		
 
         //TODO Deplacer ce code la dans le BanqueCOnnector
 
