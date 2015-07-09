@@ -1,11 +1,15 @@
 package succursale.Message;
 
+import java.io.Serializable;
+
 /**
  * Created by Gus on 7/9/2015.
  */
-public class MessageNewFile extends Message{
+public class MessageNewFile extends Message implements Serializable{
 
-    private int fileLength;
+
+	private static final long serialVersionUID = -1949727947876570557L;
+	private int fileLength;
     private String fileName;
 
     public MessageNewFile(int fileLength, String fileName) {

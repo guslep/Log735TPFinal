@@ -3,6 +3,7 @@ package succursale;
 
 
 import Banque.FileServer;
+import FileManager.FileManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -68,7 +69,8 @@ import java.util.Random;
                 new NameNodeListner(serverHostname,montant,succursaleName,portNumber)
         ).start();
 
-
+        // really important
+        FileManager fm = FileManager.getInstance();
 
 
 

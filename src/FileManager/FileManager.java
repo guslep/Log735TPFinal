@@ -20,7 +20,8 @@ public class FileManager {
 
 	private File[] listeFichiers;
 	private static FileManager instance;
-	String localDir = System.getProperty("user.dir") + "\\files";
+	String localDirName = ActiveFileServer.getInstance().getThisFileServer().getNom();
+	String localDir = System.getProperty("user.dir") + "\\files - " + localDirName ;
 
 	/***
 	 * constructeur par défaut, appelé lors du getInstance s'il est null
@@ -28,8 +29,7 @@ public class FileManager {
 	private FileManager() {
 
 		File test = new File(localDir);
-		// démarrage du fileWatcher pour monitorer les changements du dossier, le constructeur se charge de démarrer un thread
-		FileWatcher fw = new FileWatcher(localDir);
+		
 		System.out.println(" not stuck");
 		if (!test.exists()) {
 			boolean success;
@@ -53,7 +53,8 @@ public class FileManager {
 					+ localDir);
 			updatelisteFichiers();
 		}
-
+		// démarrage du fileWatcher pour monitorer les changements du dossier, le constructeur se charge de démarrer un thread
+				FileWatcher fw = new FileWatcher(localDir);
 	}
 
 	/**
@@ -190,6 +191,7 @@ public class FileManager {
 	 */
 	public synchronized boolean creerFichier(byte[] fichier, String fileName) {
 
+		System.out.println("maybe pls?");
 		String fullfilename = localDir + "\\" + fileName;
 		try {
 			FileOutputStream fos = new FileOutputStream(fullfilename);

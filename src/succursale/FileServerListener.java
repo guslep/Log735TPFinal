@@ -33,6 +33,9 @@ public class FileServerListener {
 	 */
 	public static boolean ajoutFichier(File nouveauFichier, String filename) {
 
+		
+		
+		
 		// récupère les bytes d'un fichier
 		if (nouveauFichier.length() <= Integer.MAX_VALUE) {
 			int fileSize = (int) nouveauFichier.length();
@@ -46,38 +49,70 @@ public class FileServerListener {
 			} catch (IOException e) {
 				return false;
 			}
-			// split des bytes en array de NBBYTEPARMESSAGE
-			for (int i = 0; i < (fileSize / NBBYTEPARMESSAGE); i++) {
-				byte[] bytesSplit = new byte[NBBYTEPARMESSAGE];
+			int remaining=0;
+			if(fileSize % NBBYTEPARMESSAGE!=0){
+				remaining=1;
+			}
 				
-				for(int j = 0; j < NBBYTEPARMESSAGE; j++){
-					bytesSplit[j] = data[i+j];
+			
+			// split des bytes en array de NBBYTEPARMESSAGE
+			for (int i = 0; i < (fileSize / NBBYTEPARMESSAGE)+remaining; i++) {
+				byte[] bytesSplit = null;
+				if(i == (fileSize / NBBYTEPARMESSAGE)+remaining-1){
+					bytesSplit = new byte[fileSize % NBBYTEPARMESSAGE];
 				}
-				//ajout a la liste pour l'envoi
+				else{
+					bytesSplit = new byte[NBBYTEPARMESSAGE];
+				}
+				
+
+				for (int j = 0; j < bytesSplit.length; j++) {
+					bytesSplit[j] = data[i*NBBYTEPARMESSAGE + j];
+				}
+				// ajout a la liste pour l'envoi
 				listeBytes.add(bytesSplit);
 			}
-			
-			//new
+
+			// new
 			MessageNewFile mnf = new MessageNewFile(fileSize, filename);
 			ActiveFileServer afs = ActiveFileServer.getInstance();
+			System.out.println("se rend jusqu'au push to all");
 			afs.pushToAll(mnf);
-			
-			
-			// création des messages pour les différents byte array(FileMessage)
-			for(int i = 0; i< listeBytes.size(); i++){
-				
-				FileMessage messageEnvoi = new FileMessage(listeBytes.get(i), filename, (i*NBBYTEPARMESSAGE));
-				
-				// ActiveFileServer.pushtoall()
-				afs = ActiveFileServer.getInstance();
-				
-				
-				
-				afs.pushToAll(messageEnvoi);
-				
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-						
+			
 
+			// création des messages pour les différents byte array(FileMessage)
+			for (int i = 0; i < listeBytes.size(); i++) {
+
+			
+				FileMessage messageEnvoi = new FileMessage(listeBytes.get(i),
+						filename, (i * NBBYTEPARMESSAGE));
+
+				//System.out.println("envoie de partie  " + i+"de " + listeBytes.size());
+				// ActiveFileServer.pushtoall()
+//				try {
+//					Thread.sleep(100);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+				ActiveFileServer.getInstance().pushToAll(messageEnvoi);
+
+			}
+			//message final pour terminer la connexion
+			FileMessage messageFinal = new FileMessage(null, filename, 0);
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			afs.getInstance().pushToAll(messageFinal);
 
 			// si succès, retourne true
 			return true;

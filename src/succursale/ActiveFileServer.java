@@ -87,6 +87,7 @@ public class ActiveFileServer {
 
 	public void pushToAll(Message message) {
 		Iterator iter = listeSuccursale.entrySet().iterator();
+		System.out.println("avant l'itérateur du message");
 		while (iter.hasNext()) {
 			Map.Entry pair = (Map.Entry) iter.next();
 			FileServerClient currentClient = (FileServerClient) pair.getValue();

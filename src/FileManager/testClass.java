@@ -20,13 +20,5 @@ public class testClass {
 		else
 			System.out.println("fichier test n'existe pas");
 		
-		while(true){
-			try {
-				Thread.sleep(10000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
 }
