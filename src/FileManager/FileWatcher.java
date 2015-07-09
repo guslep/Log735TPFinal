@@ -77,6 +77,7 @@ public class FileWatcher {
                         System.out.println("Received " + event.kind() + " event for file: " + event.context() );
                         FileManager fm = FileManager.getInstance();
         				fm.updatelisteFichiers();
+        				
                     }
                     
                     key.reset();
