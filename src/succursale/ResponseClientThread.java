@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 
 
 /**
@@ -34,6 +35,7 @@ public class ResponseClientThread implements Runnable{
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            HashMap a= ActiveFileServer.getInstance().getListeSuccursale();
              ActiveFileServer.getInstance().getListeSuccursale().get(message.getIdSuccursale()).setConnectionThread(this);
               ActiveFileServer.getInstance().printSuccursale();
 

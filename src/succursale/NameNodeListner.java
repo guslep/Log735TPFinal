@@ -1,11 +1,12 @@
 package succursale;
 
 import Banque.FileServer;
+import succursale.Transaction.Message;
+import succursale.Transaction.NewFileServerMessage;
+import succursale.Transaction.UpdateListFileServer;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -19,8 +20,8 @@ import java.util.Map;
 public class NameNodeListner implements Runnable{
 
     private boolean finish=false;
-    PrintWriter out = null;
-    BufferedReader in = null;
+    ObjectOutputStream out = null;
+    ObjectInputStream in = null;
     private boolean firstRun=true;
     Socket echoSocket = null;
     String succursaleName;
@@ -36,8 +37,8 @@ public class NameNodeListner implements Runnable{
 
         try {
             echoSocket = new Socket(serverHostname, 10118);
-            out = new PrintWriter(echoSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+            out = new ObjectOutputStream(echoSocket.getOutputStream());
+            in = new ObjectInputStream(echoSocket.getInputStream());
         } catch (UnknownHostException e) {
             System.err.println("Hote inconnu: " + serverHostname);
             System.exit(1);
@@ -48,11 +49,18 @@ public class NameNodeListner implements Runnable{
 
 
 
-        out.println(montant.toString() + "," + succursaleName + "," + portNumber);
+        FileServer activeFile= ActiveFileServer.getInstance().getThisSuccrusale();
+        NewFileServerMessage msg=new NewFileServerMessage(activeFile);
+        try {
+            out.writeObject(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         //out.println(montant.toString()+","+succursaleName);
 
+        msg=null;
         System.out.println("Liste des succursales");
 
     }
@@ -62,76 +70,29 @@ public class NameNodeListner implements Runnable{
      */
     @Override
     public void run()
-    { HashMap<Integer, FileServerClient> listeSuccursale;
+    {
         while(!finish)
         {
 
-            String recuTest= null;
+            Message messageRecu=null;
             try {
-                recuTest = in.readLine();
+                try {
+                    while ((messageRecu=(Message) in.readObject())!=null){
+                        if(UpdateListFileServer.class.isInstance(messageRecu)){
+                           UpdateListFileServer update=(UpdateListFileServer)(messageRecu);
+                            executeUpdate(update);
+
+
+                        }
+                    }
+
+
+
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-            System.out.println(recuTest);
-            String recu[]=recuTest.split(";");
-            int banuqeMontant=Integer.parseInt(recu[0]);
-            ActiveFileServer.getInstance().setMontantBanque(banuqeMontant);
-            listeSuccursale= ActiveFileServer.getInstance().getListeSuccursale();
-            for(int index=1;index<recu.length;index++){
-                String[] splitSuccursale=recu[index].split(",");
-
-                if(!listeSuccursale.containsKey(Integer.parseInt(splitSuccursale[0]))){
-                    if(splitSuccursale[1].equals(succursaleName)){
-
-                        FileServer thisSuccrusale= null;
-                        try {
-                            thisSuccrusale = new FileServer(InetAddress.getByName(splitSuccursale[3]),
-                                    Integer.parseInt(splitSuccursale[2]),splitSuccursale[1],splitSuccursale[4]);
-                        } catch (UnknownHostException e) {
-                            e.printStackTrace();
-                        }
-                        thisSuccrusale.setId(Integer.parseInt(splitSuccursale[0]));
-                        ActiveFileServer.getInstance().setThisSuccrusale(thisSuccrusale);
-
-                    }
-                    else{
-                        FileServerClient newSuccursale= null;
-                        try {
-                            newSuccursale = new FileServerClient(InetAddress.getByName(splitSuccursale[3]),
-                                    Integer.parseInt(splitSuccursale[2]),splitSuccursale[1],splitSuccursale[4]);
-                        } catch (UnknownHostException e) {
-                            e.printStackTrace();
-                        }
-                        newSuccursale.setId(Integer.parseInt(splitSuccursale[0]));
-
-                        listeSuccursale.put(Integer.parseInt(splitSuccursale[0]),newSuccursale);
-
-
-                    }}
-
-
-
-            }
-            ActiveFileServer.getInstance().setListeSuccursale(listeSuccursale);
-
-            ActiveFileServer.getInstance().printSuccursale();
-            if(firstRun){
-                System.out.println("Creating Connection");
-
-                createConnection(listeSuccursale);
-                new Thread(
-                        new clientConnectionListener()
-
-                ).start();
-                firstRun=false;
-                System.out.println("Starting transactionDispatcher");
-/*
-                ActiveFileServer.getInstance().setTransactionDispatcher(transactionDispatcher);
-                new Thread(
-                        transactionDispatcher
-                ).start();
-                */
-
             }
 
 
@@ -182,4 +143,46 @@ public class NameNodeListner implements Runnable{
 
 
     }
+
+    private void executeUpdate(UpdateListFileServer update)
+    {
+//        TODO ici on créé un hashmap et on scrap celui du Active
+
+      Iterator iter=update.getListFileServerInTheSystem().iterator();
+        while (iter.hasNext()){
+            FileServer fileServer=(FileServer) iter.next();
+            if(!ActiveFileServer.getInstance().getListeSuccursale().containsKey(fileServer.getId())){
+                String as=ActiveFileServer.getInstance().getThisSuccrusale().getNom();
+                if(firstRun&&ActiveFileServer.getInstance().getThisSuccrusale().getNom().equals(update.getInitiator())&&fileServer.getNom().equals(update.getInitiator())){
+                    ActiveFileServer.getInstance().setThisSuccrusale(fileServer);
+                }else if(!fileServer.getNom().equals(ActiveFileServer.getInstance().getThisSuccrusale().getNom())) {
+                    FileServerClient newSuccursale= new FileServerClient(fileServer.getSuccursaleIPAdresse(),fileServer.getMontant(),fileServer.getNom(),fileServer.getPort());
+                    newSuccursale.setId(fileServer.getId());
+                    ActiveFileServer.getInstance().getListeSuccursale().put(newSuccursale.getId(),newSuccursale);
+
+                }
+            }
+
+        }
+        ActiveFileServer.getInstance().printSuccursale();
+        if(firstRun){
+            System.out.println("Creating Connection");
+
+            createConnection(ActiveFileServer.getInstance().getListeSuccursale());
+            new Thread(
+                    new clientConnectionListener()
+
+            ).start();
+            firstRun=false;
+            System.out.println("Starting transactionDispatcher");
+
+
+
+        }
+
+
+
+    }
+
+
 }
