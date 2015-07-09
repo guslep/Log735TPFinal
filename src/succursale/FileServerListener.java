@@ -32,9 +32,32 @@ public class FileServerListener implements Runnable{
 	@Override
 	public void run() {
 
+		int fileSize;
 		// r�cup�re les bytes d'un fichier
 		if (nouveauFichier.length() <= Integer.MAX_VALUE) {
-			int fileSize = (int) nouveauFichier.length();
+			
+			int oldlength = 0;
+			boolean proceed = false;
+			while(!proceed){
+				System.out.println(nouveauFichier.length());
+				if( oldlength != (int) nouveauFichier.length()){
+					oldlength = (int) nouveauFichier.length();
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				else{
+					proceed = true;
+				}
+			}
+			fileSize = (int) nouveauFichier.length();
+			
+			
+			
+			
 
 			ArrayList<byte[]> listeBytes = new ArrayList<byte[]>();
 
