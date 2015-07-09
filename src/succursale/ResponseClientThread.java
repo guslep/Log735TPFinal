@@ -2,9 +2,11 @@ package succursale;
 
 
 import FileManager.TransitFile;
+import succursale.Message.FileMessage;
 import succursale.Message.Message;
 import succursale.Message.MessageNewFile;
 import succursale.Message.SynchMessage;
+import sun.net.ConnectionResetException;
 
 
 import java.io.*;
@@ -101,8 +103,16 @@ public class ResponseClientThread implements Runnable{
                     TransitFile transit=new TransitFile(this,((MessageNewFile)messageReceived).getFileName(),((MessageNewFile)messageReceived).getFileLength());
                     fileBeignWritten.put(transit.getNom(),transit);
                 }
+                else if(FileMessage.class.isInstance(messageReceived)){
+                    FileMessage msg=(FileMessage) messageReceived;
+                    fileBeignWritten.get(msg.getFileName()).addByte(msg.getByteArray(),msg.getPosition());
+
+                }
 
             }
+        } catch (ConnectionResetException e){
+            e.printStackTrace();
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
