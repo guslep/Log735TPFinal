@@ -1,12 +1,17 @@
 package FileManager;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 
+import succursale.FileServerListener;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 
@@ -77,6 +82,15 @@ public class FileWatcher {
                         System.out.println("Received " + event.kind() + " event for file: " + event.context() );
                         FileManager fm = FileManager.getInstance();
         				fm.updatelisteFichiers();
+        				//remote create new files/folders
+        				if(event.kind().equals("ENTRY_CREATE")){
+        					String filename = event.context().toString();
+        					File nouveauFichier = fm.getFichier(filename); 
+        					FileServerListener.ajoutFichier(nouveauFichier, filename);
+        				}
+        				else if(event.kind().equals("ENTRY_DELETE")){
+        					// to do, remote delete
+        				}
         				
                     }
                     
