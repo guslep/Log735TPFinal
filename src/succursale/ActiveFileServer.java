@@ -15,7 +15,7 @@ public class ActiveFileServer {
 
 
 
-    FileServer thisSuccrusale;
+    FileServer thisFileServer;
 
     static HashMap<Integer, FileServerClient> listeSuccursale=new HashMap<Integer, FileServerClient>();
     private String portNumber;
@@ -73,8 +73,8 @@ public class ActiveFileServer {
 
 
 
-    public FileServer getThisSuccrusale() {
-        return thisSuccrusale;
+    public FileServer getThisFileServer() {
+        return thisFileServer;
     }
 
 
@@ -82,8 +82,8 @@ public class ActiveFileServer {
         ActiveFileServer.listeSuccursale = listeSuccursale;
     }
 
-    public void setThisSuccrusale(FileServer thisSuccrusale) {
-        this.thisSuccrusale = thisSuccrusale;
+    public void setThisFileServer(FileServer thisFileServer) {
+        this.thisFileServer = thisFileServer;
     }
 
     public String getPortNumber() {

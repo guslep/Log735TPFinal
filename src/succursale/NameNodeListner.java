@@ -7,7 +7,6 @@ import succursale.Transaction.UpdateListFileServer;
 
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -49,7 +48,7 @@ public class NameNodeListner implements Runnable{
 
 
 
-        FileServer activeFile= ActiveFileServer.getInstance().getThisSuccrusale();
+        FileServer activeFile= ActiveFileServer.getInstance().getThisFileServer();
         NewFileServerMessage msg=new NewFileServerMessage(activeFile);
         try {
             out.writeObject(msg);
@@ -124,7 +123,7 @@ public class NameNodeListner implements Runnable{
             {
 
 
-                    FileServer thisSuccrusale= ActiveFileServer.getInstance().getThisSuccrusale();
+                    FileServer thisSuccrusale= ActiveFileServer.getInstance().getThisFileServer();
                 ResponseClientThread newConnectionThread = new ResponseClientThread(currentClient.getSuccursaleIPAdresse(), thisSuccrusale.getId(),Integer.parseInt(currentClient.getPort()));
 
                 currentClient.setConnectionThread(newConnectionThread);
@@ -152,10 +151,10 @@ public class NameNodeListner implements Runnable{
         while (iter.hasNext()){
             FileServer fileServer=(FileServer) iter.next();
             if(!ActiveFileServer.getInstance().getListeSuccursale().containsKey(fileServer.getId())){
-                String as=ActiveFileServer.getInstance().getThisSuccrusale().getNom();
-                if(firstRun&&ActiveFileServer.getInstance().getThisSuccrusale().getNom().equals(update.getInitiator())&&fileServer.getNom().equals(update.getInitiator())){
-                    ActiveFileServer.getInstance().setThisSuccrusale(fileServer);
-                }else if(!fileServer.getNom().equals(ActiveFileServer.getInstance().getThisSuccrusale().getNom())) {
+                String as=ActiveFileServer.getInstance().getThisFileServer().getNom();
+                if(firstRun&&ActiveFileServer.getInstance().getThisFileServer().getNom().equals(update.getInitiator())&&fileServer.getNom().equals(update.getInitiator())){
+                    ActiveFileServer.getInstance().setThisFileServer(fileServer);
+                }else if(!fileServer.getNom().equals(ActiveFileServer.getInstance().getThisFileServer().getNom())) {
                     FileServerClient newSuccursale= new FileServerClient(fileServer.getSuccursaleIPAdresse(),fileServer.getMontant(),fileServer.getNom(),fileServer.getPort());
                     newSuccursale.setId(fileServer.getId());
                     ActiveFileServer.getInstance().getListeSuccursale().put(newSuccursale.getId(),newSuccursale);
