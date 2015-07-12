@@ -10,6 +10,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.util.HashMap;
 
 import succursale.FileServerListener;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
@@ -19,51 +20,62 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
  * Cette classe est utilis�e pour updater automatiquement les listes du
  * FileManager, advenant le cas ou des modifications sont faites manuellement
  * dans le dossier
- * 
- * exemple tir� de http://www.thecoderscorner.com/team-blog/java-and-jvm/java-nio/36-watching-files-in-java-7-with-watchservice
- * 
  * @author Marc
  *
  */
-public class FileWatcher  {
-	
-	public FileWatcher(String path){
-		Path toWatch = Paths.get(path);
-	      if(toWatch == null) {
-	          System.out.println("Directory not found");
-	      }
-	      
-	      System.out.println("directory " + path + " found");
+public class FileWatcher {
 
-	      //Monitoring du dossier demand� en param�tre
-	      WatchService myWatcher = null;
-		try {
+	HashMap<String, String> nomhashMap = new HashMap<String, String>();
+
+	public FileWatcher(String path) {
+		Path toWatch = Paths.get(path);
+
+		if (toWatch == null) {
+			System.out.println("Directory not found");
+		}
+
+		System.out.println("directory " + path + " found");
+
+		// Monitoring du dossier demand� en param�tre
+		WatchService myWatcher = null;
+	try {
 			myWatcher = toWatch.getFileSystem().newWatchService();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	      // start the file watcher thread below
-	      MyWatchQueueReader fileWatcher = new MyWatchQueueReader(myWatcher);
-	      Thread th = new Thread(fileWatcher, "FileWatcher");
-	      th.start();
-	      
-	      //register folder to watch
-	        try {
-				toWatch.register(myWatcher, ENTRY_CREATE, ENTRY_DELETE);
-			} catch (IOException e) {}
-	      
+		// start the file watcher thread below
+		MyWatchQueueReader fileWatcher = new MyWatchQueueReader(myWatcher,
+				nomhashMap);
+		Thread th = new Thread(fileWatcher, "FileWatcher");
+		th.start();
+
+		// register folder to watch
+		try {
+			toWatch.register(myWatcher, ENTRY_CREATE, ENTRY_DELETE);
+		} catch (IOException e) {
+		}
+
 	}
-	  
-	
+
+	public void fileReceived(String filereceived) {
+		nomhashMap.put(filereceived, filereceived);
+	}
+
 	private static class MyWatchQueueReader implements Runnable {
-		 
-        /** the watchService that is passed in from above */
-        private WatchService myWatcher;
-        public MyWatchQueueReader(WatchService myWatcher) {
-            this.myWatcher = myWatcher;
-        }
- 
+
+
+		/** the watchService that is passed in from above */
+		private WatchService myWatcher;
+		private HashMap<String, String> nomHashMap;
+
+		public MyWatchQueueReader(WatchService myWatcher,
+				HashMap<String, String> nomHashMap) {
+			this.myWatcher = myWatcher;
+			this.nomHashMap = nomHashMap;
+		}
+
+
         /**
          * In order to implement a file watcher, we loop forever 
          * ensuring requesting to take the next item from the file 
@@ -83,17 +95,27 @@ public class FileWatcher  {
                         FileManager fm = FileManager.getInstance();
         				fm.updatelisteFichiers();
         				//remote create new files/folders
-        				
+
+    					String filename = event.context().toString();
         				if(event.kind().toString().equals("ENTRY_CREATE")){
-        					String filename = event.context().toString();
+        					if(nomHashMap.containsKey(filename)){
+        						nomHashMap.remove(filename);
+        					}
+        					else{
         					fm = FileManager.getInstance();
         					File nouveauFichier = fm.getFichier(filename); 
         					new Thread(new FileServerListener(nouveauFichier, filename)).start();
 
         					System.out.println("envoie du fichier " + filename);
+        					}
         				}
         				else if(event.kind().toString().equals("ENTRY_DELETE")){
-        					// to do, remote delete
+        					fm = FileManager.getInstance();
+        					//boolean existe = fm.fichierExiste(filename);
+        					if(true){
+        						//TODO: envoie d'une commande de delete
+        					//	fm.supprimerFichier(filename);
+        					}
         				}
         				
                     }
@@ -108,4 +130,5 @@ public class FileWatcher  {
         }
     }
 	
+
 }

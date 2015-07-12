@@ -22,8 +22,9 @@ public class FileManager {
 
 	private ArrayList<File> listeFichiers;
 	private static FileManager instance;
-	String localDirName = ActiveFileServer.getInstance().getThisFileServer().getNom();
-	String localDir = System.getProperty("user.dir") + "\\files - " + localDirName ;
+	private String localDirName = ActiveFileServer.getInstance().getThisFileServer().getNom();
+	private String localDir = System.getProperty("user.dir") + "\\files - " + localDirName ;
+	private FileWatcher fw;
 
 	/***
 	 * constructeur par d�faut, appel� lors du getInstance s'il est null
@@ -58,8 +59,10 @@ public class FileManager {
 					+ localDir);
 			updatelisteFichiers();
 		}
+
 		// d�marrage du fileWatcher pour monitorer les changements du dossier, le constructeur se charge de d�marrer un thread
-				FileWatcher fw = new FileWatcher(localDir);
+				fw = new FileWatcher(localDir);
+
 	}
 
 	/**
@@ -106,6 +109,7 @@ public class FileManager {
 		return listeFichiers;
 	}
 
+	
 	/**
 	 * permet d'obtenir les fichiers disponibles sur le serveur
 	 */
@@ -193,6 +197,7 @@ public class FileManager {
 	 */
 	public synchronized boolean creerFichier(byte[] fichier, String fileName) {
 
+		fw.fileReceived(fileName);
 		System.out.println("maybe pls?");
 		String fullfilename = localDir + "\\" + fileName;
 		try {

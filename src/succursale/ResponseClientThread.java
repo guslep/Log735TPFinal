@@ -2,8 +2,13 @@ package succursale;
 
 import FileManager.MissingFileSender;
 import FileManager.TransitFile;
+
 import succursale.Message.*;
 import sun.net.ConnectionResetException;
+import succursale.Message.FileMessage;
+import succursale.Message.Message;
+import succursale.Message.MessageNewFile;
+import succursale.Message.SynchMessage;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -86,14 +91,15 @@ public class ResponseClientThread implements Runnable {
 	}
 
 	@Override
-    public void run() {
+	public void run() {
 
-        System.out.println ("connexion reussie");
-        System.out.println ("Attente de l'entree.....");
+		System.out.println("connexion reussie");
+		System.out.println("Attente de l'entree.....");
+
+		Message messageReceived;
 
 
 
-        Message messageReceived;
         try {
 
             while ((messageReceived =(Message)messageReader.readObject() ) != null)
@@ -129,20 +135,21 @@ public class ResponseClientThread implements Runnable {
             e.printStackTrace();
         }
 
-    }
+
+	}
 
 	/**
 	 * envoie une message à une succursale
 	 * 
 	 * @param messageTosSend
 	 */
-	public void sendMessage(Message messageTosSend) {
+	public synchronized void sendMessage(Message messageTosSend) {
 
 		try {
+
             if(!connectionDestroyed){
                 messageSender.writeObject(messageTosSend);
             }
-
 
 		} catch (IOException e) {
 			e.printStackTrace();

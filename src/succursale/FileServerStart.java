@@ -78,7 +78,10 @@ import serverStatus.AutoServerStatus;
 
 
 
-       // new Thread(new AutoServerStatus(nameNode)).start() ;
+
+        // pour d�bug �a crash <3
+//        new Thread(new AutoServerStatus(nameNode)).start() ;
+		
 
 
 
