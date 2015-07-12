@@ -3,6 +3,7 @@ package Banque;
 import serverStatus.MessageServerStatus;
 import succursale.Message.Message;
 import succursale.Message.NewFileServerMessage;
+import sun.net.ConnectionResetException;
 
 import java.io.*;
 import java.net.Socket;
@@ -14,6 +15,7 @@ public class ResponseServerThread implements Runnable{
 
     private Socket sucursaleSocket;
     private NameNode nameNode;
+    private boolean isDestroyed;
     ObjectOutputStream out = null;
 
         // the thread will wait for client input and send it back in uppercase
@@ -49,7 +51,11 @@ public class ResponseServerThread implements Runnable{
 
 
                 }
-            } catch (IOException e) {
+            }catch(ConnectionResetException e){
+
+                out.close();
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -73,7 +79,10 @@ public class ResponseServerThread implements Runnable{
     }
     public void sendMessage(Message message){
         try {
-            out.writeObject(message);
+            if(!isDestroyed){
+                out.writeObject(message);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,5 +93,9 @@ public class ResponseServerThread implements Runnable{
         this.sucursaleSocket = sucursaleSocket;
         this.nameNode = nameNode;
         nameNode.addConnection(this);
+    }
+
+    public boolean isDestroyed() {
+        return isDestroyed;
     }
 }

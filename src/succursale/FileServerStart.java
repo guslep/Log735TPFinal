@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
+import FileManager.*;
+
 
 import serverStatus.AutoServerStatus;
 
@@ -76,14 +78,9 @@ import serverStatus.AutoServerStatus;
 
 
 
-        
-        new Thread(new AutoServerStatus(nameNode)).start() ;
-		
+       // new Thread(new AutoServerStatus(nameNode)).start() ;
 
-        //TODO Deplacer ce code la dans le BanqueCOnnector
 
-//TODO ajouter le menu ici et l'interaction avec l'usager, idealement creer une classe affichage ce serait pas mal plus clean
-        //stdIn.close();
 
 
 

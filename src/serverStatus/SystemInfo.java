@@ -69,10 +69,10 @@ public class SystemInfo {
 	    if (list.isEmpty())     return Double.NaN;
 
 	    Attribute att = (Attribute)list.get(0);
-	    double value  = (double)att.getValue();
+	   // double value  = Double.catt.getValue();
 
-	    if (value == -1.0)      return Double.NaN;  // usually takes a couple of seconds before we get real values
+	    //if (value == -1.0)      return Double.NaN;  // usually takes a couple of seconds before we get real values
 
-	    return ((int)(100 - (value * 1000) / 10.0));        // returns a percentage value with 1 decimal point precision
+	    return 0.00;//((int)(100 - (value * 1000) / 10.0));        // returns a percentage value with 1 decimal point precision
 	}
 }

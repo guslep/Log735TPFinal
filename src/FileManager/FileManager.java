@@ -5,12 +5,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.*;
+import java.util.ArrayList;
 
 import succursale.ActiveFileServer;
 
 /***
  * la classe FileManager permet de monitorer les changements sur le dossier
- * files, ainsi que s'updater si des changements sont apportés manuellement, à
+ * files, ainsi que s'updater si des changements sont apportï¿½s manuellement, ï¿½
  * l'aide de FileWatcher
  * 
  * @author Marc
@@ -18,30 +20,33 @@ import succursale.ActiveFileServer;
  */
 public class FileManager {
 
-	private File[] listeFichiers;
+	private ArrayList<File> listeFichiers;
 	private static FileManager instance;
 	String localDirName = ActiveFileServer.getInstance().getThisFileServer().getNom();
 	String localDir = System.getProperty("user.dir") + "\\files - " + localDirName ;
 
 	/***
-	 * constructeur par défaut, appelé lors du getInstance s'il est null
+	 * constructeur par dï¿½faut, appelï¿½ lors du getInstance s'il est null
 	 */
 	private FileManager() {
 
 		File test = new File(localDir);
 		
 		System.out.println(" not stuck");
+
+
+
 		if (!test.exists()) {
 			boolean success;
 			try {
 				success = new File(localDir).mkdirs();
 				if (!success) {
 					System.out
-							.println("Erreur lors de la création du dossier pour les fichiers,");
+							.println("Erreur lors de la crï¿½ation du dossier pour les fichiers,");
 					listeFichiers = null;
 				} else {
 					System.out
-							.println("Serveur instancié, utilisation du répertoire "
+							.println("Serveur instanciï¿½, utilisation du rï¿½pertoire "
 									+ localDir);
 				}
 			} catch (SecurityException se) {
@@ -49,17 +54,17 @@ public class FileManager {
 			}
 
 		} else {
-			System.out.println("Serveur instancié, utilisation du répertoire "
+			System.out.println("Serveur instanciï¿½, utilisation du rï¿½pertoire "
 					+ localDir);
 			updatelisteFichiers();
 		}
-		// démarrage du fileWatcher pour monitorer les changements du dossier, le constructeur se charge de démarrer un thread
+		// dï¿½marrage du fileWatcher pour monitorer les changements du dossier, le constructeur se charge de dï¿½marrer un thread
 				FileWatcher fw = new FileWatcher(localDir);
 	}
 
 	/**
 	 * singleton pour s'approprier l'instance du FileManager (puisqu'elle peut
-	 * etre rapellée par FileWatcher
+	 * etre rapellï¿½e par FileWatcher
 	 * 
 	 * @return
 	 */
@@ -75,12 +80,12 @@ public class FileManager {
 	}
 
 	/**
-	 * constructeur par défaut, va se construire en listant les items
+	 * constructeur par dï¿½faut, va se construire en listant les items
 	 * disponibles
 	 */
 
 	/**
-	 * méthode pour synchronizer les fichiers du répertoire local avec les
+	 * mï¿½thode pour synchronizer les fichiers du rï¿½pertoire local avec les
 	 * autres serveurs.
 	 * 
 	 * @return
@@ -96,7 +101,7 @@ public class FileManager {
 	 * 
 	 * @return liste des fichiers du serveur
 	 */
-	public File[] getListeFichiers() {
+	public ArrayList<File> getListeFichiers() {
 		updatelisteFichiers();
 		return listeFichiers;
 	}
@@ -105,8 +110,21 @@ public class FileManager {
 	 * permet d'obtenir les fichiers disponibles sur le serveur
 	 */
 	public void updatelisteFichiers() {
-		this.listeFichiers = new File(localDir).listFiles();
-	}
+
+        ArrayList<File> list=new ArrayList<File>();
+        Path dir=FileSystems.getDefault().getPath(localDir);
+        try {
+            DirectoryStream<Path> stream = Files.newDirectoryStream(dir);
+            for(Path path:stream){
+                list.add(path.toFile());
+
+            }
+            stream.close();
+            this.listeFichiers=list;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 	/**
 	 * retourne le nombre de fichiers disponibles sur le serveur
@@ -116,44 +134,28 @@ public class FileManager {
 	public int getNbFichiers() {
 		updatelisteFichiers();
 		if (listeFichiers != null)
-			return listeFichiers.length;
+			return listeFichiers.size();
 		else
 			return 0;
 	}
 
-	/**
-	 * retourne si le fichier existe localement sur le serveur
-	 * 
-	 * @param nomFichier
-	 * @return true si le fichier existe, false sinon
-	 */
-	public boolean fichierExiste(String nomFichier) {
-		updatelisteFichiers();
-		boolean existe = false;
-		int cpt = 0;
-		while (existe == false && cpt < listeFichiers.length) {
-			if (nomFichier == listeFichiers[cpt].getName()) {
-				existe = true;
-			}
-			cpt++;
-		}
 
-		return existe;
-	}
 
 	/**
 	 * permet de supprimer un fichier en fonction de son nom
 	 * 
 	 * @param nomFichier
-	 * @return true si le fichier est supprimé, false si une erreur
+	 * @return true si le fichier est supprimï¿½, false si une erreur
 	 */
 	public boolean supprimerFichier(String nomFichier) {
 		updatelisteFichiers();
 		boolean done = false;
 		int cpt = 0;
-		while (done == false && cpt < listeFichiers.length) {
-			if (nomFichier == listeFichiers[cpt].getName()) {
-				done = listeFichiers[cpt].delete();
+
+		while (done == false && cpt < listeFichiers.size()) {
+			if (localDir+nomFichier == listeFichiers.get(cpt).getName()) {
+				done = listeFichiers.get(cpt).delete();
+
 			}
 			cpt++;
 		}
@@ -187,7 +189,7 @@ public class FileManager {
 	 * 
 	 * @param fichier
 	 *            (bytes?)
-	 * @return true si créé, false si une erreur ou existe déjà
+	 * @return true si crï¿½ï¿½, false si une erreur ou existe dï¿½jï¿½
 	 */
 	public synchronized boolean creerFichier(byte[] fichier, String fileName) {
 
@@ -209,10 +211,10 @@ public class FileManager {
 	}
 
 	/**
-	 * permet de récupérer un fichier local selon son nom
+	 * permet de rï¿½cupï¿½rer un fichier local selon son nom
 	 * 
 	 * @param filename
-	 *            nom du fichier à récupérer
+	 *            nom du fichier ï¿½ rï¿½cupï¿½rer
 	 * @return File du fichier, null si le fichier est inexistant
 	 */
 	public File getFichier(String filename) {
@@ -220,13 +222,20 @@ public class FileManager {
 		updatelisteFichiers();
 		boolean done = false;
 		int cpt = 0;
-		while (done == false && cpt < listeFichiers.length) {
-			if (filename.equals(listeFichiers[cpt].getName())) {
-				fichier = listeFichiers[cpt];
-			}
-			cpt++;
-		}
-		return fichier;
+
+
+
+        while (done == false && cpt < listeFichiers.size()) {
+            if (localDir+filename == listeFichiers.get(cpt).getName()) {
+                fichier = listeFichiers.get(cpt);
+
+            }
+            cpt++;
+        }
+        return fichier;
 	}
 
+    public String getLocalDir() {
+        return localDir;
+    }
 }

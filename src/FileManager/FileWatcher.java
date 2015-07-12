@@ -88,7 +88,7 @@ public class FileWatcher  {
         					String filename = event.context().toString();
         					fm = FileManager.getInstance();
         					File nouveauFichier = fm.getFichier(filename); 
-        					FileServerListener envoieFichier=new FileServerListener(nouveauFichier, filename);
+        					new Thread(new FileServerListener(nouveauFichier, filename)).start();
 
         					System.out.println("envoie du fichier " + filename);
         				}

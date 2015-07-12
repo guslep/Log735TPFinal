@@ -1,10 +1,8 @@
 package succursale;
 
+import FileManager.MissingFileSender;
 import FileManager.TransitFile;
-import succursale.Message.FileMessage;
-import succursale.Message.Message;
-import succursale.Message.MessageNewFile;
-import succursale.Message.SynchMessage;
+import succursale.Message.*;
 import sun.net.ConnectionResetException;
 
 import java.io.*;
@@ -17,6 +15,8 @@ import java.util.HashMap;
  * Created by Gus on 6/11/2015.
  */
 public class ResponseClientThread implements Runnable {
+
+    private boolean connectionDestroyed=false;
 
 	ObjectOutputStream messageSender;
 	Socket echoSocket = null;
@@ -107,10 +107,20 @@ public class ResponseClientThread implements Runnable {
                 	FileMessage msg = (FileMessage) messageReceived;
                 	fileBeingWritten.get(msg.getFileName()).addByte(msg.getByteArray(), msg.getPosition());
                 }
+                else if(InitSymchronizerMessage.class.isInstance(messageReceived)){
+
+                    new Thread(new MissingFileSender((InitSymchronizerMessage)messageReceived)).start();
+                }
 
             }
         } catch (ConnectionResetException e){
-            e.printStackTrace();
+            connectionDestroyed=true;
+            System.out.println("erreur dans la connection");
+            try {
+                messageSender.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -129,8 +139,11 @@ public class ResponseClientThread implements Runnable {
 	public void sendMessage(Message messageTosSend) {
 
 		try {
+            if(!connectionDestroyed){
+                messageSender.writeObject(messageTosSend);
+            }
 
-			messageSender.writeObject(messageTosSend);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -141,4 +154,7 @@ public class ResponseClientThread implements Runnable {
 		fileBeingWritten.remove(fileName);
 	}
 
+    public boolean isConnectionDestroyed() {
+        return connectionDestroyed;
+    }
 }

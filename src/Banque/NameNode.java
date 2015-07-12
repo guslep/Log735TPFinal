@@ -58,7 +58,12 @@ public class NameNode {
 
 
             System.out.println(printSucursale());
-            current.sendMessage(update);
+            if(current.isDestroyed()){
+                listConnection.remove(current);
+            }else{
+                current.sendMessage(update);
+            }
+
             System.out.println(update.getListFileServerInTheSystem().size());
         }
          

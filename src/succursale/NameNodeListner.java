@@ -1,9 +1,11 @@
 package succursale;
 
 import Banque.FileServer;
+import FileManager.InitFileSynchronizer;
 import succursale.Message.Message;
 import succursale.Message.NewFileServerMessage;
 import succursale.Message.UpdateListFileServer;
+import sun.net.ConnectionResetException;
 
 import java.io.*;
 import java.net.Socket;
@@ -86,7 +88,11 @@ public class NameNodeListner implements Runnable{
 
 
 
-                } catch (ClassNotFoundException e) {
+                } catch (ConnectionResetException e) {
+                    in.close();
+                    out.close();
+                }
+                catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             } catch (IOException e) {
@@ -173,6 +179,7 @@ public class NameNodeListner implements Runnable{
             ).start();
             firstRun=false;
             System.out.println("Starting transactionDispatcher");
+            new Thread(new InitFileSynchronizer()).start();
 
 
 

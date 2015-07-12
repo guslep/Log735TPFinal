@@ -91,7 +91,12 @@ public class ActiveFileServer {
 		while (iter.hasNext()) {
 			Map.Entry pair = (Map.Entry) iter.next();
 			FileServerClient currentClient = (FileServerClient) pair.getValue();
-			currentClient.getConnectionThread().sendMessage(message);
+			if(currentClient.getConnectionThread().isConnectionDestroyed()){
+                listeSuccursale.remove(pair.getKey());
+            }else{
+
+            }
+            currentClient.getConnectionThread().sendMessage(message);
 
 
 		}

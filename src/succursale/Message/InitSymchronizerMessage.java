@@ -9,16 +9,21 @@ import java.util.List;
  * Created by Guillaume on 2015-07-11.
  */
 public class InitSymchronizerMessage extends Message implements Serializable {
-    private File[] listContainedFile;
+    private static final long serialVersionUID = -1949727947876870557L;
+
+    private ArrayList<File> listContainedFile;
     private String rootDirectory;
 
 
-    public InitSymchronizerMessage(File[] listContainedFile, String rootDirectory) {
-        this.listContainedFile = listContainedFile;
-        this.rootDirectory = rootDirectory;
+
+
+
+    public InitSymchronizerMessage(ArrayList<File> listeFichiers, String localDir) {
+        this.listContainedFile = listeFichiers;
+        this.rootDirectory = localDir;
     }
 
-    public File[] getListContainedFile() {
+    public ArrayList<File> getListContainedFile() {
         return listContainedFile;
     }
 
