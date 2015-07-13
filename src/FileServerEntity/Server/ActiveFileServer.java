@@ -5,6 +5,7 @@ import NameNode.FileServer;
 
 import FileServerEntity.Message.Message;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,9 +15,8 @@ public class ActiveFileServer {
 	FileServer thisFileServer;
 
 	static HashMap<Integer, FileServerClient> listeSuccursale = new HashMap<Integer, FileServerClient>();
+    private ArrayList<ClientResponseThread> connectionClient=new ArrayList<ClientResponseThread>();
 	private String portNumber;
-
-	private int montantBanque;
 
 	public HashMap<Integer, FileServerClient> getListeSuccursale() {
 		return listeSuccursale;
@@ -85,6 +85,8 @@ public class ActiveFileServer {
 		this.portNumber = portNumber;
 	}
 
+
+
 	public void pushToAll(Message message) {
 		Iterator iter = listeSuccursale.entrySet().iterator();
 
@@ -103,6 +105,7 @@ public class ActiveFileServer {
 		}
 	}
 
-
-
+    public ArrayList getConnectionClient() {
+        return connectionClient;
+    }
 }

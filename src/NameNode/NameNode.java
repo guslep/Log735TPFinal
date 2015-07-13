@@ -1,13 +1,14 @@
 package NameNode;
 
 
-import FileServerEntity.Message.UpdateListFileServer;
-
-
+import FileServerEntity.Message.ServerMessage.UpdateListFileServer;
+import FileServerEntity.Message.ServerMessage.MessageServerStatus;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 
 /**
@@ -18,6 +19,7 @@ public class NameNode {
 
     private ArrayList<FileServer> listFileServer=new ArrayList<FileServer>();
     private ArrayList<ResponseServerThread>listConnection = new ArrayList<ResponseServerThread>();
+    private HashMap<Integer,MessageServerStatus> hashServerStatus=new HashMap<Integer, MessageServerStatus>();
 
 
 
@@ -86,10 +88,53 @@ public class NameNode {
     public  void removeSuccursale(ResponseServerThread deadConnection){
         int indexRemove=listConnection.indexOf(deadConnection);
         listConnection.remove(indexRemove);
+        hashServerStatus.remove(listFileServer.get(indexRemove).getId());
         listFileServer.remove(indexRemove);
 
 
+
     }
+    public void updateServerStatus(MessageServerStatus msg){
+        hashServerStatus.put(msg.getIdServer(),msg);
+
+    }
+    public FileServer dispatchToAvailaibleServer(){
+        Iterator iter=hashServerStatus.entrySet().iterator();
+        MessageServerStatus bestServer=null;
+
+        while (iter.hasNext()){
+
+
+            Map.Entry pair = (Map.Entry)iter.next();
+
+            MessageServerStatus serverStatus=(MessageServerStatus)pair.getValue();
+            if(bestServer==null){
+                bestServer=serverStatus;
+            }else if(serverStatus.isLessUsed(bestServer)){
+                bestServer=serverStatus;
+
+            }
+
+        }
+        FileServer bestFileServer=listFileServer.get(0);
+        Iterator itr = listFileServer.iterator();
+        while (itr.hasNext()){
+            FileServer current=(FileServer)itr.next();
+
+
+
+            if(current.getId()==bestServer.getIdServer()){
+                bestFileServer=current;
+            }
+
+
+        }
+
+
+        return bestFileServer ;
+
+    }
+
 
 
 

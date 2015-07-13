@@ -1,12 +1,7 @@
 package NameNode;
 
-import NameNode.NameNode;
-
-import java.beans.Transient;
 import java.io.Serializable;
-import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.URI;
 
 /**
  * Created by Gus on 6/4/2015.
@@ -19,14 +14,16 @@ public class FileServer implements Serializable {
 
 	private String nom;
 	private String port;
+    private String clientPort;
 
 	public FileServer(InetAddress succursaleIPAdresse, String nom,
-			String portNumber) {
+                      String portNumber, String clientPort) {
 		this.succursaleIPAdresse = succursaleIPAdresse;
 
 		this.nom = nom;
 		this.port = portNumber;
-	}
+        this.clientPort = clientPort;
+    }
 
 	public String getPort() {
 		return port;
@@ -64,7 +61,17 @@ public class FileServer implements Serializable {
 
 	}
 
-	// public synchronized int doWHitdraw(int whitdraw){
+    public String getClientPort() {
+        return clientPort;
+    }
+
+    public void setClientPort(String clientPort) {
+        this.clientPort = clientPort;
+    }
+
+
+
+    // public synchronized int doWHitdraw(int whitdraw){
 	// if(whitdraw<0){
 	// return -1;
 	// }

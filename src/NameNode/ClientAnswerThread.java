@@ -1,21 +1,25 @@
 package NameNode;
 
-import FileServerEntity.Message.ServerMessage.MessageServerStatus;
+import FileServerEntity.Message.ClientMessage.ClientDispatchAnswer;
+import FileServerEntity.Message.ClientMessage.ClientDispatchRequest;
 import FileServerEntity.Message.Message;
+import FileServerEntity.Message.ServerMessage.MessageServerStatus;
 import FileServerEntity.Message.ServerMessage.NewFileServerMessage;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
 /**
  * Created by Gus on 5/7/2015.
  */
-public class ResponseServerThread implements Runnable{
+public class ClientAnswerThread implements Runnable{
 
     private Socket sucursaleSocket;
     private NameNode nameNode;
-    private boolean isDestroyed;
+    private boolean isFinished=false;
     ObjectOutputStream out = null;
 
         // the thread will wait for client input and send it back in uppercase
@@ -34,27 +38,25 @@ public class ResponseServerThread implements Runnable{
 
             Message messageReceived;
             try {
-                while ((messageReceived =(Message)in.readObject() ) != null)
+                while (!isFinished&&(messageReceived =(Message)in.readObject() ) != null)
                 {
-                    if(NewFileServerMessage.class.isInstance(messageReceived))
-                    {
-                        FileServer fileServer= ((NewFileServerMessage)messageReceived).getFileServer();
-                      fileServer.setSuccursaleIPAdresse(sucursaleSocket.getInetAddress());
-                        nameNode.addSucursale(fileServer);
+                    if(ClientDispatchRequest.class.isInstance(messageReceived))
 
-                    }else if (MessageServerStatus.class.isInstance(messageReceived)){
-                    	MessageServerStatus currentServerStatus = (MessageServerStatus)messageReceived;
-                        nameNode.updateServerStatus(currentServerStatus);
-                    	System.out.println("CPU AVAILABILITY: " + currentServerStatus.getIdServer());
-                    	System.out.println("RAM AVAILABILITY: " + currentServerStatus.getRamAvailability() + "GB");
+                    {
+                        ClientDispatchAnswer message=new ClientDispatchAnswer(nameNode.dispatchToAvailaibleServer());
+                        sendMessage(message);
+                        isFinished=true;
+
+
+
                     }
 
 
 
                 }
             }catch(SocketException e){
-                isDestroyed=true;
-                nameNode.removeSuccursale(this);
+                isFinished=true;
+
 
                 out.close();
             }
@@ -82,7 +84,7 @@ public class ResponseServerThread implements Runnable{
     }
     public void sendMessage(Message message){
         try {
-            if(!isDestroyed){
+            if(!isFinished){
                 out.writeObject(message);
             }
 
@@ -92,13 +94,11 @@ public class ResponseServerThread implements Runnable{
 
     }
 
-    public ResponseServerThread(Socket sucursaleSocket, NameNode nameNode) {
+    public ClientAnswerThread(Socket sucursaleSocket, NameNode nameNode) {
         this.sucursaleSocket = sucursaleSocket;
         this.nameNode = nameNode;
-        nameNode.addConnection(this);
+
     }
 
-    public boolean isDestroyed() {
-        return isDestroyed;
-    }
+
 }

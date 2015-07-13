@@ -1,4 +1,6 @@
-package FileServerEntity.ServerStatus.serverStatus;
+package FileServerEntity.ServerStatus;
+import FileServerEntity.Server.ActiveFileServer;
+
 import java.lang.management.ManagementFactory;
 import java.text.DecimalFormat;
 
@@ -31,16 +33,8 @@ public class SystemInfo {
 		}
     }
 
-    public String OSname() {
-        return System.getProperty("os.name");
-    }
-
-    public String OSversion() {
-        return System.getProperty("os.version");
-    }
-
-    public String OsArch() {
-        return System.getProperty("os.arch");
+  public int getConnectionNumber(){
+        return ActiveFileServer.getInstance().getConnectionClient().size();
     }
 
     public long totalMem() {
@@ -57,7 +51,7 @@ public class SystemInfo {
         long freeMemory = runtime.freeMemory();
         double freeRam = (freeMemory + (maxMemory - allocatedMemory));
      
-    	return  Double.parseDouble(df.format(freeRam / 1024 / 1024 / 1024));
+    	return  Double.parseDouble(df.format(freeRam / 1024 / 1024 / 1024).replace(',','.'));
     }
     
     public double getProcessCpuAvailable() throws MalformedObjectNameException, ReflectionException, InstanceNotFoundException {
@@ -68,9 +62,9 @@ public class SystemInfo {
 	    if (list.isEmpty())     return Double.NaN;
 
 	    Attribute att = (Attribute)list.get(0);
-	   // double value  = Double.catt.getValue();
+	    double value  = ((Double) att.getValue());
 
-	    //if (value == -1.0)      return Double.NaN;  // usually takes a couple of seconds before we get real values
+	    if (value == -1.0)      return Double.NaN;  // usually takes a couple of seconds before we get real values
 
 	    return 0.00;//((int)(100 - (value * 1000) / 10.0));        // returns a percentage value with 1 decimal point precision
 	}

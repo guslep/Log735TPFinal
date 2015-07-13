@@ -7,8 +7,8 @@ import java.net.Socket;
 /**
  * Created by Gus on 6/11/2015.
  */
-public class clientConnectionListener implements Runnable {
-    public clientConnectionListener() {
+public class ClientConnectionListener implements Runnable {
+    public ClientConnectionListener() {
 
     }
 
@@ -21,18 +21,18 @@ public class clientConnectionListener implements Runnable {
         boolean isRunning = true;
 
         try {
-            serverSocket = new ServerSocket(Integer.parseInt( ActiveFileServer.getInstance().getPortNumber()));
+            serverSocket = new ServerSocket(Integer.parseInt( ActiveFileServer.getInstance().getThisFileServer().getClientPort()));
         } catch (IOException e) {
-            System.err.println("On ne peut pas ecouter au  port: 10119.");
+            System.err.println("On ne peut pas ecouter au  port "+ActiveFileServer.getInstance().getThisFileServer().getClientPort());
             System.exit(1);
         }
-        System.out.println("La succursale est en Attente de connexion.....");
+        System.out.println("Le serveur est en Attente de connexion de client.....");
 
         while (isRunning) {
             Socket succursaleSocket = null;
             try {
                 succursaleSocket = serverSocket.accept();
-                System.out.println("La succursale a accepte une connexion.....");
+                System.out.println("La succursale a accepte une connexion de client.....");
 
             } catch (IOException e) {
                 System.err.println("Accept a echoue.");

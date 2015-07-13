@@ -10,8 +10,8 @@ import java.net.InetAddress;
 public class FileServerClient extends FileServer {
   private ResponseClientThread connectionThread;
 
-    public FileServerClient(InetAddress succursaleIPAdresse,  String nom, String port) {
-        super(succursaleIPAdresse,  nom, port);
+    public FileServerClient(InetAddress succursaleIPAdresse,  String nom, String port,String clientPort) {
+        super(succursaleIPAdresse,  nom, port, clientPort);
     }
 
     public ResponseClientThread getConnectionThread() {

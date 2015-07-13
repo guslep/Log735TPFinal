@@ -3,8 +3,8 @@ package FileServerEntity.Server;
 import NameNode.FileServer;
 import FileServerEntity.FileManager.InitFileSynchronizer;
 import FileServerEntity.Message.Message;
-import FileServerEntity.Message.NewFileServerMessage;
-import FileServerEntity.Message.UpdateListFileServer;
+import FileServerEntity.Message.ServerMessage.NewFileServerMessage;
+import FileServerEntity.Message.ServerMessage.UpdateListFileServer;
 
 import java.io.*;
 import java.net.Socket;
@@ -157,7 +157,7 @@ public class NameNodeListner implements Runnable{
                 if(firstRun&&ActiveFileServer.getInstance().getThisFileServer().getNom().equals(update.getInitiator())&&fileServer.getNom().equals(update.getInitiator())){
                     ActiveFileServer.getInstance().setThisFileServer(fileServer);
                 }else if(!fileServer.getNom().equals(ActiveFileServer.getInstance().getThisFileServer().getNom())) {
-                    FileServerClient newSuccursale= new FileServerClient(fileServer.getSuccursaleIPAdresse(),fileServer.getNom(),fileServer.getPort());
+                    FileServerClient newSuccursale= new FileServerClient(fileServer.getSuccursaleIPAdresse(),fileServer.getNom(),fileServer.getPort(),fileServer.getClientPort());
                     newSuccursale.setId(fileServer.getId());
                     ActiveFileServer.getInstance().getListeSuccursale().put(newSuccursale.getId(),newSuccursale);
 
@@ -171,7 +171,7 @@ public class NameNodeListner implements Runnable{
 
             createConnection(ActiveFileServer.getInstance().getListeSuccursale());
             new Thread(
-                    new clientConnectionListener()
+                    new DistantFileServerConnectionListener()
 
             ).start();
             firstRun=false;

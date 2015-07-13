@@ -4,6 +4,10 @@ import FileServerEntity.FileManager.MissingFileSender;
 import FileServerEntity.FileManager.TransitFile;
 
 import FileServerEntity.Message.*;
+import FileServerEntity.Message.ServerMessage.FileMessage;
+import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
+import FileServerEntity.Message.ServerMessage.MessageNewFile;
+import FileServerEntity.Message.ServerMessage.SynchMessage;
 
 import java.io.*;
 import java.net.InetAddress;

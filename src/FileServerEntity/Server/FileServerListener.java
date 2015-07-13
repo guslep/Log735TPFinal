@@ -8,8 +8,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import FileServerEntity.FileManager.FileManager;
-import FileServerEntity.Message.FileMessage;
-import FileServerEntity.Message.MessageNewFile;
+import FileServerEntity.Message.ServerMessage.FileMessage;
+import FileServerEntity.Message.ServerMessage.MessageNewFile;
 
 /**
  * Classe permettant d'envoyer des messages d'ex�cution pour les autres serveurs

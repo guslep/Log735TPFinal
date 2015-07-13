@@ -1,5 +1,6 @@
-package FileServerEntity.Message;
+package FileServerEntity.Message.ServerMessage;
 
+import FileServerEntity.Message.Message;
 import NameNode.FileServer;
 
 import java.io.Serializable;

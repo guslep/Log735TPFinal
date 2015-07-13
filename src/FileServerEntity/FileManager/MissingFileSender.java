@@ -1,7 +1,7 @@
 package FileServerEntity.FileManager;
 
 import FileServerEntity.Server.FileServerListener;
-import FileServerEntity.Message.InitSymchronizerMessage;
+import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
 import FileServerEntity.Server.ResponseClientThread;
 
 import java.io.File;
@@ -24,7 +24,8 @@ public class MissingFileSender implements Runnable{
     }
 
     @Override
-    public void run() {
+    public void run()
+    {
         ArrayList<File> currentFile=FileManager.getInstance().getListeFichiers();
         HashMap<String,File> hashAllFile= new HashMap<String, File>();
             String rootDir=FileManager.getInstance().getLocalDir();
@@ -61,7 +62,16 @@ public class MissingFileSender implements Runnable{
             }
         }
 
+        //TODO: envoyer un InitFileSynchroniser au client qui vient de l'envoyer et setter un flag pour dire qui doit push to all
+        //TODO: implementer le thetering à 10 mb/s
 
+        /*
+        We don't wnat to end up in an infinite loop of updates
+         */
+        if(!otherFilesServerState.getSynchWithNewServer()){
+            new Thread(new InitFileSynchronizer(caller)).start();
+
+        }
 
     }
 }

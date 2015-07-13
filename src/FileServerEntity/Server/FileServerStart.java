@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
+import FileServerEntity.ServerStatus.AutoServerStatus;
 
 /**
  * Created by Gus on 6/11/2015.
@@ -35,7 +36,7 @@ import java.util.Random;
         if(serverHostname==null||serverHostname.equals("")){
             serverHostname="127.0.0.1";
         }
-        System.out.print ("Entree le port de file server: ");
+        System.out.print ("Entree le port du file server: ");
 
         portNumber=stdIn.readLine();
         if(portNumber==null||portNumber.equals("")){
@@ -53,9 +54,16 @@ import java.util.Random;
 
         montant=rand.nextInt(1000000)+1000;
 
+        System.out.print ("Entree le port d'écoute pour les clients: ");
+        String clientPortNumber=stdIn.readLine();
+        if(clientPortNumber==null||clientPortNumber.equals("")){
+
+            portNumber=Integer.toString(10219+new Random().nextInt(20));
+        }
+
 
         ActiveFileServer.getInstance().setPortNumber(portNumber);
-        ActiveFileServer.getInstance().setThisFileServer(new FileServer(null,  succursaleName, portNumber));
+        ActiveFileServer.getInstance().setThisFileServer(new FileServer(null,  succursaleName, portNumber, clientPortNumber));
 
         	NameNodeListner nameNode;
         new Thread(
@@ -69,7 +77,7 @@ import java.util.Random;
 
 
         // pour d�bug �a crash <3
-//        new Thread(new AutoServerStatus(nameNode)).start() ;
+       new Thread(new AutoServerStatus(nameNode)).start() ;
 		
 
 
