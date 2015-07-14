@@ -102,6 +102,17 @@ public class ClientResponseThread implements Runnable {
     }
 
 
-
+    public HashMap<String, TransitFile> getFileBeingWritten() {
+        return fileBeingWritten;
     }
+
+    public void fileWasWritten(String fileName) {
+
+        fileBeingWritten.remove(fileName);
+    }
+
+    public boolean isConnectionDestroyed() {
+        return connectionDestroyed;
+    }
+}
 

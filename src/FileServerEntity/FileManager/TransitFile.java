@@ -1,5 +1,6 @@
 package FileServerEntity.FileManager;
 
+import FileServerEntity.Server.ClientResponseThread;
 import FileServerEntity.Server.ResponseClientThread;
 
 /**
@@ -9,6 +10,7 @@ public class TransitFile {
     private String nom;
     private byte[] byteArray;
     private ResponseClientThread connectionThread;
+    private ClientResponseThread clientConnectionThread;
 
 
     public TransitFile(ResponseClientThread responseClientThread, String nom, int byteSize) {
@@ -17,6 +19,11 @@ public class TransitFile {
         this.byteArray = new byte[byteSize];
     }
 
+    public TransitFile(ClientResponseThread clientConnectionThread,String nom,int byteSize ){
+        this.nom = nom;
+        this.byteArray = new byte[byteSize];
+        this.clientConnectionThread = clientConnectionThread;
+    }
 
     public void addByte(byte[] byteArrayReceived,int position){
        
@@ -32,7 +39,14 @@ public class TransitFile {
 
     private void writeFile() {
         FileManager.getInstance().creerFichier(byteArray, nom);
-        connectionThread.fileWasWritten(nom);
+        if(connectionThread==null){
+            clientConnectionThread.fileWasWritten(nom);
+        }else{
+            connectionThread.fileWasWritten(nom);
+
+        }
+
+
 
     }
 

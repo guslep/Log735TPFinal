@@ -87,7 +87,7 @@ public class ActiveFileServer {
 
 
 
-	public void pushToAll(Message message) {
+	public void pushToAllServer(Message message) {
 		Iterator iter = listeSuccursale.entrySet().iterator();
 
 		while (iter.hasNext()) {
@@ -104,6 +104,27 @@ public class ActiveFileServer {
 
 		}
 	}
+
+
+    public void pushToAllClient(Message message){
+
+        Iterator iter = connectionClient.iterator();
+
+        while (iter.hasNext()) {
+            ClientResponseThread client= (ClientResponseThread) iter.next();
+
+            if(client==null||client.isConnectionDestroyed()){
+                connectionClient.remove(client);
+            }else{
+                client.sendMessage(message);
+
+            }
+
+
+
+        }
+
+    }
 
     public ArrayList getConnectionClient() {
         return connectionClient;

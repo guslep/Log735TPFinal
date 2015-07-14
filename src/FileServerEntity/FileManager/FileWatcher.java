@@ -9,6 +9,8 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.HashMap;
 
+import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
+import FileServerEntity.Server.ActiveFileServer;
 import FileServerEntity.Server.FileServerListener;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
@@ -103,6 +105,8 @@ public class FileWatcher {
         					File nouveauFichier = fm.getFichier(filename);
                                 if(nouveauFichier!=null){
                                     new Thread(new FileServerListener(nouveauFichier, filename)).start();
+                                    InitSymchronizerMessage allFile=new InitSymchronizerMessage(FileManager.getInstance().getListeFichiers(),false,FileManager.getInstance().getLocalDir());
+                                    ActiveFileServer.getInstance().pushToAllClient(allFile);
 
                                     System.out.println("envoie du fichier " + filename);
                                 }else{

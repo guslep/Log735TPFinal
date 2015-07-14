@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 
 import FileServerEntity.FileManager.FileManager;
 import FileServerEntity.Message.ServerMessage.FileMessage;
@@ -20,6 +21,7 @@ import FileServerEntity.Message.ServerMessage.MessageNewFile;
 public class FileServerListener implements Runnable{
 
 	private final static int NBBYTEPARMESSAGE = 2048;
+    private final static int  NBBYTEMAXTHETHERYNG=10485760;
 	private File nouveauFichier;
     private ResponseClientThread caller;
 	String filename;
@@ -107,7 +109,7 @@ public class FileServerListener implements Runnable{
             if(caller==null){
 
 
-			afs.pushToAll(mnf);}
+			afs.pushToAllServer(mnf);}
             else{
                 caller.sendMessage(mnf);
             }
@@ -115,23 +117,36 @@ public class FileServerListener implements Runnable{
 
 
 			// cr�ation des messages pour les diff�rents byte array(FileMessage)
+            Date lastMesureTook=new Date();
+            int numberPacketSent=0;
 			for (int i = 0; i < listeBytes.size(); i++) {
 
 
 				FileMessage messageEnvoi = new FileMessage(listeBytes.get(i),
 						filename, (i * NBBYTEPARMESSAGE));
                 if(caller==null){
-                    ActiveFileServer.getInstance().pushToAll(messageEnvoi);
+                    ActiveFileServer.getInstance().pushToAllServer(messageEnvoi);
 
                 }else{
                     caller.sendMessage(messageEnvoi);
                 }
+                numberPacketSent++;
+                Date now=new Date();
+                 if(numberPacketSent*NBBYTEPARMESSAGE>NBBYTEMAXTHETHERYNG&&now.getTime()-lastMesureTook.getTime()<1000){
+                     try {
+                         Thread.sleep(now.getTime() - lastMesureTook.getTime());
+                     } catch (InterruptedException e) {
+                         e.printStackTrace();
+                     }
+                 }else if(now.getTime()-lastMesureTook.getTime()>1000){
+                     lastMesureTook=new Date();
+                 }
 
 			}
 			//message final pour terminer la connexion
 			FileMessage messageFinal = new FileMessage(null, filename, 0);
 			if(caller==null){
-                afs.getInstance().pushToAll(messageFinal);
+                afs.getInstance().pushToAllServer(messageFinal);
             }else{
                 caller.sendMessage(messageFinal);
             }
