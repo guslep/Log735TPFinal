@@ -251,8 +251,8 @@ public class FileManager {
 
 
         while (done == false && cpt < listeFichiers.size()) {
-            String test=listeFichiers.get(cpt).getName();
-            if (filename.equals(listeFichiers.get(cpt).getName()) ) {
+//            String test=listeFichiers.get(cpt);
+            if (filename.equals(listeFichiers.get(cpt).getAbsolutePath()) ) {
                 fichier = listeFichiers.get(cpt);
 
             }

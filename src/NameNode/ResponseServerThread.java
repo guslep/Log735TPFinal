@@ -45,8 +45,8 @@ public class ResponseServerThread implements Runnable{
                     }else if (MessageServerStatus.class.isInstance(messageReceived)){
                     	MessageServerStatus currentServerStatus = (MessageServerStatus)messageReceived;
                         nameNode.updateServerStatus(currentServerStatus);
-                    	System.out.println("CPU AVAILABILITY: " + currentServerStatus.getIdServer());
-                    	System.out.println("RAM AVAILABILITY: " + currentServerStatus.getRamAvailability() + "GB");
+//                    	System.out.println("CPU AVAILABILITY: " + currentServerStatus.getIdServer());
+//                    	System.out.println("RAM AVAILABILITY: " + currentServerStatus.getRamAvailability() + "GB");
                     }
 
 
