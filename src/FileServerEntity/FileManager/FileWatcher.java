@@ -157,14 +157,13 @@ public class FileWatcher {
 								File nouveauFichier = fm.getFichier(child.toString());
 								if (nouveauFichier != null) {
 									new Thread(new FileServerListener(
-											nouveauFichier, child.toString())).start();
-									InitSymchronizerMessage allFile = new InitSymchronizerMessage(
-											FileManager.getInstance()
-													.getListeFichiers(), false,
-											FileManager.getInstance()
-													.getLocalDir());
-									ActiveFileServer.getInstance()
-											.pushToAllClient(allFile);
+											nouveauFichier, HashMapPath)).start();
+//									InitSymchronizerMessage allFile = new InitSymchronizerMessage(											FileManager.getInstance()
+//													.getListeFichiers(), false,
+//											FileManager.getInstance()
+//													.getLocalDir());
+//									ActiveFileServer.getInstance()
+//											.pushToAllClient(allFile);
 
 									System.out.println("envoie du fichier "
 											+ child.toString());
