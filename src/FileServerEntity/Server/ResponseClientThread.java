@@ -1,13 +1,11 @@
 package FileServerEntity.Server;
 
+import FileServerEntity.FileManager.FileManager;
 import FileServerEntity.FileManager.MissingFileSender;
 import FileServerEntity.FileManager.TransitFile;
 
 import FileServerEntity.Message.*;
-import FileServerEntity.Message.ServerMessage.FileMessage;
-import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
-import FileServerEntity.Message.ServerMessage.MessageNewFile;
-import FileServerEntity.Message.ServerMessage.SynchMessage;
+import FileServerEntity.Message.ServerMessage.*;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -107,6 +105,7 @@ public class ResponseClientThread implements Runnable {
             {
             	System.out.println("message de type " + messageReceived);
                 if(MessageNewFile.class.isInstance(messageReceived)){
+
                     TransitFile transit=new TransitFile(this,((MessageNewFile)messageReceived).getFileName(),((MessageNewFile)messageReceived).getFileLength());
                     fileBeingWritten.put(transit.getNom(),transit);
                 }
@@ -118,6 +117,9 @@ public class ResponseClientThread implements Runnable {
 
                     new Thread(new MissingFileSender((InitSymchronizerMessage)messageReceived,this)).start();
                 }
+				else if(MessageDelete.class.isInstance(messageReceived)){
+					FileManager.getInstance().supprimerFichier(((MessageDelete)messageReceived).getFileName());
+				}
 
             }
         } catch (SocketException e){

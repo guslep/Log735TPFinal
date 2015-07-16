@@ -10,6 +10,7 @@ import java.nio.file.WatchService;
 import java.util.HashMap;
 
 import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
+import FileServerEntity.Message.ServerMessage.MessageDelete;
 import FileServerEntity.Server.ActiveFileServer;
 import FileServerEntity.Server.FileServerListener;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
@@ -24,7 +25,10 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
  */
 public class FileWatcher {
 
-	HashMap<String, String> nomhashMap = new HashMap<String, String>();
+	 HashMap<String, String> nomhashMap = new HashMap<String, String>();
+
+
+
 
 	public FileWatcher(String path) {
 		Path toWatch = Paths.get(path);
@@ -105,8 +109,8 @@ public class FileWatcher {
         					File nouveauFichier = fm.getFichier(filename);
                                 if(nouveauFichier!=null){
                                     new Thread(new FileServerListener(nouveauFichier, filename)).start();
-                                    InitSymchronizerMessage allFile=new InitSymchronizerMessage(FileManager.getInstance().getListeFichiers(),false,FileManager.getInstance().getLocalDir());
-                                    ActiveFileServer.getInstance().pushToAllClient(allFile);
+                                   // InitSymchronizerMessage allFile=new InitSymchronizerMessage(FileManager.getInstance().getListeFichiers(),false,FileManager.getInstance().getLocalDir());
+                                    //ActiveFileServer.getInstance().pushToAllClient(allFile);
 
                                     System.out.println("envoie du fichier " + filename);
                                 }else{
@@ -119,8 +123,10 @@ public class FileWatcher {
         					fm = FileManager.getInstance();
         					//boolean existe = fm.fichierExiste(filename);
         					if(true){
+        						FileManager.getInstance().getNomFichierDelete().put(filename, filename);
         						//TODO: envoie d'une commande de delete
-        					//	fm.supprimerFichier(filename);
+								ActiveFileServer.getInstance().pushToAllServer(new MessageDelete(filename));
+
         					}
         				}
         				

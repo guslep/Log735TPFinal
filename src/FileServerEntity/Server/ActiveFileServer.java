@@ -87,7 +87,7 @@ public class ActiveFileServer {
 
 
 
-	public void pushToAllServer(Message message) {
+	public synchronized void pushToAllServer(Message message) {
 		Iterator iter = listeSuccursale.entrySet().iterator();
 
 		while (iter.hasNext()) {

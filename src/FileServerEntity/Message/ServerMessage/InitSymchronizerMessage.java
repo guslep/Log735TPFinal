@@ -1,10 +1,12 @@
 package FileServerEntity.Message.ServerMessage;
 
+import FileServerEntity.FileManager.FileManager;
 import FileServerEntity.Message.Message;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Guillaume on 2015-07-11.
@@ -13,7 +15,8 @@ public class InitSymchronizerMessage extends Message implements Serializable {
     private static final long serialVersionUID = -1949727947876870557L;
 
     private ArrayList<File> listContainedFile;
-    private Boolean SynchWithNewServer=false;
+    private HashMap<String,String> deletedFile;
+    private Boolean shouldNotSyncWithServer =false;
     private String rootDirectory;
 
 
@@ -23,11 +26,13 @@ public class InitSymchronizerMessage extends Message implements Serializable {
     public InitSymchronizerMessage(ArrayList<File> listeFichiers, String localDir) {
         this.listContainedFile = listeFichiers;
         this.rootDirectory = localDir;
+        this.deletedFile= FileManager.getInstance().getNomFichierDelete();
+
     }
 
-    public InitSymchronizerMessage(ArrayList<File> listContainedFile, Boolean synchWithNewServer, String rootDirectory) {
+    public InitSymchronizerMessage(ArrayList<File> listContainedFile, Boolean shouldNotSyncWithServer, String rootDirectory) {
         this.listContainedFile = listContainedFile;
-        SynchWithNewServer = synchWithNewServer;
+        this.shouldNotSyncWithServer = shouldNotSyncWithServer;
         this.rootDirectory = rootDirectory;
     }
 
@@ -40,7 +45,11 @@ public class InitSymchronizerMessage extends Message implements Serializable {
     }
 
 
-    public Boolean getSynchWithNewServer() {
-        return SynchWithNewServer;
+    public Boolean getShouldNotSyncWithServer() {
+        return shouldNotSyncWithServer;
+    }
+
+    public HashMap<String,String> getDeletedFile() {
+        return deletedFile;
     }
 }

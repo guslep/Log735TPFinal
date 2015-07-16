@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import FileServerEntity.Server.ActiveFileServer;
 
@@ -20,6 +21,8 @@ import FileServerEntity.Server.ActiveFileServer;
 public class FileManager {
 
 	private ArrayList<File> listeFichiers;
+	private HashMap<String, String> nomhashMap = new HashMap<String, String>();
+	private HashMap<String, String> nomFichierDelete = new HashMap<String, String>();
 	private static FileManager instance;
 	private String localDirName = ActiveFileServer.getInstance().getThisFileServer().getNom();
 	private String localDir = System.getProperty("user.dir") + "\\files - " + localDirName ;
@@ -168,8 +171,11 @@ public class FileManager {
 		int cpt = 0;
 
 		while (done == false && cpt < listeFichiers.size()) {
-			if (localDir+nomFichier == listeFichiers.get(cpt).getName()) {
+
+
+			if ((localDir+"\\"+nomFichier).equals(listeFichiers.get(cpt).getAbsolutePath())  ) {
 				done = listeFichiers.get(cpt).delete();
+				listeFichiers.remove(cpt);
 
 			}
 			cpt++;
@@ -264,4 +270,8 @@ public class FileManager {
     public String getLocalDir() {
         return localDir;
     }
+
+	public HashMap<String, String> getNomFichierDelete() {
+		return nomFichierDelete;
+	}
 }
