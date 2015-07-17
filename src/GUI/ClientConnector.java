@@ -3,6 +3,7 @@ package GUI;
 import FileServerEntity.Message.ClientMessage.ClientDeleteFile;
 
 import java.io.File;
+import java.net.Inet4Address;
 import java.util.ArrayList;
 
 /**
@@ -26,6 +27,7 @@ public class ClientConnector {
 
 
     public void addFile(){
+        //TODO lire et ajouter le fichier comme avec le serveur
 
 
     }
@@ -37,6 +39,12 @@ public class ClientConnector {
     }
     public void readFile(){
 
+        //TODO recevoir un fichier
+
+    }
+
+    public void ConnectToFileSystem(Inet4Address nameNoderIpAdress,int portNumber){
+        new Thread(new SystemConnector(nameNoderIpAdress,portNumber));
     }
 
     public ServerConnectionThread getServerConnectedTo() {
