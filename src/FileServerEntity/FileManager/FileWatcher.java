@@ -158,6 +158,7 @@ public class FileWatcher {
 								nomHashMap.remove(HashMapPath.toString());
 							} else {
 								fm = FileManager.getInstance();
+								fm.updatelisteFichiers();
 								File nouveauFichier = fm.getFichier(child.toString());
 								if (nouveauFichier != null) {
 									new Thread(new FileServerListener(

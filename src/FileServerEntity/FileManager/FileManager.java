@@ -107,7 +107,7 @@ public class FileManager {
 	 * @return liste des fichiers du serveur
 	 */
 	public ArrayList<File> getListeFichiers() {
-		updatelisteFichiers();
+		//updatelisteFichiers();
 		return listeFichiers;
 	}
 
@@ -166,7 +166,6 @@ public class FileManager {
 	 * @return true si le fichier est supprim�, false si une erreur
 	 */
 	public boolean supprimerFichier(String nomFichier) {
-		updatelisteFichiers();
 		boolean done = false;
 		int cpt = 0;
 
@@ -250,7 +249,7 @@ public class FileManager {
 	 */
 	public File getFichier(String filename) {
 		File fichier = null;
-		updatelisteFichiers();
+		//updatelisteFichiers();
 		boolean done = false;
 		int cpt = 0;
 
