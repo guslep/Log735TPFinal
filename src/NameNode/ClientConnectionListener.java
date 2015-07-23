@@ -31,13 +31,14 @@ public class ClientConnectionListener implements Runnable{
             System.err.println("On ne peut pas ecouter au  port: 10111.");
             System.exit(1);
         }
-        System.out.println ("Le serveur est en marche, Attente de la connexion.....");
+        System.out.println ("Le serveur est en marche, Attente de la connexion d,un client.....");
 
 
         while(isRunning){
             Socket succursaleSocket = null;
             try {
                 succursaleSocket = serverSocket.accept();
+
             }
             catch (IOException e)
             {
@@ -47,9 +48,7 @@ public class ClientConnectionListener implements Runnable{
 
 
             //Create a new thread for each connection 1 client = 1 thread
-            new Thread(
-                    new ResponseServerThread(succursaleSocket, nameNode)
-            ).start();
+
             new Thread(
                     new ClientAnswerThread(succursaleSocket, nameNode)
             ).start();

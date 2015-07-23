@@ -53,7 +53,7 @@ public class MessageServerStatus extends Message implements Serializable{
         Compare quel des serveurs est le mieux
          */
     public Boolean isLessUsed(MessageServerStatus otherServer){
-        return this.getRamAvailability()*5+this.connectionNumber*10<otherServer.getRamAvailability()*5+otherServer.getConnectionNumber()*10;
+        return this.getRamAvailability()*5-this.connectionNumber*10<otherServer.getRamAvailability()*5-otherServer.getConnectionNumber()*10;
 
     }
 }

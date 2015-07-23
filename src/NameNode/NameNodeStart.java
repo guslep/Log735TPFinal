@@ -1,5 +1,7 @@
 package NameNode;
 
+import NameNode.ClientConnectionListener;
+
 import java.net.*;
 import java.io.*;
 
@@ -20,6 +22,9 @@ public class NameNodeStart {
 		}
 		System.out.println ("Le serveur est en marche, Attente de la connexion.....");
 
+		new Thread(
+				new ClientConnectionListener(nameNode)
+		).start();
 
 		while(isRunning){
 			Socket succursaleSocket = null;
@@ -37,6 +42,8 @@ public class NameNodeStart {
 			new Thread(
 					new ResponseServerThread(succursaleSocket, nameNode)
 			).start();
+
+
 
 		}
 
