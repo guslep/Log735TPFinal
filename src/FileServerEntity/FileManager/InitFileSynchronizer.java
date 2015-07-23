@@ -3,7 +3,7 @@ package FileServerEntity.FileManager;
 import FileServerEntity.Server.ActiveFileServer;
 import FileServerEntity.Server.FileServerClient;
 import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
-import FileServerEntity.Server.ResponseClientThread;
+import FileServerEntity.Server.FileServerResponseThread;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -14,9 +14,9 @@ import java.util.Random;
  */
 public class InitFileSynchronizer implements Runnable{
 
-    ResponseClientThread caller;
+    FileServerResponseThread caller;
 
-    public InitFileSynchronizer(ResponseClientThread caller) {
+    public InitFileSynchronizer(FileServerResponseThread caller) {
         this.caller = caller;
     }
 
@@ -80,7 +80,7 @@ public class InitFileSynchronizer implements Runnable{
 
     }
 
-    private void synchWithServer(ResponseClientThread caller) {
+    private void synchWithServer(FileServerResponseThread caller) {
 
 
         InitSymchronizerMessage message= new InitSymchronizerMessage( FileManager.getInstance().getListeFichiers(),true,FileManager.getInstance().getLocalDir());

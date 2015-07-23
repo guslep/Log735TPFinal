@@ -42,7 +42,7 @@ public class ClientConnectionListener implements Runnable {
 
             //Create a new thread for each connection 1 client = 1 thread
             new Thread(
-                    new ResponseClientThread(succursaleSocket)
+                    new ClientResponseThread(succursaleSocket)
 
             ).start();
 

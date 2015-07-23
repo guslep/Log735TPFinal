@@ -6,6 +6,7 @@ import javafx.collections.ObservableSet;
 
 import java.io.File;
 import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -15,8 +16,11 @@ import java.util.Observable;
 public class ClientConnector  extends Observable{
 
     private static ClientConnector instance;
+    private Inet4Address nameNodateSuccursaleIPAdresse;
+    private Integer nameNodeportNumber;
+
     private  ServerConnectionThread serverConnectedTo;
-    private ArrayList<File> listFileAvailaible;
+    private ArrayList<String> listFileAvailaible;
     private ClientConnector() {
     }
 
@@ -50,6 +54,8 @@ public class ClientConnector  extends Observable{
 
     public void ConnectToFileSystem(Inet4Address nameNoderIpAdress,int portNumber){
         new Thread(new SystemConnector(nameNoderIpAdress,portNumber)).start();
+        this.nameNodateSuccursaleIPAdresse=nameNoderIpAdress;
+        this.nameNodeportNumber=portNumber;
     }
 
     public ServerConnectionThread getServerConnectedTo() {
@@ -64,12 +70,27 @@ public class ClientConnector  extends Observable{
         ClientConnector.instance = instance;
     }
 
-    public ArrayList<File> getListFileAvailaible() {
+    public ArrayList<String> getListFileAvailaible() {
         return listFileAvailaible;
     }
 
-    public void setListFileAvailaible(ArrayList<File> listFileAvailaible) {
-        this.listFileAvailaible = listFileAvailaible;
-        notifyAll();
+    public synchronized void setListFileAvailaible(ArrayList<File> listFileAvailaible, String rootDirectory) {
+
+
+        ArrayList<String> listRelativeFilePath=new ArrayList<String>();
+         for(File file:listFileAvailaible){
+             listRelativeFilePath.add(file.getPath().replace(rootDirectory+"\\",""));
+         }
+        this.listFileAvailaible = listRelativeFilePath;
+        this.setChanged();
+    this.notifyObservers();
+    }
+
+    public Inet4Address getNameNodateSuccursaleIPAdresse() {
+        return nameNodateSuccursaleIPAdresse;
+    }
+
+    public Integer getNameNodeportNumber() {
+        return nameNodeportNumber;
     }
 }

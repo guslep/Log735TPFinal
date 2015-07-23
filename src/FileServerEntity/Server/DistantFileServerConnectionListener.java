@@ -42,7 +42,7 @@ public class DistantFileServerConnectionListener implements Runnable {
 
             //Create a new thread for each connection 1 client = 1 thread
             new Thread(
-                    new ResponseClientThread(succursaleSocket)
+                    new FileServerResponseThread(succursaleSocket)
 
             ).start();
 
