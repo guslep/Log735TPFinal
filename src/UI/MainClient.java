@@ -479,29 +479,34 @@ public class MainClient implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		System.out.println("notified");
-		//updateFileList(ClientConnector.getInstance().getListFileAvailaible());
+		
+		updateFileList(ClientConnector.getInstance().getListFileAvailaible());
 	}
 
 	private void updateFileList(final ArrayList<String> listeFile) {
 
+		treeItems.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(){}));
 		treeItems.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(
 				"DisBox") {
 			{
 				DefaultMutableTreeNode node_1 = new DefaultMutableTreeNode();
 				// pour chacun des fichiers dans la liste
-				for (String f : listeFile) {
-					String[] splitFichiers = f.split("/");
+				for (String f : listeFile)
+				{
+					String[] splitFichiers = f.replace("\\","/").split("/");
 					DefaultMutableTreeNode root = (DefaultMutableTreeNode) treeItems
 							.getModel().getRoot();
+					
 					// on récupère le node root
 					node_1 = root;
 					// on split le fichier pour récupérer les dossiers et les
 					// filenames
 					for (int i = 0; i < splitFichiers.length; i++) {
+						System.out.println("lle");
 						boolean existe = false;
 						int existeat = 0;
 
+						
 						int nbChildren = node_1.getChildCount();
 						if (nbChildren > 0) {
 							for (int j = 0; j < nbChildren; j++) {
@@ -510,15 +515,27 @@ public class MainClient implements Observer {
 								existeat = j;
 							}
 						}
-
+						System.out.println(splitFichiers[i]);
 						if (existe == false) {
-							node_1.add(new DefaultMutableTreeNode(
-									splitFichiers[i]));
+							if(i==0){
+								add(new DefaultMutableTreeNode(
+										splitFichiers[i]));
+							}
+							else{
+								
+								node_1.add(new DefaultMutableTreeNode(
+										splitFichiers[i]));
+//								add(node_1);
+							}
+							
 						} else {
 							node_1 = (DefaultMutableTreeNode) node_1
 									.getChildAt(existeat);
 						}
-
+						if(i == splitFichiers.length -1 && i != 0){
+							add(node_1);	
+						}
+						
 					}
 
 				}

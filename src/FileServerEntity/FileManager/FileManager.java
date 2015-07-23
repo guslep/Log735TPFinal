@@ -169,16 +169,34 @@ public class FileManager {
 		boolean done = false;
 		int cpt = 0;
 
-		while (done == false && cpt < listeFichiers.size()) {
-
-
-			if ((localDir+"\\"+nomFichier).equals(listeFichiers.get(cpt).getAbsolutePath())  ) {
-				done = listeFichiers.get(cpt).delete();
-				listeFichiers.remove(cpt);
-
+//		while (done == false && cpt < listeFichiers.size()) {
+//				///A Optimiser pas mal sur que le code du bas marche toujours
+//
+//			if ((localDir+"\\"+nomFichier).equals(listeFichiers.get(cpt).getAbsolutePath())  ) {
+//				done = listeFichiers.get(cpt).delete();
+//				listeFichiers.remove(cpt);
+//			}
+//			cpt++;
+//		}
+			
+			File directory=new File(localDir+"\\"+nomFichier);
+			if(directory!=null){
+				while(!done)
+				try{
+				done = directory.delete();
+				
+				}catch(Exception e){
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
 			}
-			cpt++;
-		}
+		
+		
 		updatelisteFichiers();
 		return done;
 	}
