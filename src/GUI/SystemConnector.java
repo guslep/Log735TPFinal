@@ -42,8 +42,10 @@ public class SystemConnector implements Runnable {
         try {
             echoSocket = new Socket(succursaleIPAdresse, portNumber);
 
+
             messageSender = new ObjectOutputStream(echoSocket.getOutputStream());
             messageReader = new ObjectInputStream(echoSocket.getInputStream());
+
         } catch (UnknownHostException e) {
             System.err.println("Hote inconnu: " + succursaleIPAdresse);
             System.exit(1);

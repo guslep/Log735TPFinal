@@ -101,6 +101,7 @@ public class FileWatcher {
 													 BasicFileAttributes attrs) throws IOException {
 				register(dir);
 				return FileVisitResult.CONTINUE;
+
 			}
 		});
 	}
