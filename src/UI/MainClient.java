@@ -34,6 +34,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import FileServerEntity.FileManager.InitFileSynchronizer;
+import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
 import GUI.ClientConnector;
 import GUI.SystemConnector;
 
@@ -50,7 +52,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MainClient implements Observer{
+public class MainClient implements Observer {
 	boolean isConnected = false;
 	private JFrame frmDistributedbox;
 	ClientConnector cc = ClientConnector.getInstance();
@@ -59,7 +61,7 @@ public class MainClient implements Observer{
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args)  {
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -211,7 +213,6 @@ public class MainClient implements Observer{
 		JScrollPane ScrollPanelItems = new JScrollPane();
 		panelItems.add(ScrollPanelItems);
 
-
 		treeItems.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -234,6 +235,7 @@ public class MainClient implements Observer{
 						"bluesdfdsfdsfdsfdsfsdfdsfdsfdsfdsfsd"));
 				node_1.add(new DefaultMutableTreeNode("violet"));
 				node_1.add(new DefaultMutableTreeNode("red"));
+
 				node_1.add(new DefaultMutableTreeNode("yellow"));
 				add(node_1);
 				node_1 = new DefaultMutableTreeNode("sports");
@@ -386,7 +388,9 @@ public class MainClient implements Observer{
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File fichierOuDossier = chooser.getSelectedFile();
 					txtLogs.append("\nfichier/dossier selectionnï¿½, envoi en cours");
-					//envoie le fichier Ã  ajouter et le path. le path est le path choisie par l'utilisateur ex root/bleu/nouvveaufichier.txt
+					// envoie le fichier Ã  ajouter et le path. le path est le
+					// path choisie par l'utilisateur ex
+					// root/bleu/nouvveaufichier.txt
 
 					cc.addFile(fichierOuDossier, " ");
 
@@ -439,8 +443,10 @@ public class MainClient implements Observer{
 							ip = (Inet4Address) Inet4Address
 									.getByName(hostname);
 							port = Integer.parseInt(connectionString.split(":")[1]);
-							System.out.println("connecting to " + ip.toString() + " on the port " + port);
-							//connect to nameNode, server infos will be dispatched
+							System.out.println("connecting to " + ip.toString()
+									+ " on the port " + port);
+							// connect to nameNode, server infos will be
+							// dispatched
 							cc.ConnectToFileSystem(ip, port);
 							// Connect to Server
 							txtLogs.setText("");
@@ -477,10 +483,47 @@ public class MainClient implements Observer{
 		updateFileList(ClientConnector.getInstance().getListFileAvailaible());
 	}
 
+	private void updateFileList(final ArrayList<String> listeFile) {
 
+		treeItems.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(
+				"DisBox") {
+			{
+				DefaultMutableTreeNode node_1 = new DefaultMutableTreeNode();
+				// pour chacun des fichiers dans la liste
+				for (String f : listeFile) {
+					String[] splitFichiers = f.split("/");
+					DefaultMutableTreeNode root = (DefaultMutableTreeNode) treeItems
+							.getModel().getRoot();
+					// on récupère le node root
+					node_1 = root;
+					// on split le fichier pour récupérer les dossiers et les
+					// filenames
+					for (int i = 0; i < splitFichiers.length; i++) {
+						boolean existe = false;
+						int existeat = 0;
 
-	private void updateFileList(ArrayList<File> file){
+						int nbChildren = node_1.getChildCount();
+						if (nbChildren > 0) {
+							for (int j = 0; j < nbChildren; j++) {
+								existe = node_1.getChildAt(j).toString()
+										.equals(splitFichiers[i]);
+								existeat = j;
+							}
+						}
 
+						if (existe == false) {
+							node_1.add(new DefaultMutableTreeNode(
+									splitFichiers[i]));
+						} else {
+							node_1 = (DefaultMutableTreeNode) node_1
+									.getChildAt(existeat);
+						}
+
+					}
+
+				}
+			}
+		}));
 
 	}
 }

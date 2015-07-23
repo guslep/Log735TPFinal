@@ -2,7 +2,6 @@ package GUI;
 
 import FileServerEntity.Message.ClientMessage.ClientAddFile;
 import FileServerEntity.Message.ClientMessage.ClientDeleteFile;
-import javafx.collections.ObservableSet;
 
 import java.io.File;
 import java.net.Inet4Address;
