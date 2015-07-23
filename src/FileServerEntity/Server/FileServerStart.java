@@ -58,7 +58,7 @@ import FileServerEntity.ServerStatus.AutoServerStatus;
         String clientPortNumber=stdIn.readLine();
         if(clientPortNumber==null||clientPortNumber.equals("")){
 
-            portNumber=Integer.toString(10219+new Random().nextInt(20));
+            clientPortNumber=Integer.toString(10219+new Random().nextInt(20));
         }
 
 
