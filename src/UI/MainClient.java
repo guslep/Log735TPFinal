@@ -416,7 +416,7 @@ public class MainClient {
 									new JFrame(),
 									"Entrez les informations de connexions pour le NameNode",
 									"Connexion..", JOptionPane.PLAIN_MESSAGE,
-									null, null, "localhost:port");
+									null, null, "localhost:10111");
 
 					// If a string was returned
 					if ((connectionString != null)
@@ -431,9 +431,11 @@ public class MainClient {
 									.getByName(hostname);
 							port = Integer.parseInt(connectionString.split(":")[1]);
 
-							// good one?
-							// cc.ConnectToFileSystem(ip, port);
+							//connect to nameNode, server infos will be dispatched
+							cc.ConnectToFileSystem(ip, port);
 							// Connect to Server
+							txtLogs.setText("");
+							txtLogs.append("\nConnexion établie avec le serveur");
 
 							// set isConnected True
 							isConnected = true;
