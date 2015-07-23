@@ -1,42 +1,55 @@
 package UI;
 
+import java.awt.Component;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JToolBar;
+
 import java.awt.BorderLayout;
+
+import javax.swing.JFileChooser;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JList;
 import javax.swing.JButton;
+
 import java.awt.Color;
-import java.awt.GridLayout;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JDesktopPane;
-import java.awt.Panel;
-import javax.swing.JSplitPane;
 import javax.swing.JScrollPane;
-import javax.swing.JComboBox;
-import javax.swing.BoxLayout;
+
 import java.awt.FlowLayout;
+
 import javax.swing.JLabel;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.ListSelectionModel;
-import javax.swing.border.CompoundBorder;
-import javax.swing.AbstractListModel;
 import javax.swing.SwingConstants;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.border.BevelBorder;
-import javax.swing.JTable;
-import javax.swing.UIManager;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.JTextArea;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import GUI.ClientConnector;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 
 public class MainClient {
-
-	private JFrame frame;
+	boolean isConnected = false;
+	private JFrame frmDistributedbox;
+	ClientConnector cc = ClientConnector.getInstance();
 
 	/**
 	 * Launch the application.
@@ -46,7 +59,7 @@ public class MainClient {
 			public void run() {
 				try {
 					MainClient window = new MainClient();
-					window.frame.setVisible(true);
+					window.frmDistributedbox.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -65,79 +78,385 @@ public class MainClient {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 337, 315);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
+		frmDistributedbox = new JFrame();
+		frmDistributedbox.setTitle("DistributedBox");
+		frmDistributedbox.setBounds(100, 100, 666, 510);
+		frmDistributedbox.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
-		
-		JMenu mnConnection = new JMenu("Connection");
+		frmDistributedbox.setJMenuBar(menuBar);
+
+		final JMenu mnConnection = new JMenu("Connexion");
 		menuBar.add(mnConnection);
-		
-		JMenuItem mntmConnect = new JMenuItem("Connect");
-		mnConnection.add(mntmConnect);
-		
-		JMenuItem mntmDisconnect = new JMenuItem("Disconnect");
-		mnConnection.add(mntmDisconnect);
-		
-		JPanel panel = new JPanel();
-		
-		JPanel panel_1 = new JPanel();
-		
-		JPanel panel_2 = new JPanel();
-		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(panel_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap())
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-						.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 198, Short.MAX_VALUE))
-					.addGap(319))
-		);
-		
-		JList list = new JList();
-		list.setVisibleRowCount(12);
-		list.setBackground(UIManager.getColor("Button.background"));
-		list.setLayoutOrientation(JList.VERTICAL_WRAP);
-		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"1sdlkfj.txt", "2sdf.txt", "3tsts.txt", "4tsts.txt", "5tsts.txt", "6tsts.txt", "7tsts.txt", "8tsts.txt", "9tsts.txt", "10tsts.txt", "11tsts.txt", "12tsts.txt", "13tsts.txt", "14tsts.txt", "15tsts.txt", "16tsts.txt", "17tsts.txt", "18tsts.txt", "19tsts.txt", "20tsts.txt"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
+
+		final JMenuItem menuItemConnect = new JMenuItem("Connecte");
+
+		mnConnection.add(menuItemConnect);
+
+		JPanel panelButtons = new JPanel();
+
+		JPanel pnlConnection = new JPanel();
+		pnlConnection.setForeground(Color.RED);
+
+		final JPanel panelItems = new JPanel();
+
+		JPanel PanelItems = new JPanel();
+		GroupLayout groupLayout = new GroupLayout(
+				frmDistributedbox.getContentPane());
+		groupLayout
+				.setHorizontalGroup(groupLayout
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								groupLayout
+										.createSequentialGroup()
+										.addGap(11)
+										.addComponent(panelItems,
+												GroupLayout.PREFERRED_SIZE,
+												242, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
+										.addGroup(
+												groupLayout
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																groupLayout
+																		.createSequentialGroup()
+																		.addComponent(
+																				panelButtons,
+																				GroupLayout.PREFERRED_SIZE,
+																				108,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addPreferredGap(
+																				ComponentPlacement.UNRELATED)
+																		.addComponent(
+																				pnlConnection,
+																				GroupLayout.PREFERRED_SIZE,
+																				125,
+																				GroupLayout.PREFERRED_SIZE))
+														.addComponent(
+																PanelItems,
+																GroupLayout.DEFAULT_SIZE,
+																374,
+																Short.MAX_VALUE))
+										.addGap(14)));
+		groupLayout
+				.setVerticalGroup(groupLayout
+						.createParallelGroup(Alignment.TRAILING)
+						.addGroup(
+								groupLayout
+										.createSequentialGroup()
+										.addGroup(
+												groupLayout
+														.createParallelGroup(
+																Alignment.TRAILING)
+														.addComponent(
+																panelItems,
+																GroupLayout.DEFAULT_SIZE,
+																405,
+																Short.MAX_VALUE)
+														.addGroup(
+																groupLayout
+																		.createSequentialGroup()
+																		.addGroup(
+																				groupLayout
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addGroup(
+																								groupLayout
+																										.createSequentialGroup()
+																										.addGap(31)
+																										.addComponent(
+																												pnlConnection,
+																												GroupLayout.PREFERRED_SIZE,
+																												GroupLayout.DEFAULT_SIZE,
+																												GroupLayout.PREFERRED_SIZE))
+																						.addComponent(
+																								panelButtons,
+																								GroupLayout.PREFERRED_SIZE,
+																								89,
+																								GroupLayout.PREFERRED_SIZE))
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED)
+																		.addComponent(
+																				PanelItems,
+																				GroupLayout.DEFAULT_SIZE,
+																				309,
+																				Short.MAX_VALUE)))
+										.addGap(34)));
+		PanelItems.setLayout(new BorderLayout(0, 0));
+
+		JScrollPane scrollPane = new JScrollPane();
+		PanelItems.add(scrollPane);
+
+		final JTextArea txtLogs = new JTextArea();
+		txtLogs.setEditable(false);
+		txtLogs.setText("This is a really long line to prove the point that the scroller works even thought if the logs are this long this will be so stupid\r\n\r\nhello\r\nmom");
+		scrollPane.setViewportView(txtLogs);
+		pnlConnection.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		final JLabel lblConnexion = new JLabel("D\u00E9connect\u00E9");
+		lblConnexion.setForeground(Color.RED);
+		lblConnexion.setHorizontalAlignment(SwingConstants.CENTER);
+		pnlConnection.add(lblConnexion);
+		panelItems.setLayout(new BorderLayout(0, 0));
+
+		JScrollPane ScrollPanelItems = new JScrollPane();
+		panelItems.add(ScrollPanelItems);
+
+		final JTree treeItems = new JTree();
+		treeItems.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int row = treeItems.getRowForLocation(arg0.getX(), arg0.getY());
+				if (row == -1)
+					treeItems.clearSelection();
 			}
 		});
-		panel_2.add(list);
-		
-		JLabel lblConnected = new JLabel("Disconnected");
-		lblConnected.setBackground(new Color(204, 204, 204));
-		lblConnected.setForeground(new Color(204, 51, 51));
-		panel_1.add(lblConnected);
-		
-		JButton btnAjouter = new JButton("Ajouter");
+
+		treeItems.setVisibleRowCount(21);
+		ScrollPanelItems.setViewportView(treeItems);
+		treeItems.setEditable(true);
+		treeItems.setBackground(Color.WHITE);
+		treeItems.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(
+				"JTree") {
+			{
+				DefaultMutableTreeNode node_1;
+				node_1 = new DefaultMutableTreeNode("colors");
+				node_1.add(new DefaultMutableTreeNode(
+						"bluesdfdsfdsfdsfdsfsdfdsfdsfdsfdsfsd"));
+				node_1.add(new DefaultMutableTreeNode("violet"));
+				node_1.add(new DefaultMutableTreeNode("red"));
+				node_1.add(new DefaultMutableTreeNode("yellow"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("sports");
+				node_1.add(new DefaultMutableTreeNode("basketball"));
+				node_1.add(new DefaultMutableTreeNode("soccer"));
+				node_1.add(new DefaultMutableTreeNode("football"));
+				node_1.add(new DefaultMutableTreeNode("hockey"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("food");
+				node_1.add(new DefaultMutableTreeNode("hot dogs"));
+				node_1.add(new DefaultMutableTreeNode("pizza"));
+				node_1.add(new DefaultMutableTreeNode("ravioli"));
+				node_1.add(new DefaultMutableTreeNode("bananas"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("colors");
+				node_1.add(new DefaultMutableTreeNode("blue"));
+				node_1.add(new DefaultMutableTreeNode("violet"));
+				node_1.add(new DefaultMutableTreeNode("red"));
+				node_1.add(new DefaultMutableTreeNode("yellow"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("sports");
+				node_1.add(new DefaultMutableTreeNode("basketball"));
+				node_1.add(new DefaultMutableTreeNode("soccer"));
+				node_1.add(new DefaultMutableTreeNode("football"));
+				node_1.add(new DefaultMutableTreeNode("hockey"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("food");
+				node_1.add(new DefaultMutableTreeNode("hot dogs"));
+				node_1.add(new DefaultMutableTreeNode("pizza"));
+				node_1.add(new DefaultMutableTreeNode("ravioli"));
+				node_1.add(new DefaultMutableTreeNode("bananas"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("colors");
+				node_1.add(new DefaultMutableTreeNode("blue"));
+				node_1.add(new DefaultMutableTreeNode("violet"));
+				node_1.add(new DefaultMutableTreeNode("red"));
+				node_1.add(new DefaultMutableTreeNode("yellow"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("sports");
+				node_1.add(new DefaultMutableTreeNode("basketball"));
+				node_1.add(new DefaultMutableTreeNode("soccer"));
+				node_1.add(new DefaultMutableTreeNode("football"));
+				node_1.add(new DefaultMutableTreeNode("hockey"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("food");
+				node_1.add(new DefaultMutableTreeNode("hot dogs"));
+				node_1.add(new DefaultMutableTreeNode("pizza"));
+				node_1.add(new DefaultMutableTreeNode("ravioli"));
+				node_1.add(new DefaultMutableTreeNode("bananas"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("colors");
+				node_1.add(new DefaultMutableTreeNode("blue"));
+				node_1.add(new DefaultMutableTreeNode("violet"));
+				node_1.add(new DefaultMutableTreeNode("red"));
+				node_1.add(new DefaultMutableTreeNode("yellow"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("sports");
+				node_1.add(new DefaultMutableTreeNode("basketball"));
+				node_1.add(new DefaultMutableTreeNode("soccer"));
+				node_1.add(new DefaultMutableTreeNode("football"));
+				node_1.add(new DefaultMutableTreeNode("hockey"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("food");
+				node_1.add(new DefaultMutableTreeNode("hot dogs"));
+				node_1.add(new DefaultMutableTreeNode("pizza"));
+				node_1.add(new DefaultMutableTreeNode("ravioli"));
+				node_1.add(new DefaultMutableTreeNode("bananas"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("colors");
+				node_1.add(new DefaultMutableTreeNode("blue"));
+				node_1.add(new DefaultMutableTreeNode("violet"));
+				node_1.add(new DefaultMutableTreeNode("red"));
+				node_1.add(new DefaultMutableTreeNode("yellow"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("sports");
+				node_1.add(new DefaultMutableTreeNode("basketball"));
+				node_1.add(new DefaultMutableTreeNode("soccer"));
+				node_1.add(new DefaultMutableTreeNode("football"));
+				node_1.add(new DefaultMutableTreeNode("hockey"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("food");
+				node_1.add(new DefaultMutableTreeNode("hot dogs"));
+				node_1.add(new DefaultMutableTreeNode("pizza"));
+				node_1.add(new DefaultMutableTreeNode("ravioli"));
+				node_1.add(new DefaultMutableTreeNode("bananas"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("colors");
+				node_1.add(new DefaultMutableTreeNode("blue"));
+				node_1.add(new DefaultMutableTreeNode("violet"));
+				node_1.add(new DefaultMutableTreeNode("red"));
+				node_1.add(new DefaultMutableTreeNode("yellow"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("sports");
+				node_1.add(new DefaultMutableTreeNode("basketball"));
+				node_1.add(new DefaultMutableTreeNode("soccer"));
+				node_1.add(new DefaultMutableTreeNode("football"));
+				node_1.add(new DefaultMutableTreeNode("hockey"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("food");
+				node_1.add(new DefaultMutableTreeNode("hot dogs"));
+				node_1.add(new DefaultMutableTreeNode("pizza"));
+				node_1.add(new DefaultMutableTreeNode("ravioli"));
+				node_1.add(new DefaultMutableTreeNode("bananas"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("colors");
+				node_1.add(new DefaultMutableTreeNode("blue"));
+				node_1.add(new DefaultMutableTreeNode("violet"));
+				node_1.add(new DefaultMutableTreeNode("red"));
+				node_1.add(new DefaultMutableTreeNode("yellow"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("sports");
+				node_1.add(new DefaultMutableTreeNode("basketball"));
+				node_1.add(new DefaultMutableTreeNode("soccer"));
+				node_1.add(new DefaultMutableTreeNode("football"));
+				node_1.add(new DefaultMutableTreeNode("hockey"));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("food");
+				node_1.add(new DefaultMutableTreeNode("hot dogs"));
+				node_1.add(new DefaultMutableTreeNode("pizza"));
+				node_1.add(new DefaultMutableTreeNode("ravioli"));
+				node_1.add(new DefaultMutableTreeNode("bananas"));
+				add(node_1);
+			}
+		}));
+
+		final JButton btnAjouter = new JButton("Ajout");
+
+		btnAjouter.setEnabled(false);
 		btnAjouter.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel.add(btnAjouter);
-		
-		JButton btnSupprimer = new JButton("Supprimer");
+		panelButtons.add(btnAjouter);
+
+		final JButton btnSupprimer = new JButton("Supp");
+
+		btnSupprimer.setEnabled(false);
 		btnSupprimer.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel.add(btnSupprimer);
-		frame.getContentPane().setLayout(groupLayout);
+		panelButtons.add(btnSupprimer);
+		frmDistributedbox.getContentPane().setLayout(groupLayout);
+		treeItems.addTreeSelectionListener(new TreeSelectionListener() {
+			public void valueChanged(TreeSelectionEvent e) {
+				System.out.println("something happens");
+				boolean somethingIsSelected = !(treeItems.isSelectionEmpty());
+				btnSupprimer.setEnabled(somethingIsSelected);
+
+			}
+		});
+		btnAjouter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				int returnVal = chooser.showOpenDialog(new JFrame());
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File fichierOuDossier = chooser.getSelectedFile();
+					txtLogs.append("\nfichier/dossier selectionné, envoi en cours");
+
+					// send file/dossier to server
+				} else {
+					txtLogs.append("\najout annulé par l'utilisateur");
+				}
+			}
+		});
+		btnSupprimer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cc.getServerConnectedTo().sendMessage(/* messageDelete */null);
+				// refresh treeItems après réponse
+
+			}
+		});
+		menuItemConnect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				if (isConnected) {
+					isConnected = false;
+
+					// kill connection
+					// cc.setServerConnectedTo(null); //??
+
+					// change name of button back to Connect
+					mnConnection.setText("Connecte");
+					lblConnexion.setText("Déconnecté");
+					lblConnexion.setBackground(new Color(16));
+
+				} else {
+					// popup avec info du nameNode -- needed?
+
+					String connectionString = (String) JOptionPane
+							.showInputDialog(
+									new JFrame(),
+									"Entrez les informations de connexions pour le NameNode",
+									"Connexion..", JOptionPane.PLAIN_MESSAGE,
+									null, null, "localhost:port");
+
+					// If a string was returned
+					if ((connectionString != null)
+							&& (connectionString.length() > 0)
+							&& (connectionString.contains(":"))) {
+						// extract IPAdress, portNumber
+						String hostname = connectionString.split(":")[0];
+						Inet4Address ip;
+						int port;
+						try {
+							ip = (Inet4Address) Inet4Address
+									.getByName(hostname);
+							port = Integer.parseInt(connectionString.split(":")[1]);
+
+							// good one?
+							// cc.ConnectToFileSystem(ip, port);
+							// Connect to Server
+
+							// set isConnected True
+							isConnected = true;
+							lblConnexion.setText("Connecté");
+							lblConnexion.setBackground(new Color(9));
+							mnConnection.setText("Deconnecte");
+							// refresh treeItems
+						} catch (Exception e) {
+							txtLogs.append("\nEchec de connexion, "
+									+ connectionString
+									+ " n'est pas une connexion valide");
+						}
+
+					} else {
+						txtLogs.append("\nEchec de connexion, "
+								+ connectionString
+								+ " n'est pas une connexion valide");
+					}
+
+				}
+				btnAjouter.setEnabled(isConnected);
+			}
+		});
 	}
+
 }
