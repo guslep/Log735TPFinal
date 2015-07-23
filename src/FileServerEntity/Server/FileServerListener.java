@@ -54,7 +54,7 @@ public class FileServerListener implements Runnable{
 				if( oldlength != (int) nouveauFichier.length()){
 					oldlength = (int) nouveauFichier.length();
 					try {
-						Thread.sleep(50);
+						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -134,12 +134,16 @@ public class FileServerListener implements Runnable{
                 Date now=new Date();
                  if(numberPacketSent*NBBYTEPARMESSAGE>NBBYTEMAXTHETHERYNG&&now.getTime()-lastMesureTook.getTime()<1000){
                      try {
-                         Thread.sleep(now.getTime() - lastMesureTook.getTime());
+                    	 System.out.println("Hey, tethering the connection, NbByteParMessage: " + (numberPacketSent*NBBYTEPARMESSAGE) + " NbByteMaxTethering: " + NBBYTEMAXTHETHERYNG);
+                         Thread.sleep(1100-(now.getTime() - lastMesureTook.getTime()));
+                         numberPacketSent=0;
+                         
                      } catch (InterruptedException e) {
                          e.printStackTrace();
                      }
                  }else if(now.getTime()-lastMesureTook.getTime()>1000){
                      lastMesureTook=new Date();
+                     //numberPacketSent=0;
                  }
 
 			}

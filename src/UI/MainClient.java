@@ -430,7 +430,7 @@ public class MainClient {
 							ip = (Inet4Address) Inet4Address
 									.getByName(hostname);
 							port = Integer.parseInt(connectionString.split(":")[1]);
-
+							System.out.println("connecting to " + ip.toString() + " on the port " + port);
 							//connect to nameNode, server infos will be dispatched
 							cc.ConnectToFileSystem(ip, port);
 							// Connect to Server

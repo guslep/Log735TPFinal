@@ -44,7 +44,7 @@ public class ClientConnector {
     }
 
     public void ConnectToFileSystem(Inet4Address nameNoderIpAdress,int portNumber){
-        new Thread(new SystemConnector(nameNoderIpAdress,portNumber));
+        new Thread(new SystemConnector(nameNoderIpAdress,portNumber)).start();
     }
 
     public ServerConnectionThread getServerConnectedTo() {
