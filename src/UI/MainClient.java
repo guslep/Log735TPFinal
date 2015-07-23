@@ -35,6 +35,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.ClientConnector;
+import GUI.SystemConnector;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -45,16 +46,20 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-public class MainClient {
+public class MainClient implements Observer{
 	boolean isConnected = false;
 	private JFrame frmDistributedbox;
 	ClientConnector cc = ClientConnector.getInstance();
+	final JTree treeItems = new JTree();
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args)  {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -83,6 +88,7 @@ public class MainClient {
 		frmDistributedbox.setTitle("DistributedBox");
 		frmDistributedbox.setBounds(100, 100, 666, 510);
 		frmDistributedbox.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ClientConnector.getInstance().addObserver(this);
 
 		JMenuBar menuBar = new JMenuBar();
 		frmDistributedbox.setJMenuBar(menuBar);
@@ -205,7 +211,7 @@ public class MainClient {
 		JScrollPane ScrollPanelItems = new JScrollPane();
 		panelItems.add(ScrollPanelItems);
 
-		final JTree treeItems = new JTree();
+
 		treeItems.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -379,18 +385,21 @@ public class MainClient {
 				int returnVal = chooser.showOpenDialog(new JFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File fichierOuDossier = chooser.getSelectedFile();
-					txtLogs.append("\nfichier/dossier selectionné, envoi en cours");
+					txtLogs.append("\nfichier/dossier selectionnï¿½, envoi en cours");
+					//envoie le fichier Ã  ajouter et le path. le path est le path choisie par l'utilisateur ex root/bleu/nouvveaufichier.txt
+
+					cc.addFile(fichierOuDossier, " ");
 
 					// send file/dossier to server
 				} else {
-					txtLogs.append("\najout annulé par l'utilisateur");
+					txtLogs.append("\najout annulï¿½ par l'utilisateur");
 				}
 			}
 		});
 		btnSupprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cc.getServerConnectedTo().sendMessage(/* messageDelete */null);
-				// refresh treeItems après réponse
+				// refresh treeItems aprï¿½s rï¿½ponse
 
 			}
 		});
@@ -405,7 +414,7 @@ public class MainClient {
 
 					// change name of button back to Connect
 					mnConnection.setText("Connecte");
-					lblConnexion.setText("Déconnecté");
+					lblConnexion.setText("Dï¿½connectï¿½");
 					lblConnexion.setBackground(new Color(16));
 
 				} else {
@@ -435,11 +444,12 @@ public class MainClient {
 							cc.ConnectToFileSystem(ip, port);
 							// Connect to Server
 							txtLogs.setText("");
-							txtLogs.append("\nConnexion établie avec le serveur");
+							txtLogs.append("\nConnexion ï¿½tablie avec le serveur");
 
 							// set isConnected True
 							isConnected = true;
-							lblConnexion.setText("Connecté");
+							cc.getListFileAvailaible();
+							lblConnexion.setText("Connectï¿½");
 							lblConnexion.setBackground(new Color(9));
 							mnConnection.setText("Deconnecte");
 							// refresh treeItems
@@ -461,4 +471,16 @@ public class MainClient {
 		});
 	}
 
+	@Override
+	public void update(Observable o, Object arg) {
+
+		updateFileList(ClientConnector.getInstance().getListFileAvailaible());
+	}
+
+
+
+	private void updateFileList(ArrayList<File> file){
+
+
+	}
 }

@@ -21,7 +21,7 @@ import FileServerEntity.Message.ServerMessage.MessageNewFile;
 public class FileServerListener implements Runnable{
 
 	private final static int NBBYTEPARMESSAGE = 2048;
-    private final static int  NBBYTEMAXTHETHERYNG=10485760;
+    private final static int  NBBYTEMAXTHETHERYNG=20000000;
 	private File nouveauFichier;
     private ResponseClientThread caller;
 	String filename;

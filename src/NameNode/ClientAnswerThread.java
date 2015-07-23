@@ -25,8 +25,8 @@ public class ClientAnswerThread implements Runnable{
         // the thread will wait for client input and send it back in uppercase
     @Override
     public void run() {
-        System.out.println ("connexion reussie");
-        System.out.println ("Attente de l'entree.....");
+        System.out.println ("connexion reussie pour le client");
+
 
 
         try {

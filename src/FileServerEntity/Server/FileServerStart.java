@@ -70,6 +70,8 @@ import FileServerEntity.ServerStatus.AutoServerStatus;
                 nameNode=new NameNodeListner(serverHostname,montant,succursaleName,portNumber)
         ).start();
 
+        new Thread(new ClientConnectionListener()).start();
+
         // really important
         FileManager fm = FileManager.getInstance();
 

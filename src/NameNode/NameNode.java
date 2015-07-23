@@ -122,8 +122,10 @@ public class NameNode {
             FileServer current=(FileServer)itr.next();
 
 
-
-            if(current.getId()==bestServer.getIdServer()){
+            if(bestServer==null){
+                bestFileServer=current;
+            }
+            else if(current.getId()==bestServer.getIdServer()){
                 bestFileServer=current;
             }
 

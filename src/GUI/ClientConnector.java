@@ -1,15 +1,18 @@
 package GUI;
 
+import FileServerEntity.Message.ClientMessage.ClientAddFile;
 import FileServerEntity.Message.ClientMessage.ClientDeleteFile;
+import javafx.collections.ObservableSet;
 
 import java.io.File;
 import java.net.Inet4Address;
 import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  * Created by Gus on 7/16/2015.
  */
-public class ClientConnector {
+public class ClientConnector  extends Observable{
 
     private static ClientConnector instance;
     private  ServerConnectionThread serverConnectedTo;
@@ -26,8 +29,10 @@ public class ClientConnector {
 
 
 
-    public void addFile(){
+    public void addFile(File fichierOuDossier,String path){
         //TODO lire et ajouter le fichier comme avec le serveur
+
+       new Thread(new ThreadUploadFile(fichierOuDossier,path)).start();
 
 
     }
@@ -39,7 +44,7 @@ public class ClientConnector {
     }
     public void readFile(){
 
-        //TODO recevoir un fichier
+
 
     }
 
@@ -65,5 +70,6 @@ public class ClientConnector {
 
     public void setListFileAvailaible(ArrayList<File> listFileAvailaible) {
         this.listFileAvailaible = listFileAvailaible;
+        notifyAll();
     }
 }

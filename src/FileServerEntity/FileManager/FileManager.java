@@ -212,8 +212,13 @@ public class FileManager {
 	 * @return true si cr��, false si une erreur ou existe d�j�
 	 */
 	public synchronized boolean creerFichier(byte[] fichier, String fileName) {
+		return creerFichier(fichier,fileName,false);
+	}
 
+		public synchronized boolean creerFichier(byte[] fichier, String fileName,Boolean updateSystem) {
+		if(!updateSystem){
 		fw.fileReceived(fileName);
+		}
 		System.out.println("maybe pls?");
 		String fullfilename = localDir + "\\" + fileName;
         File newFile=new File(fullfilename);

@@ -3,6 +3,7 @@ package GUI;
 import FileServerEntity.FileManager.FileManager;
 import FileServerEntity.FileManager.MissingFileSender;
 import FileServerEntity.FileManager.TransitFile;
+import FileServerEntity.Message.ClientMessage.ClientListFile;
 import FileServerEntity.Message.Message;
 import FileServerEntity.Message.ServerMessage.FileMessage;
 import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
@@ -36,10 +37,12 @@ public class ServerConnectionThread implements Runnable {
     @Override
     public void run() {
         try {
+            System.out.println("Connecting to "+ server.getSuccursaleIPAdresse().getHostAddress()+" "+server.getClientPort() );
             echoSocket = new Socket(server.getSuccursaleIPAdresse(),Integer.parseInt(server.getClientPort()) );
             messageSender = new ObjectOutputStream(echoSocket.getOutputStream());
             messageReader = new ObjectInputStream(echoSocket.getInputStream());
             System.out.println("ClientConnected To "+server.getNom()+":"+server.getClientPort() );
+            messageSender.writeObject(new ClientListFile());
         } catch (IOException e) {
             e.printStackTrace();
         }

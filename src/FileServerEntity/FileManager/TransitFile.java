@@ -11,6 +11,7 @@ public class TransitFile {
     private byte[] byteArray;
     private ResponseClientThread connectionThread;
     private ClientResponseThread clientConnectionThread;
+    private  Boolean comesFromClient=false;
 
 
     public TransitFile(ResponseClientThread responseClientThread, String nom, int byteSize) {
@@ -23,6 +24,7 @@ public class TransitFile {
         this.nom = nom;
         this.byteArray = new byte[byteSize];
         this.clientConnectionThread = clientConnectionThread;
+        comesFromClient=true;
     }
 
     public void addByte(byte[] byteArrayReceived,int position){
@@ -38,7 +40,14 @@ public class TransitFile {
     }
 
     private void writeFile() {
-        FileManager.getInstance().creerFichier(byteArray, nom);
+        if(comesFromClient){
+            FileManager.getInstance().creerFichier(byteArray, nom, true);
+
+        }
+        else{FileManager.getInstance().creerFichier(byteArray, nom);
+
+
+        }
         if(connectionThread==null){
             clientConnectionThread.fileWasWritten(nom);
         }else{
