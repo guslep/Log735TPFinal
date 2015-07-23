@@ -38,7 +38,7 @@ public class ClientConnectionListener implements Runnable{
             Socket succursaleSocket = null;
             try {
                 succursaleSocket = serverSocket.accept();
-
+                System.out.println("Client connection Accepte");
             }
             catch (IOException e)
             {
