@@ -126,7 +126,7 @@ public class NameNodeListner implements Runnable{
 
 
                     FileServer thisSuccrusale= ActiveFileServer.getInstance().getThisFileServer();
-                ResponseClientThread newConnectionThread = new ResponseClientThread(currentClient.getSuccursaleIPAdresse(), thisSuccrusale.getId(),Integer.parseInt(currentClient.getPort()));
+                FileServerResponseThread newConnectionThread = new FileServerResponseThread(currentClient.getSuccursaleIPAdresse(), thisSuccrusale.getId(),Integer.parseInt(currentClient.getPort()));
 
                 currentClient.setConnectionThread(newConnectionThread);
 

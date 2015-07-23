@@ -3,7 +3,7 @@ package FileServerEntity.FileManager;
 import FileServerEntity.Message.ServerMessage.MessageDelete;
 import FileServerEntity.Server.FileServerListener;
 import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
-import FileServerEntity.Server.ResponseClientThread;
+import FileServerEntity.Server.FileServerResponseThread;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,13 +15,13 @@ import java.util.HashMap;
 public class MissingFileSender implements Runnable {
 
 	private InitSymchronizerMessage otherFilesServerState;
-	private ResponseClientThread caller;
+	private FileServerResponseThread caller;
 
 	public MissingFileSender(InitSymchronizerMessage otherFilesServerState,
-			ResponseClientThread responseClientThread) {
+			FileServerResponseThread fileServerResponseThread) {
 
 		this.otherFilesServerState = otherFilesServerState;
-		this.caller = responseClientThread;
+		this.caller = fileServerResponseThread;
 	}
 
 	@Override

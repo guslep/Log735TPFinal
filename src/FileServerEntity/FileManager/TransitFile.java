@@ -1,7 +1,7 @@
 package FileServerEntity.FileManager;
 
 import FileServerEntity.Server.ClientResponseThread;
-import FileServerEntity.Server.ResponseClientThread;
+import FileServerEntity.Server.FileServerResponseThread;
 
 /**
  * Created by Gus on 7/9/2015.
@@ -9,13 +9,13 @@ import FileServerEntity.Server.ResponseClientThread;
 public class TransitFile {
     private String nom;
     private byte[] byteArray;
-    private ResponseClientThread connectionThread;
+    private FileServerResponseThread connectionThread;
     private ClientResponseThread clientConnectionThread;
     private  Boolean comesFromClient=false;
 
 
-    public TransitFile(ResponseClientThread responseClientThread, String nom, int byteSize) {
-        this.connectionThread=responseClientThread;
+    public TransitFile(FileServerResponseThread fileServerResponseThread, String nom, int byteSize) {
+        this.connectionThread= fileServerResponseThread;
         this.nom = nom;
         this.byteArray = new byte[byteSize];
     }

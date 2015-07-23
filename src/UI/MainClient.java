@@ -479,8 +479,8 @@ public class MainClient implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-
-		updateFileList(ClientConnector.getInstance().getListFileAvailaible());
+		System.out.println("notified");
+		//updateFileList(ClientConnector.getInstance().getListFileAvailaible());
 	}
 
 	private void updateFileList(final ArrayList<String> listeFile) {

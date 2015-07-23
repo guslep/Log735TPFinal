@@ -1,6 +1,7 @@
 package GUI;
 
 import FileServerEntity.FileManager.FileManager;
+import FileServerEntity.FileManager.InitFileSynchronizer;
 import FileServerEntity.FileManager.MissingFileSender;
 import FileServerEntity.FileManager.TransitFile;
 import FileServerEntity.Message.ClientMessage.ClientListFile;
@@ -14,6 +15,7 @@ import NameNode.FileServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 
@@ -24,6 +26,7 @@ public class ServerConnectionThread implements Runnable {
     private FileServer server;
     private ObjectOutputStream messageSender;
     private Socket echoSocket = null;
+
 
     private ObjectInputStream messageReader;
 
@@ -49,12 +52,12 @@ public class ServerConnectionThread implements Runnable {
 
         Message messageReceived;
 
-
+        Boolean exit=false;
 
         try
         {
 
-            while ((messageReceived =(Message)messageReader.readObject() ) != null)
+            while (!exit&&(messageReceived =(Message)messageReader.readObject() ) != null)
             {
                 System.out.println("message de type " + messageReceived);
                 if(MessageNewFile.class.isInstance(messageReceived)){
@@ -65,8 +68,9 @@ public class ServerConnectionThread implements Runnable {
 
                 }
                 else if(InitSymchronizerMessage.class.isInstance(messageReceived)){
+                    InitSymchronizerMessage msgReceived= (InitSymchronizerMessage) messageReceived;
 
-                    ClientConnector.getInstance().setListFileAvailaible(((InitSymchronizerMessage) messageReceived).getListContainedFile());
+                    ClientConnector.getInstance().setListFileAvailaible(msgReceived.getListContainedFile(),msgReceived.getRootDirectory());
                 }
 
 
@@ -74,8 +78,11 @@ public class ServerConnectionThread implements Runnable {
         } catch (SocketException e){
 
             System.out.println("erreur dans la connection");
+            ClientConnector.getInstance().ConnectToFileSystem(ClientConnector.getInstance().getNameNodateSuccursaleIPAdresse(),ClientConnector.getInstance().getNameNodeportNumber());
+            exit=true;
             try {
                 messageSender.close();
+                messageReader.close();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }

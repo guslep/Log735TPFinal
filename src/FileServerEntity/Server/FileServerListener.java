@@ -23,10 +23,10 @@ public class FileServerListener implements Runnable{
 	private final static int NBBYTEPARMESSAGE = 2048;
     private final static int  NBBYTEMAXTHETHERYNG=20000000;
 	private File nouveauFichier;
-    private ResponseClientThread caller;
+    private FileServerResponseThread caller;
 	String filename;
 
-	public FileServerListener(File nouveauFichier, String filename, ResponseClientThread caller) {
+	public FileServerListener(File nouveauFichier, String filename, FileServerResponseThread caller) {
 		this.nouveauFichier = nouveauFichier;
 		this.filename = filename;
         this.caller=caller;
