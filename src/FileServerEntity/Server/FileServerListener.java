@@ -65,31 +65,36 @@ public class FileServerListener implements Runnable{
 				}
 			}
 			fileSize = (int) nouveauFichier.length();
-			
-			
-			try {
-				copy( fileSize);
-			}catch (Exception e){
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException error) {
-					// TODO Auto-generated catch block
-					error.printStackTrace();
+			//forgive us father we have sinned !!
+			boolean hack=true;
+			while(hack){
+				try{
+					hack=false;
+					copy(fileSize);
+				}catch(Exception e){
+					try {
+						Thread.sleep(1000);
+						hack=true;
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
-				copy(fileSize);
 			}
 			
-
-
-
+			
+			
+			
+			
 			// si succ�s, retourne true
 
 		}
 		// >MaxValue
 
 	}
-
+	
 	private void copy(int fileSize){
+
 
 		ArrayList<byte[]> listeBytes = new ArrayList<byte[]>();
 
@@ -126,52 +131,56 @@ public class FileServerListener implements Runnable{
 
 		// new
 		MessageNewFile mnf = new MessageNewFile(fileSize, filename.replace(FileManager.getInstance().getLocalDir()+"\\",""));
-		ActiveFileServer afs = ActiveFileServer.getInstance();
-		if(caller==null){
+        ActiveFileServer afs = ActiveFileServer.getInstance();
+        if(caller==null){
 
 
-			afs.pushToAllServer(mnf);}
-		else{
-			caller.sendMessage(mnf);
-		}
+		afs.pushToAllServer(mnf);}
+        else{
+            caller.sendMessage(mnf);
+        }
 
 
 
 		// cr�ation des messages pour les diff�rents byte array(FileMessage)
-		Date lastMesureTook=new Date();
-		int numberPacketSent=0;
+        Date lastMesureTook=new Date();
+        int numberPacketSent=0;
 		for (int i = 0; i < listeBytes.size(); i++) {
 
 
 			FileMessage messageEnvoi = new FileMessage(listeBytes.get(i),
 					filename, (i * NBBYTEPARMESSAGE));
-			if(caller==null){
-				ActiveFileServer.getInstance().pushToAllServer(messageEnvoi);
+            if(caller==null){
+                ActiveFileServer.getInstance().pushToAllServer(messageEnvoi);
 
-			}else{
-				caller.sendMessage(messageEnvoi);
-			}
-			numberPacketSent++;
-			Date now=new Date();
-			if(numberPacketSent*NBBYTEPARMESSAGE>NBBYTEMAXTHETHERYNG&&now.getTime()-lastMesureTook.getTime()<1000){
-				try {
-					Thread.sleep(now.getTime() - lastMesureTook.getTime());
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}else if(now.getTime()-lastMesureTook.getTime()>1000){
-				lastMesureTook=new Date();
-			}
+            }else{
+                caller.sendMessage(messageEnvoi);
+            }
+            numberPacketSent++;
+            Date now=new Date();
+             if(numberPacketSent*NBBYTEPARMESSAGE>NBBYTEMAXTHETHERYNG&&now.getTime()-lastMesureTook.getTime()<1000){
+                 try {
+                	 System.out.println("Hey, tethering the connection, NbByteParMessage: " + (numberPacketSent*NBBYTEPARMESSAGE) + " NbByteMaxTethering: " + NBBYTEMAXTHETHERYNG);
+                     Thread.sleep(1100-(now.getTime() - lastMesureTook.getTime()));
+                     numberPacketSent=0;
+                     
+                 } catch (InterruptedException e) {
+                     e.printStackTrace();
+                 }
+             }else if(now.getTime()-lastMesureTook.getTime()>1000){
+                 lastMesureTook=new Date();
+                 //numberPacketSent=0;
+             }
 
 		}
 		//message final pour terminer la connexion
 		FileMessage messageFinal = new FileMessage(null, filename, 0);
 		if(caller==null){
-			afs.getInstance().pushToAllServer(messageFinal);
-		}else{
-			caller.sendMessage(messageFinal);
-		}
+            afs.getInstance().pushToAllServer(messageFinal);
+        }else{
+            caller.sendMessage(messageFinal);
+        }
 
 
-
-	}}
+	}
+}

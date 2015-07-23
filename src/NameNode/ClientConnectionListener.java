@@ -31,7 +31,7 @@ public class ClientConnectionListener implements Runnable{
             System.err.println("On ne peut pas ecouter au  port: 10111.");
             System.exit(1);
         }
-        System.out.println ("Le serveur est en marche, Attente de la connexion d,un client.....");
+        System.out.println ("Le serveur est en marche, Attente de la connexion d'un client.....");
 
 
         while(isRunning){
