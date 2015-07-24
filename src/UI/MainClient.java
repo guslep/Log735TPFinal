@@ -49,6 +49,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -56,7 +57,7 @@ public class MainClient implements Observer {
 	boolean isConnected = false;
 	private JFrame frmDistributedbox;
 	ClientConnector cc = ClientConnector.getInstance();
-	final JTree treeItems = new JTree();
+	JTree treeItems = new JTree();
 
 	/**
 	 * Launch the application.
@@ -227,137 +228,9 @@ public class MainClient implements Observer {
 		treeItems.setEditable(true);
 		treeItems.setBackground(Color.WHITE);
 		treeItems.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(
-				"JTree") {
+				"DisBox") {
 			{
-				DefaultMutableTreeNode node_1;
-				node_1 = new DefaultMutableTreeNode("colors");
-				node_1.add(new DefaultMutableTreeNode(
-						"bluesdfdsfdsfdsfdsfsdfdsfdsfdsfdsfsd"));
-				node_1.add(new DefaultMutableTreeNode("violet"));
-				node_1.add(new DefaultMutableTreeNode("red"));
-
-				node_1.add(new DefaultMutableTreeNode("yellow"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("sports");
-				node_1.add(new DefaultMutableTreeNode("basketball"));
-				node_1.add(new DefaultMutableTreeNode("soccer"));
-				node_1.add(new DefaultMutableTreeNode("football"));
-				node_1.add(new DefaultMutableTreeNode("hockey"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("food");
-				node_1.add(new DefaultMutableTreeNode("hot dogs"));
-				node_1.add(new DefaultMutableTreeNode("pizza"));
-				node_1.add(new DefaultMutableTreeNode("ravioli"));
-				node_1.add(new DefaultMutableTreeNode("bananas"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("colors");
-				node_1.add(new DefaultMutableTreeNode("blue"));
-				node_1.add(new DefaultMutableTreeNode("violet"));
-				node_1.add(new DefaultMutableTreeNode("red"));
-				node_1.add(new DefaultMutableTreeNode("yellow"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("sports");
-				node_1.add(new DefaultMutableTreeNode("basketball"));
-				node_1.add(new DefaultMutableTreeNode("soccer"));
-				node_1.add(new DefaultMutableTreeNode("football"));
-				node_1.add(new DefaultMutableTreeNode("hockey"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("food");
-				node_1.add(new DefaultMutableTreeNode("hot dogs"));
-				node_1.add(new DefaultMutableTreeNode("pizza"));
-				node_1.add(new DefaultMutableTreeNode("ravioli"));
-				node_1.add(new DefaultMutableTreeNode("bananas"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("colors");
-				node_1.add(new DefaultMutableTreeNode("blue"));
-				node_1.add(new DefaultMutableTreeNode("violet"));
-				node_1.add(new DefaultMutableTreeNode("red"));
-				node_1.add(new DefaultMutableTreeNode("yellow"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("sports");
-				node_1.add(new DefaultMutableTreeNode("basketball"));
-				node_1.add(new DefaultMutableTreeNode("soccer"));
-				node_1.add(new DefaultMutableTreeNode("football"));
-				node_1.add(new DefaultMutableTreeNode("hockey"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("food");
-				node_1.add(new DefaultMutableTreeNode("hot dogs"));
-				node_1.add(new DefaultMutableTreeNode("pizza"));
-				node_1.add(new DefaultMutableTreeNode("ravioli"));
-				node_1.add(new DefaultMutableTreeNode("bananas"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("colors");
-				node_1.add(new DefaultMutableTreeNode("blue"));
-				node_1.add(new DefaultMutableTreeNode("violet"));
-				node_1.add(new DefaultMutableTreeNode("red"));
-				node_1.add(new DefaultMutableTreeNode("yellow"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("sports");
-				node_1.add(new DefaultMutableTreeNode("basketball"));
-				node_1.add(new DefaultMutableTreeNode("soccer"));
-				node_1.add(new DefaultMutableTreeNode("football"));
-				node_1.add(new DefaultMutableTreeNode("hockey"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("food");
-				node_1.add(new DefaultMutableTreeNode("hot dogs"));
-				node_1.add(new DefaultMutableTreeNode("pizza"));
-				node_1.add(new DefaultMutableTreeNode("ravioli"));
-				node_1.add(new DefaultMutableTreeNode("bananas"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("colors");
-				node_1.add(new DefaultMutableTreeNode("blue"));
-				node_1.add(new DefaultMutableTreeNode("violet"));
-				node_1.add(new DefaultMutableTreeNode("red"));
-				node_1.add(new DefaultMutableTreeNode("yellow"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("sports");
-				node_1.add(new DefaultMutableTreeNode("basketball"));
-				node_1.add(new DefaultMutableTreeNode("soccer"));
-				node_1.add(new DefaultMutableTreeNode("football"));
-				node_1.add(new DefaultMutableTreeNode("hockey"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("food");
-				node_1.add(new DefaultMutableTreeNode("hot dogs"));
-				node_1.add(new DefaultMutableTreeNode("pizza"));
-				node_1.add(new DefaultMutableTreeNode("ravioli"));
-				node_1.add(new DefaultMutableTreeNode("bananas"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("colors");
-				node_1.add(new DefaultMutableTreeNode("blue"));
-				node_1.add(new DefaultMutableTreeNode("violet"));
-				node_1.add(new DefaultMutableTreeNode("red"));
-				node_1.add(new DefaultMutableTreeNode("yellow"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("sports");
-				node_1.add(new DefaultMutableTreeNode("basketball"));
-				node_1.add(new DefaultMutableTreeNode("soccer"));
-				node_1.add(new DefaultMutableTreeNode("football"));
-				node_1.add(new DefaultMutableTreeNode("hockey"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("food");
-				node_1.add(new DefaultMutableTreeNode("hot dogs"));
-				node_1.add(new DefaultMutableTreeNode("pizza"));
-				node_1.add(new DefaultMutableTreeNode("ravioli"));
-				node_1.add(new DefaultMutableTreeNode("bananas"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("colors");
-				node_1.add(new DefaultMutableTreeNode("blue"));
-				node_1.add(new DefaultMutableTreeNode("violet"));
-				node_1.add(new DefaultMutableTreeNode("red"));
-				node_1.add(new DefaultMutableTreeNode("yellow"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("sports");
-				node_1.add(new DefaultMutableTreeNode("basketball"));
-				node_1.add(new DefaultMutableTreeNode("soccer"));
-				node_1.add(new DefaultMutableTreeNode("football"));
-				node_1.add(new DefaultMutableTreeNode("hockey"));
-				add(node_1);
-				node_1 = new DefaultMutableTreeNode("food");
-				node_1.add(new DefaultMutableTreeNode("hot dogs"));
-				node_1.add(new DefaultMutableTreeNode("pizza"));
-				node_1.add(new DefaultMutableTreeNode("ravioli"));
-				node_1.add(new DefaultMutableTreeNode("bananas"));
-				add(node_1);
+				
 			}
 		}));
 
@@ -384,15 +257,26 @@ public class MainClient implements Observer {
 		btnAjouter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
+				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				int returnVal = chooser.showOpenDialog(new JFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File fichierOuDossier = chooser.getSelectedFile();
-					txtLogs.append("\nfichier/dossier selectionnï¿½, envoi en cours");
+					txtLogs.append("\nFichier sélectionné, envoi en cours");
+					if(fichierOuDossier.isDirectory()){
+						File[] filesInDirectory = fichierOuDossier.listFiles();
+						for ( File file : filesInDirectory ) {
+							System.out.println("envoie de " + file.getName());
+							cc.addFile(file, " ");	
+						}
+					}
+					else{
+						cc.addFile(fichierOuDossier, " ");	
+					}
 					// envoie le fichier Ã  ajouter et le path. le path est le
 					// path choisie par l'utilisateur ex
 					// root/bleu/nouvveaufichier.txt
 
-					cc.addFile(fichierOuDossier, " ");
+					
 
 					// send file/dossier to server
 				} else {
@@ -418,8 +302,8 @@ public class MainClient implements Observer {
 
 					// change name of button back to Connect
 					mnConnection.setText("Connecte");
-					lblConnexion.setText("Dï¿½connectï¿½");
-					lblConnexion.setBackground(new Color(16));
+					lblConnexion.setText("Déconnecté");
+					lblConnexion.setForeground(new Color(16));
 
 				} else {
 					// popup avec info du nameNode -- needed?
@@ -450,13 +334,13 @@ public class MainClient implements Observer {
 							cc.ConnectToFileSystem(ip, port);
 							// Connect to Server
 							txtLogs.setText("");
-							txtLogs.append("\nConnexion ï¿½tablie avec le serveur");
+							txtLogs.append("\nConnexion établie avec le serveur");
 
 							// set isConnected True
 							isConnected = true;
 							cc.getListFileAvailaible();
-							lblConnexion.setText("Connectï¿½");
-							lblConnexion.setBackground(new Color(9));
+							lblConnexion.setText("Connecté");
+							lblConnexion.setForeground(new Color(9));
 							mnConnection.setText("Deconnecte");
 							// refresh treeItems
 						} catch (Exception e) {
@@ -479,68 +363,76 @@ public class MainClient implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		
+
 		updateFileList(ClientConnector.getInstance().getListFileAvailaible());
 	}
 
 	private void updateFileList(final ArrayList<String> listeFile) {
 
-		treeItems.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(){}));
-		treeItems.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(
-				"DisBox") {
-			{
-				DefaultMutableTreeNode node_1 = new DefaultMutableTreeNode();
-				// pour chacun des fichiers dans la liste
-				for (String f : listeFile)
-				{
-					String[] splitFichiers = f.replace("\\","/").split("/");
-					DefaultMutableTreeNode root = (DefaultMutableTreeNode) treeItems
-							.getModel().getRoot();
-					
-					// on récupère le node root
-					node_1 = root;
-					// on split le fichier pour récupérer les dossiers et les
-					// filenames
-					for (int i = 0; i < splitFichiers.length; i++) {
-						System.out.println("lle");
-						boolean existe = false;
-						int existeat = 0;
+		
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("DisBox");
 
-						
-						int nbChildren = node_1.getChildCount();
-						if (nbChildren > 0) {
-							for (int j = 0; j < nbChildren; j++) {
-								existe = node_1.getChildAt(j).toString()
-										.equals(splitFichiers[i]);
-								existeat = j;
-							}
-						}
-						System.out.println(splitFichiers[i]);
-						if (existe == false) {
-							if(i==0){
-								add(new DefaultMutableTreeNode(
-										splitFichiers[i]));
-							}
-							else{
-								
-								node_1.add(new DefaultMutableTreeNode(
-										splitFichiers[i]));
-//								add(node_1);
-							}
-							
-						} else {
-							node_1 = (DefaultMutableTreeNode) node_1
-									.getChildAt(existeat);
-						}
-						if(i == splitFichiers.length -1 && i != 0){
-							add(node_1);	
-						}
-						
-					}
+		// Create the tree model and add the root node to it
+		DefaultTreeModel model = new DefaultTreeModel(root);
 
-				}
+		// pour chacun des fichiers dans la liste
+		for (String f : listeFile) {
+			String file = f.replace("\\", "/");
+
+			// Build the tree from the various string samples
+			buildTreeFromString(model, file);
+
+		}
+		treeItems.setModel(model);
+	}
+
+	private void buildTreeFromString(DefaultTreeModel model,
+			final String str) {
+		// Fetch the root node
+		DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+
+		// Split the string around the delimiter
+		String[] strings = str.split("/");
+
+		// Create a node object to use for traversing down the tree as it
+		// is being created
+		DefaultMutableTreeNode node = root;
+		// Iterate of the string array
+		for (String s : strings) {
+			// Look for the index of a node at the current level that
+			// has a value equal to the current string
+			int index = childIndex(node, s);
+
+			// Index less than 0, this is a new node not currently present on
+			// the tree
+			if (index < 0) {
+				// Add the new node
+				DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(s);
+				node.insert(newChild, node.getChildCount());
+				node = newChild;
 			}
-		}));
+			// Else, existing node, skip to the next string
+			else {
+				node = (DefaultMutableTreeNode) node.getChildAt(index);
+			}
+		}
+	}
 
+	private int childIndex(final DefaultMutableTreeNode node,
+			final String childValue) {
+		Enumeration<DefaultMutableTreeNode> children = node.children();
+		DefaultMutableTreeNode child = null;
+		int index = -1;
+
+		while (children.hasMoreElements() && index < 0) {
+			child = children.nextElement();
+
+			if (child.getUserObject() != null
+					&& childValue.equals(child.getUserObject())) {
+				index = node.getIndex(child);
+			}
+		}
+
+		return index;
 	}
 }
