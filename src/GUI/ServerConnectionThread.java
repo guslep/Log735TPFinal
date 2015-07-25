@@ -1,5 +1,6 @@
 package GUI;
 
+import FileServerEntity.FileManager.ClientDownloadFile;
 import FileServerEntity.FileManager.FileManager;
 import FileServerEntity.FileManager.InitFileSynchronizer;
 import FileServerEntity.FileManager.MissingFileSender;
@@ -18,6 +19,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.HashMap;
 
 /**
  * Created by Gus on 7/16/2015.
@@ -26,7 +28,7 @@ public class ServerConnectionThread implements Runnable {
     private FileServer server;
     private ObjectOutputStream messageSender;
     private Socket echoSocket = null;
-
+    private HashMap<String, ClientDownloadFile> fileBeingWritten = new HashMap<String, ClientDownloadFile>();
 
     private ObjectInputStream messageReader;
 
@@ -72,6 +74,15 @@ public class ServerConnectionThread implements Runnable {
 
                     ClientConnector.getInstance().setListFileAvailaible(msgReceived.getListContainedFile(),msgReceived.getRootDirectory());
                 }
+                else if (MessageNewFile.class.isInstance(messageReceived)){
+
+                   ClientDownloadFile clientFile = new ClientDownloadFile(this,((MessageNewFile)messageReceived).getFileName(),((MessageNewFile)messageReceived).getFileLength());
+                   fileBeingWritten.put(clientFile.getNom(),clientFile);
+                }
+                else if(FileMessage.class.isInstance(messageReceived)){
+                	FileMessage msg = (FileMessage) messageReceived;
+                	fileBeingWritten.get(msg.getFileName()).addByte(msg.getByteArray(), msg.getPosition());
+                }
 
 
             }
@@ -93,22 +104,16 @@ public class ServerConnectionThread implements Runnable {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-
-
-
-
     }
-
+    
+    public void fileWasWritten(String fileName) {
+		fileBeingWritten.remove(fileName);
+	}
 
     public synchronized void sendMessage(Message messageTosSend) {
 
         try {
-
-
                 messageSender.writeObject(messageTosSend);
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
