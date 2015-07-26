@@ -24,6 +24,7 @@ public class FileServerListener implements Runnable{
     private final static int  NBBYTEMAXTHETHERYNG=20000000;
 	private File nouveauFichier;
     private FileServerResponseThread caller;
+	private ClientResponseThread clientConnection;
 	String filename;
 
 	public FileServerListener(File nouveauFichier, String filename, FileServerResponseThread caller) {
@@ -37,6 +38,14 @@ public class FileServerListener implements Runnable{
         this.caller=null;
 
     }
+
+	public FileServerListener(File sentFile, String fileName, ClientResponseThread caller) {
+		this.nouveauFichier = sentFile;
+		this.filename = fileName;
+		this.caller=null;
+		this.clientConnection=caller;
+
+	}
 
 	@Override
 	public void run() {
@@ -136,6 +145,9 @@ public class FileServerListener implements Runnable{
 
 
 		afs.pushToAllServer(mnf);}
+		else if(clientConnection!=null){
+			clientConnection.sendMessage(mnf);
+		}
         else{
             caller.sendMessage(mnf);
         }
@@ -153,7 +165,9 @@ public class FileServerListener implements Runnable{
             if(caller==null){
                 ActiveFileServer.getInstance().pushToAllServer(messageEnvoi);
 
-            }else{
+            } else if(clientConnection!=null){
+				clientConnection.sendMessage(mnf);
+			}else{
                 caller.sendMessage(messageEnvoi);
             }
             numberPacketSent++;
@@ -177,7 +191,10 @@ public class FileServerListener implements Runnable{
 		FileMessage messageFinal = new FileMessage(null, filename, 0);
 		if(caller==null){
             afs.getInstance().pushToAllServer(messageFinal);
-        }else{
+        }else if(clientConnection!=null){
+			clientConnection.sendMessage(mnf);
+		}
+		else{
             caller.sendMessage(messageFinal);
         }
 
