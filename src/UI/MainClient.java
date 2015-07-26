@@ -89,7 +89,7 @@ public class MainClient implements Observer {
 
 		frmDistributedbox = new JFrame();
 		frmDistributedbox.setTitle("DistributedBox");
-		frmDistributedbox.setBounds(100, 100, 666, 510);
+		frmDistributedbox.setBounds(100, 100, 899, 654);
 		frmDistributedbox.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ClientConnector.getInstance().addObserver(this);
 
@@ -113,87 +113,35 @@ public class MainClient implements Observer {
 		JPanel PanelItems = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(
 				frmDistributedbox.getContentPane());
-		groupLayout
-				.setHorizontalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addGap(11)
-										.addComponent(panelItems,
-												GroupLayout.PREFERRED_SIZE,
-												242, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addComponent(
-																				panelButtons,
-																				GroupLayout.PREFERRED_SIZE,
-																				108,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addPreferredGap(
-																				ComponentPlacement.UNRELATED)
-																		.addComponent(
-																				pnlConnection,
-																				GroupLayout.PREFERRED_SIZE,
-																				125,
-																				GroupLayout.PREFERRED_SIZE))
-														.addComponent(
-																PanelItems,
-																GroupLayout.DEFAULT_SIZE,
-																374,
-																Short.MAX_VALUE))
-										.addGap(14)));
-		groupLayout
-				.setVerticalGroup(groupLayout
-						.createParallelGroup(Alignment.TRAILING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.TRAILING)
-														.addComponent(
-																panelItems,
-																GroupLayout.DEFAULT_SIZE,
-																405,
-																Short.MAX_VALUE)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addGap(31)
-																										.addComponent(
-																												pnlConnection,
-																												GroupLayout.PREFERRED_SIZE,
-																												GroupLayout.DEFAULT_SIZE,
-																												GroupLayout.PREFERRED_SIZE))
-																						.addComponent(
-																								panelButtons,
-																								GroupLayout.PREFERRED_SIZE,
-																								89,
-																								GroupLayout.PREFERRED_SIZE))
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				PanelItems,
-																				GroupLayout.DEFAULT_SIZE,
-																				309,
-																				Short.MAX_VALUE)))
-										.addGap(34)));
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(11)
+					.addComponent(panelItems, GroupLayout.PREFERRED_SIZE, 290, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(pnlConnection, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE))
+						.addComponent(PanelItems, GroupLayout.PREFERRED_SIZE, 534, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(74, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(panelItems, GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(34)
+							.addComponent(pnlConnection, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(39)
+							.addComponent(PanelItems, GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)))
+					.addGap(34))
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(514, Short.MAX_VALUE))
+		);
 		PanelItems.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -201,11 +149,11 @@ public class MainClient implements Observer {
 
 		final JTextArea txtLogs = new JTextArea();
 		txtLogs.setEditable(false);
-		txtLogs.setText("This is a really long line to prove the point that the scroller works even thought if the logs are this long this will be so stupid\r\n\r\nhello\r\nmom");
+		txtLogs.setText("Connectez-vous au name node pour débuter");
 		scrollPane.setViewportView(txtLogs);
 		pnlConnection.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		final JLabel lblConnexion = new JLabel("D\u00E9connect\u00E9");
+		final JLabel lblConnexion = new JLabel("Déconnecté");
 		lblConnexion.setForeground(Color.RED);
 		lblConnexion.setHorizontalAlignment(SwingConstants.CENTER);
 		pnlConnection.add(lblConnexion);
@@ -245,6 +193,12 @@ public class MainClient implements Observer {
 		btnSupprimer.setEnabled(false);
 		btnSupprimer.setHorizontalAlignment(SwingConstants.RIGHT);
 		panelButtons.add(btnSupprimer);
+		
+		JButton btnOuvrir = new JButton("Ouvrir");
+		
+		btnOuvrir.setHorizontalAlignment(SwingConstants.RIGHT);
+		btnOuvrir.setEnabled(false);
+		panelButtons.add(btnOuvrir);
 		frmDistributedbox.getContentPane().setLayout(groupLayout);
 		treeItems.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
@@ -286,9 +240,30 @@ public class MainClient implements Observer {
 		});
 		btnSupprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cc.getServerConnectedTo().sendMessage(/* messageDelete */null);
-				// refresh treeItems aprï¿½s rï¿½ponse
+				
+				//rebuild chemin du node root\\dossier1\\fichier
+				DefaultMutableTreeNode selectedNode = 
+					       (DefaultMutableTreeNode)treeItems.getLastSelectedPathComponent(); 
+				
+				String rebuild = rebuildNodeString(selectedNode);
+				
+				System.out.println(rebuild);
+				cc.deleteFile(rebuild);
+				
+				txtLogs.append("\nSupression de l'élément, "
+						+ rebuild);
 
+			}
+		});
+		btnOuvrir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				DefaultMutableTreeNode selectedNode = 
+					       (DefaultMutableTreeNode)treeItems.getLastSelectedPathComponent(); 
+				String rebuild = rebuildNodeString(selectedNode);
+				
+				//ouvre fichier
+				
 			}
 		});
 		menuItemConnect.addActionListener(new ActionListener() {
@@ -303,7 +278,7 @@ public class MainClient implements Observer {
 					// change name of button back to Connect
 					mnConnection.setText("Connecte");
 					lblConnexion.setText("Déconnecté");
-					lblConnexion.setForeground(new Color(16));
+					lblConnexion.setForeground(Color.RED);
 
 				} else {
 					// popup avec info du nameNode -- needed?
@@ -334,13 +309,13 @@ public class MainClient implements Observer {
 							cc.ConnectToFileSystem(ip, port);
 							// Connect to Server
 							txtLogs.setText("");
-							txtLogs.append("\nConnexion établie avec le serveur");
+							txtLogs.append("Connexion établie avec le serveur");
 
 							// set isConnected True
 							isConnected = true;
 							cc.getListFileAvailaible();
 							lblConnexion.setText("Connecté");
-							lblConnexion.setForeground(new Color(9));
+							lblConnexion.setForeground(Color.GREEN);
 							mnConnection.setText("Deconnecte");
 							// refresh treeItems
 						} catch (Exception e) {
@@ -360,7 +335,27 @@ public class MainClient implements Observer {
 			}
 		});
 	}
-
+	public String rebuildNodeString(DefaultMutableTreeNode selectedNode){
+		boolean isroot = false;
+		ArrayList<String> rebuildStrings = new ArrayList<String>();
+		while(!isroot){
+			rebuildStrings.add(selectedNode.toString());
+			if(!(selectedNode.getParent().toString().equals("DisBox"))){
+				selectedNode = (DefaultMutableTreeNode) selectedNode.getParent();
+			}
+			else{
+				isroot = true;
+			}
+		}
+		String rebuild = "";
+		for(int i = rebuildStrings.size() - 1; i >= 0; i--){
+			if(i != rebuildStrings.size() - 1){
+				rebuild += "\\";
+			}
+			rebuild += rebuildStrings.get(i);
+		}
+		return rebuild;
+	}
 	@Override
 	public void update(Observable o, Object arg) {
 

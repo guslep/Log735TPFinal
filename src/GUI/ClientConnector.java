@@ -40,10 +40,17 @@ public class ClientConnector  extends Observable{
 
     }
 
-    public void deleteFille(String fileName){
+    public void deleteFile(String fileName){
 
         serverConnectedTo.sendMessage(new ClientDeleteFile(fileName));
-
+        try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        this.setChanged();
+        this.notifyObservers();
     }
     public void readFile(){
 
