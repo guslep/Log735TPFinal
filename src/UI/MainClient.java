@@ -113,35 +113,82 @@ public class MainClient implements Observer {
 		JPanel PanelItems = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(
 				frmDistributedbox.getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(11)
-					.addComponent(panelItems, GroupLayout.PREFERRED_SIZE, 290, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(pnlConnection, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE))
-						.addComponent(PanelItems, GroupLayout.PREFERRED_SIZE, 534, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(74, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(panelItems, GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(34)
-							.addComponent(pnlConnection, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(39)
-							.addComponent(PanelItems, GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)))
-					.addGap(34))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(514, Short.MAX_VALUE))
-		);
+		groupLayout
+				.setHorizontalGroup(groupLayout
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								groupLayout
+										.createSequentialGroup()
+										.addGap(11)
+										.addComponent(panelItems,
+												GroupLayout.PREFERRED_SIZE,
+												290, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
+										.addGroup(
+												groupLayout
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addGroup(
+																groupLayout
+																		.createSequentialGroup()
+																		.addComponent(
+																				panelButtons,
+																				GroupLayout.PREFERRED_SIZE,
+																				109,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addPreferredGap(
+																				ComponentPlacement.UNRELATED)
+																		.addComponent(
+																				pnlConnection,
+																				GroupLayout.PREFERRED_SIZE,
+																				125,
+																				GroupLayout.PREFERRED_SIZE))
+														.addComponent(
+																PanelItems,
+																GroupLayout.PREFERRED_SIZE,
+																534,
+																GroupLayout.PREFERRED_SIZE))
+										.addContainerGap(74, Short.MAX_VALUE)));
+		groupLayout
+				.setVerticalGroup(groupLayout
+						.createParallelGroup(Alignment.TRAILING)
+						.addGroup(
+								groupLayout
+										.createSequentialGroup()
+										.addGroup(
+												groupLayout
+														.createParallelGroup(
+																Alignment.TRAILING)
+														.addComponent(
+																panelItems,
+																GroupLayout.DEFAULT_SIZE,
+																577,
+																Short.MAX_VALUE)
+														.addGroup(
+																groupLayout
+																		.createSequentialGroup()
+																		.addGap(34)
+																		.addComponent(
+																				pnlConnection,
+																				GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addGap(39)
+																		.addComponent(
+																				PanelItems,
+																				GroupLayout.DEFAULT_SIZE,
+																				478,
+																				Short.MAX_VALUE)))
+										.addGap(34))
+						.addGroup(
+								Alignment.LEADING,
+								groupLayout
+										.createSequentialGroup()
+										.addComponent(panelButtons,
+												GroupLayout.PREFERRED_SIZE, 97,
+												GroupLayout.PREFERRED_SIZE)
+										.addContainerGap(514, Short.MAX_VALUE)));
 		PanelItems.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -178,7 +225,7 @@ public class MainClient implements Observer {
 		treeItems.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(
 				"DisBox") {
 			{
-				
+
 			}
 		}));
 
@@ -193,9 +240,9 @@ public class MainClient implements Observer {
 		btnSupprimer.setEnabled(false);
 		btnSupprimer.setHorizontalAlignment(SwingConstants.RIGHT);
 		panelButtons.add(btnSupprimer);
-		
+
 		JButton btnOuvrir = new JButton("Ouvrir");
-		
+
 		btnOuvrir.setHorizontalAlignment(SwingConstants.RIGHT);
 		btnOuvrir.setEnabled(false);
 		panelButtons.add(btnOuvrir);
@@ -213,57 +260,84 @@ public class MainClient implements Observer {
 				JFileChooser chooser = new JFileChooser();
 				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				int returnVal = chooser.showOpenDialog(new JFrame());
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File fichierOuDossier = chooser.getSelectedFile();
-					txtLogs.append("\nFichier sélectionné, envoi en cours");
-					if(fichierOuDossier.isDirectory()){
-						File[] filesInDirectory = fichierOuDossier.listFiles();
-						for ( File file : filesInDirectory ) {
-							System.out.println("envoie de " + file.getName());
-							cc.addFile(file, " ");	
+				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeItems
+						.getLastSelectedPathComponent();
+
+				String dossierParent = " ";
+
+				if (selectedNode != null) {
+					String temp = rebuildNodeString(selectedNode);
+					System.out.println(temp);
+					if (temp.contains("\\")) {
+
+						String[] tempSplit = temp.replace("\\","/").split("/");
+						for (int i = 0; i < tempSplit.length; i++) {
+
+							if (!tempSplit[i].contains(".")) {
+
+								if (i != 0) {
+									dossierParent += "\\";
+								}
+								dossierParent += tempSplit[i];
+							}
 						}
+						System.out.println(dossierParent);
 					}
-					else{
-						cc.addFile(fichierOuDossier, " ");	
-					}
-					// envoie le fichier Ã  ajouter et le path. le path est le
-					// path choisie par l'utilisateur ex
-					// root/bleu/nouvveaufichier.txt
-
-					
-
-					// send file/dossier to server
-				} else {
-					txtLogs.append("\najout annulï¿½ par l'utilisateur");
 				}
+
+				// if (returnVal == JFileChooser.APPROVE_OPTION) {
+				// File fichierOuDossier = chooser.getSelectedFile();
+				// txtLogs.append("\nFichier sélectionné, envoi en cours");
+				// if(fichierOuDossier.isDirectory()){
+				// File[] filesInDirectory = fichierOuDossier.listFiles();
+				// for ( File file : filesInDirectory ) {
+				// System.out.println("envoie de " + file.getName());
+				// cc.addFile(file, dossierParent);
+				//
+				// //mettre le nom du dossier dans le "" + récursif
+				// //cc.addFile(file, "NouveauDossier/");
+				// }
+				// }
+				// else{
+				// cc.addFile(fichierOuDossier, dossierParent);
+				// }
+				// // envoie le fichier Ã  ajouter et le path. le path est le
+				// // path choisie par l'utilisateur ex
+				// // root/bleu/nouvveaufichier.txt
+				//
+				//
+				//
+				// // send file/dossier to server
+				// } else {
+				// txtLogs.append("\najout annulï¿½ par l'utilisateur");
+				// }
 			}
 		});
 		btnSupprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				//rebuild chemin du node root\\dossier1\\fichier
-				DefaultMutableTreeNode selectedNode = 
-					       (DefaultMutableTreeNode)treeItems.getLastSelectedPathComponent(); 
-				
+
+				// rebuild chemin du node root\\dossier1\\fichier
+				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeItems
+						.getLastSelectedPathComponent();
+
 				String rebuild = rebuildNodeString(selectedNode);
-				
+
 				System.out.println(rebuild);
 				cc.deleteFile(rebuild);
-				
-				txtLogs.append("\nSupression de l'élément, "
-						+ rebuild);
+
+				txtLogs.append("\nSupression de l'élément, " + rebuild);
 
 			}
 		});
 		btnOuvrir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				DefaultMutableTreeNode selectedNode = 
-					       (DefaultMutableTreeNode)treeItems.getLastSelectedPathComponent(); 
+
+				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeItems
+						.getLastSelectedPathComponent();
 				String rebuild = rebuildNodeString(selectedNode);
-				
-				//ouvre fichier
-				
+
+				cc.readFile(rebuild);
+
 			}
 		});
 		menuItemConnect.addActionListener(new ActionListener() {
@@ -335,36 +409,36 @@ public class MainClient implements Observer {
 			}
 		});
 	}
-	public String rebuildNodeString(DefaultMutableTreeNode selectedNode){
+
+	public String rebuildNodeString(DefaultMutableTreeNode selectedNode) {
 		boolean isroot = false;
 		ArrayList<String> rebuildStrings = new ArrayList<String>();
-		while(!isroot){
+		while (!isroot) {
 			rebuildStrings.add(selectedNode.toString());
-			if(!(selectedNode.getParent().toString().equals("DisBox"))){
-				selectedNode = (DefaultMutableTreeNode) selectedNode.getParent();
-			}
-			else{
+			if (!(selectedNode.getParent().toString().equals("DisBox"))) {
+				selectedNode = (DefaultMutableTreeNode) selectedNode
+						.getParent();
+			} else {
 				isroot = true;
 			}
 		}
 		String rebuild = "";
-		for(int i = rebuildStrings.size() - 1; i >= 0; i--){
-			if(i != rebuildStrings.size() - 1){
+		for (int i = rebuildStrings.size() - 1; i >= 0; i--) {
+			if (i != rebuildStrings.size() - 1) {
 				rebuild += "\\";
 			}
 			rebuild += rebuildStrings.get(i);
 		}
 		return rebuild;
 	}
+
 	@Override
 	public void update(Observable o, Object arg) {
-
 		updateFileList(ClientConnector.getInstance().getListFileAvailaible());
 	}
 
 	private void updateFileList(final ArrayList<String> listeFile) {
 
-		
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("DisBox");
 
 		// Create the tree model and add the root node to it
@@ -381,8 +455,7 @@ public class MainClient implements Observer {
 		treeItems.setModel(model);
 	}
 
-	private void buildTreeFromString(DefaultTreeModel model,
-			final String str) {
+	private void buildTreeFromString(DefaultTreeModel model, final String str) {
 		// Fetch the root node
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 

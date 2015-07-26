@@ -2,6 +2,7 @@ package GUI;
 
 import FileServerEntity.Message.ClientMessage.ClientAddFile;
 import FileServerEntity.Message.ClientMessage.ClientDeleteFile;
+import FileServerEntity.Message.ClientMessage.ClientReadFile;
 
 import java.io.File;
 import java.net.Inet4Address;
@@ -12,91 +13,93 @@ import java.util.Observable;
 /**
  * Created by Gus on 7/16/2015.
  */
-public class ClientConnector  extends Observable{
+public class ClientConnector extends Observable {
 
-    private static ClientConnector instance;
-    private Inet4Address nameNodateSuccursaleIPAdresse;
-    private Integer nameNodeportNumber;
+	private static ClientConnector instance;
+	private Inet4Address nameNodateSuccursaleIPAdresse;
+	private Integer nameNodeportNumber;
 
-    private  ServerConnectionThread serverConnectedTo;
-    private ArrayList<String> listFileAvailaible;
-    private ClientConnector() {
-    }
+	private ServerConnectionThread serverConnectedTo;
+	private ArrayList<String> listFileAvailaible;
 
-    public static ClientConnector getInstance() {
-        if(instance==null){
-            instance=new ClientConnector();
-        }
-        return instance;
-    }
+	private ClientConnector() {
+	}
 
+	public static ClientConnector getInstance() {
+		if (instance == null) {
+			instance = new ClientConnector();
+		}
+		return instance;
+	}
 
+	public void addFile(File fichierOuDossier, String path) {
+		// TODO lire et ajouter le fichier comme avec le serveur
 
-    public void addFile(File fichierOuDossier,String path){
-        //TODO lire et ajouter le fichier comme avec le serveur
+		new Thread(new ThreadUploadFile(fichierOuDossier, path)).start();
 
-       new Thread(new ThreadUploadFile(fichierOuDossier,path)).start();
+	}
 
+	public void deleteFile(String fileName) {
 
-    }
-
-    public void deleteFile(String fileName){
-
-        serverConnectedTo.sendMessage(new ClientDeleteFile(fileName));
-        try {
+		serverConnectedTo.sendMessage(new ClientDeleteFile(fileName));
+		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        this.setChanged();
-        this.notifyObservers();
-    }
-    public void readFile(){
+		this.setChanged();
+		this.notifyObservers();
+	}
 
+	public void readFile(String fileName) {
+		serverConnectedTo.sendMessage(new ClientReadFile(fileName));
+	}
 
+	public void ConnectToFileSystem(Inet4Address nameNoderIpAdress,
+			int portNumber) {
+		new Thread(new SystemConnector(nameNoderIpAdress, portNumber)).start();
+		this.nameNodateSuccursaleIPAdresse = nameNoderIpAdress;
+		this.nameNodeportNumber = portNumber;
+	}
 
-    }
+	public ServerConnectionThread getServerConnectedTo() {
+		return serverConnectedTo;
+	}
 
-    public void ConnectToFileSystem(Inet4Address nameNoderIpAdress,int portNumber){
-        new Thread(new SystemConnector(nameNoderIpAdress,portNumber)).start();
-        this.nameNodateSuccursaleIPAdresse=nameNoderIpAdress;
-        this.nameNodeportNumber=portNumber;
-    }
+	public void setServerConnectedTo(ServerConnectionThread serverConnectedTo) {
+		this.serverConnectedTo = serverConnectedTo;
+	}
 
-    public ServerConnectionThread getServerConnectedTo() {
-        return serverConnectedTo;
-    }
+	public static void setInstance(ClientConnector instance) {
+		ClientConnector.instance = instance;
+	}
 
-    public void setServerConnectedTo(ServerConnectionThread serverConnectedTo) {
-        this.serverConnectedTo = serverConnectedTo;
-    }
+	public ArrayList<String> getListFileAvailaible() {
+		return listFileAvailaible;
+	}
 
-    public static void setInstance(ClientConnector instance) {
-        ClientConnector.instance = instance;
-    }
+	public synchronized void setListFileAvailaible(
+			ArrayList<File> listFileAvailaible, String rootDirectory) {
 
-    public ArrayList<String> getListFileAvailaible() {
-        return listFileAvailaible;
-    }
+		ArrayList<String> listRelativeFilePath = new ArrayList<String>();
+		if (listFileAvailaible != null) {
+			for (File file : listFileAvailaible) {
+				listRelativeFilePath.add(file.getPath().replace(
+						rootDirectory + "\\", ""));
+			}
+		}
+		this.listFileAvailaible = listRelativeFilePath;
+		this.setChanged();
+		this.notifyObservers();
 
-    public synchronized void setListFileAvailaible(ArrayList<File> listFileAvailaible, String rootDirectory) {
+	}
 
+	public Inet4Address getNameNodateSuccursaleIPAdresse() {
+		return nameNodateSuccursaleIPAdresse;
+	}
 
-        ArrayList<String> listRelativeFilePath=new ArrayList<String>();
-         for(File file:listFileAvailaible){
-             listRelativeFilePath.add(file.getPath().replace(rootDirectory+"\\",""));
-         }
-        this.listFileAvailaible = listRelativeFilePath;
-        this.setChanged();
-    this.notifyObservers();
-    }
-
-    public Inet4Address getNameNodateSuccursaleIPAdresse() {
-        return nameNodateSuccursaleIPAdresse;
-    }
-
-    public Integer getNameNodeportNumber() {
-        return nameNodeportNumber;
-    }
+	public Integer getNameNodeportNumber() {
+		return nameNodeportNumber;
+	}
 }
