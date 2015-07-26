@@ -184,9 +184,17 @@ public class FileWatcher {
 							fm = FileManager.getInstance();
 							//boolean existe = fm.fichierExiste(filename);
 							if (true) {
+
 								FileManager.getInstance().getNomFichierDelete().put(HashMapPath, HashMapPath);
 								//TODO: envoie d'une commande de delete
 								ActiveFileServer.getInstance().pushToAllServer(new MessageDelete(HashMapPath));
+                                InitSymchronizerMessage allFile = new InitSymchronizerMessage(FileManager.getInstance()
+                                        .getListeFichiers(), false,
+                                        FileManager.getInstance()
+                                                .getLocalDir());
+                                ActiveFileServer.getInstance()
+                                        .pushToAllClient(allFile);
+
 
 							}
 
