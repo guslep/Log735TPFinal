@@ -6,7 +6,9 @@ import FileServerEntity.Message.ClientMessage.ClientUploadPartFile;
 import FileServerEntity.Message.ServerMessage.FileMessage;
 import FileServerEntity.Message.ServerMessage.MessageNewFile;
 import FileServerEntity.Server.ActiveFileServer;
+import UI.FileProgressUpdate;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,6 +27,7 @@ public class ThreadUploadFile implements Runnable{
     private File fileUploaded;
     private String fileName;
     private ServerConnectionThread serverConnectedTo;
+    private JProgressBar progressBar;
 
     public ThreadUploadFile(File fileUploaded, String path) {
         this.fileUploaded = fileUploaded;
@@ -123,6 +126,10 @@ public class ThreadUploadFile implements Runnable{
             ClientUploadPartFile messageEnvoi=new ClientUploadPartFile(listeBytes.get(i),fileName,(i * NBBYTEPARMESSAGE));
 
             serverConnectedTo.sendMessage(messageEnvoi);
+
+
+            ClientConnector.getInstance().updateProgressBar(new FileProgressUpdate((int) ((double) i / (double)(listeBytes.size()-1)*100),fileName));
+
 
             numberPacketSent++;
             Date now=new Date();

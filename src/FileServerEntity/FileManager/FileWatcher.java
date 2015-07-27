@@ -194,6 +194,7 @@ public class FileWatcher {
                                         .getListeFichiers(), false,
                                         FileManager.getInstance()
                                                 .getLocalDir());
+
                                 ActiveFileServer.getInstance()
                                         .pushToAllClient(allFile);
 

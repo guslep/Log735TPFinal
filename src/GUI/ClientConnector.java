@@ -3,6 +3,7 @@ package GUI;
 import FileServerEntity.Message.ClientMessage.ClientAddFile;
 import FileServerEntity.Message.ClientMessage.ClientDeleteFile;
 import FileServerEntity.Message.ClientMessage.ClientReadFile;
+import UI.FileProgressUpdate;
 
 import java.io.File;
 import java.net.Inet4Address;
@@ -101,5 +102,12 @@ public class ClientConnector extends Observable {
 
 	public Integer getNameNodeportNumber() {
 		return nameNodeportNumber;
+	}
+
+	public void updateProgressBar(FileProgressUpdate update){
+		this.setChanged();
+		this.notifyObservers(update);
+
+		System.out.println("pls update ome one");
 	}
 }

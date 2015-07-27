@@ -59,6 +59,8 @@ public class MainClient implements Observer {
 	private JFrame frmDistributedbox;
 	ClientConnector cc = ClientConnector.getInstance();
 	JTree treeItems = new JTree();
+	private JLabel lblProgression;
+	private JProgressBar progressBar;
 
 	/**
 	 * Launch the application.
@@ -157,14 +159,14 @@ public class MainClient implements Observer {
 					.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(486, Short.MAX_VALUE))
 		);
-		
-		JLabel lblProgression = new JLabel("transfert du fichier : ");
+
+		lblProgression = new JLabel("transfert du fichier : ");
 		lblProgression.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProgression.setForeground(Color.BLACK);
 		panel_1.add(lblProgression);
 		panel.setLayout(new BorderLayout(0, 0));
-		
-		JProgressBar progressBar = new JProgressBar();
+
+		progressBar= new JProgressBar();
 		progressBar.setValue(0);
 		panel.add(progressBar);
 		PanelItems.setLayout(new BorderLayout(0, 0));
@@ -174,11 +176,11 @@ public class MainClient implements Observer {
 
 		final JTextArea txtLogs = new JTextArea();
 		txtLogs.setEditable(false);
-		txtLogs.setText("Connectez-vous au name node pour débuter");
+		txtLogs.setText("Connectez-vous au name node pour dï¿½buter");
 		scrollPane.setViewportView(txtLogs);
 		pnlConnection.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		final JLabel lblConnexion = new JLabel("Déconnecté");
+		final JLabel lblConnexion = new JLabel("Dï¿½connectï¿½");
 		lblConnexion.setForeground(Color.RED);
 		lblConnexion.setHorizontalAlignment(SwingConstants.CENTER);
 		pnlConnection.add(lblConnexion);
@@ -265,7 +267,7 @@ public class MainClient implements Observer {
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File fichierOuDossier = chooser.getSelectedFile();
-					txtLogs.append("\nFichier sélectionné, envoi en cours");
+					txtLogs.append("\nFichier sï¿½lectionnï¿½, envoi en cours");
 
 					recurseFolder(cc, fichierOuDossier, dossierParent);
 
@@ -286,7 +288,7 @@ public class MainClient implements Observer {
 				System.out.println(rebuild);
 				cc.deleteFile(rebuild);
 
-				txtLogs.append("\nSupression de l'élément, " + rebuild);
+				txtLogs.append("\nSupression de l'ï¿½lï¿½ment, " + rebuild);
 
 			}
 		});
@@ -312,7 +314,7 @@ public class MainClient implements Observer {
 
 					// change name of button back to Connect
 					mnConnection.setText("Connecte");
-					lblConnexion.setText("Déconnecté");
+					lblConnexion.setText("Dï¿½connectï¿½");
 					lblConnexion.setForeground(Color.RED);
 
 				} else {
@@ -344,12 +346,12 @@ public class MainClient implements Observer {
 							cc.ConnectToFileSystem(ip, port);
 							// Connect to Server
 							txtLogs.setText("");
-							txtLogs.append("Connexion établie avec le serveur");
+							txtLogs.append("Connexion ï¿½tablie avec le serveur");
 
 							// set isConnected True
 							isConnected = true;
 							cc.getListFileAvailaible();
-							lblConnexion.setText("Connecté");
+							lblConnexion.setText("Connectï¿½");
 							lblConnexion.setForeground(Color.GREEN);
 							mnConnection.setText("Deconnecte");
 							// refresh treeItems
@@ -381,7 +383,7 @@ public class MainClient implements Observer {
 				recurseFolder(cc, file, dossierParent);
 			}
 		} else {
-			System.out.println("écriture du fichier" + file.getName() + " dans " + dossierParent);
+			System.out.println("ï¿½criture du fichier" + file.getName() + " dans " + dossierParent);
 			if(dossierParent.lastIndexOf("\\") != dossierParent.length() - 1)
 				dossierParent += "\\";
 			cc.addFile(file, dossierParent);
@@ -412,7 +414,26 @@ public class MainClient implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
+
+
+		if(arg==null){
 		updateFileList(ClientConnector.getInstance().getListFileAvailaible());
+		}else{
+
+			if(FileProgressUpdate.class.isInstance(arg)){
+				FileProgressUpdate update=(FileProgressUpdate)arg;
+				lblProgression.setText("Transfert du fichier : "+update.getFileName());
+				progressBar.setValue(update.getPercent());
+					progressBar.setStringPainted(true);
+				progressBar.repaint();
+
+			}
+			if(progressBar.getValue()==100){
+				lblProgression.setText(" ");
+			}
+		}
+
+
 	}
 
 	private void updateFileList(final ArrayList<String> listeFile) {
