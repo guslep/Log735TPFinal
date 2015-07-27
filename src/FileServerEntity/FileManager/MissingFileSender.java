@@ -60,7 +60,7 @@ public class MissingFileSender implements Runnable {
 							&& !fileDistantFileServer.isDirectory()) {
 						if (otherFilesServerState.getDeletedFile() != null
 								&& otherFilesServerState.getDeletedFile().get(
-										relativePath) != null) {
+										relativePath) != null&&otherFilesServerState.getShouldNotSyncWithServer()) {
 							FileManager.getInstance().supprimerFichier(
 									relativePath);
 						} else {
