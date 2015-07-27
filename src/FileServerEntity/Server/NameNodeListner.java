@@ -190,7 +190,7 @@ public class NameNodeListner implements Runnable{
     	 try {
     		 out.writeObject(currentMessage);
          } catch (IOException e) {
-             e.printStackTrace();
+            System.out.println("Socket is closed");
          }
     }
 

@@ -55,6 +55,7 @@ public class ThreadUploadFile implements Runnable{
         while(hack){
             try{
                 hack=false;
+                int sfe=(int)fileUploaded.length();
                 copy((int)fileUploaded.length());
             }catch(Exception e){
                 try {
@@ -126,9 +127,9 @@ public class ThreadUploadFile implements Runnable{
             ClientUploadPartFile messageEnvoi=new ClientUploadPartFile(listeBytes.get(i),fileName,(i * NBBYTEPARMESSAGE));
 
             serverConnectedTo.sendMessage(messageEnvoi);
+            FileProgressUpdate update=new FileProgressUpdate((int) ((double) i / (double)(listeBytes.size()-1)*100),fileName);
 
-
-            ClientConnector.getInstance().updateProgressBar(new FileProgressUpdate((int) ((double) i / (double)(listeBytes.size()-1)*100),fileName));
+            ClientConnector.getInstance().updateProgressBar(update);
 
 
             numberPacketSent++;

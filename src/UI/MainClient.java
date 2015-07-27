@@ -160,13 +160,13 @@ public class MainClient implements Observer {
 					.addContainerGap(486, Short.MAX_VALUE))
 		);
 		
-		JLabel lblProgression = new JLabel("transfert du fichier : ");
+		lblProgression = new JLabel("transfert du fichier : ");
 		lblProgression.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProgression.setForeground(Color.BLACK);
 		panel_1.add(lblProgression);
 		panel.setLayout(new BorderLayout(0, 0));
 		
-		JProgressBar progressBar = new JProgressBar();
+		 progressBar = new JProgressBar();
 		progressBar.setValue(0);
 		panel.add(progressBar);
 		PanelItems.setLayout(new BorderLayout(0, 0));
@@ -347,6 +347,7 @@ public class MainClient implements Observer {
 							// connect to nameNode, server infos will be
 							// dispatched
 							cc.ConnectToFileSystem(ip, port);
+
 							// Connect to Server
 							txtLogs.setText("");
 							txtLogs.append("Connexion �tablie avec le serveur");
@@ -354,7 +355,7 @@ public class MainClient implements Observer {
 							// set isConnected True
 							isConnected = true;
 							cc.getListFileAvailaible();
-							lblConnexion.setText("Connect�");
+							lblConnexion.setText("Connecte");
 							lblConnexion.setForeground(Color.GREEN);
 							mnConnection.setText("Deconnecte");
 							// refresh treeItems
@@ -437,9 +438,7 @@ public class MainClient implements Observer {
 				progressBar.repaint();
 
 			}
-			if(progressBar.getValue()==100){
-				lblProgression.setText(" ");
-			}
+
 		}
 
 
