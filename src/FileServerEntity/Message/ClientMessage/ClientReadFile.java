@@ -23,7 +23,7 @@ public class ClientReadFile extends Message implements Serializable,MessageExecu
 
     @Override
     public void execute(ClientResponseThread caller) {
-        File sentFile=FileManager.getInstance().getFichier(fileName);
+        File sentFile=FileManager.getInstance().getFichier(FileManager.getInstance().getLocalDir()+"\\"+fileName);
         new Thread(new FileServerListener(sentFile,fileName,caller)  ).start();
     }
 }

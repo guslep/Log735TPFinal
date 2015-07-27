@@ -62,14 +62,7 @@ public class ServerConnectionThread implements Runnable {
             while (!exit&&(messageReceived =(Message)messageReader.readObject() ) != null)
             {
                 System.out.println("message de type " + messageReceived);
-                if(MessageNewFile.class.isInstance(messageReceived)){
-
-
-                }
-                else if(FileMessage.class.isInstance(messageReceived)){
-
-                }
-                else if(InitSymchronizerMessage.class.isInstance(messageReceived)){
+                if(InitSymchronizerMessage.class.isInstance(messageReceived)){
                     InitSymchronizerMessage msgReceived= (InitSymchronizerMessage) messageReceived;
 
                     ClientConnector.getInstance().setListFileAvailaible(msgReceived.getListContainedFile(),msgReceived.getRootDirectory());

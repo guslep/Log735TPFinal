@@ -159,14 +159,14 @@ public class MainClient implements Observer {
 					.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(486, Short.MAX_VALUE))
 		);
-
-		lblProgression = new JLabel("transfert du fichier : ");
+		
+		JLabel lblProgression = new JLabel("transfert du fichier : ");
 		lblProgression.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProgression.setForeground(Color.BLACK);
 		panel_1.add(lblProgression);
 		panel.setLayout(new BorderLayout(0, 0));
-
-		progressBar= new JProgressBar();
+		
+		JProgressBar progressBar = new JProgressBar();
 		progressBar.setValue(0);
 		panel.add(progressBar);
 		PanelItems.setLayout(new BorderLayout(0, 0));
@@ -218,10 +218,12 @@ public class MainClient implements Observer {
 		final JButton btnSupprimer = new JButton("Supp");
 
 		btnSupprimer.setEnabled(false);
+		
 		btnSupprimer.setHorizontalAlignment(SwingConstants.RIGHT);
 		panelButtons.add(btnSupprimer);
 
-		JButton btnOuvrir = new JButton("Ouvrir");
+		final JButton btnOuvrir = new JButton("Ouvrir");
+		btnOuvrir.setEnabled(false);
 
 		btnOuvrir.setHorizontalAlignment(SwingConstants.RIGHT);
 		btnOuvrir.setEnabled(false);
@@ -232,6 +234,7 @@ public class MainClient implements Observer {
 				System.out.println("something happens");
 				boolean somethingIsSelected = !(treeItems.isSelectionEmpty());
 				btnSupprimer.setEnabled(somethingIsSelected);
+				btnOuvrir.setEnabled(somethingIsSelected);
 
 			}
 		});
@@ -376,25 +379,31 @@ public class MainClient implements Observer {
 	private void recurseFolder(ClientConnector cc, File file,
 			String dossierParent) {
 		if (file.isDirectory()) {
-			dossierParent += "\\" + file.getName();
+			if(dossierParent != ""){
+				dossierParent += "\\";
+			}
+			dossierParent += file.getName();
 			File[] filesInDirectory = file.listFiles();
 			for (File f : filesInDirectory) {
-
 				recurseFolder(cc, file, dossierParent);
 			}
 		} else {
-			System.out.println("�criture du fichier" + file.getName() + " dans " + dossierParent);
+			System.out.println("�criture du fichier " + file.getName() + " dans " + dossierParent);
+			cc.addFile(file, dossierParent);
 			if(dossierParent.lastIndexOf("\\") != dossierParent.length() - 1)
 				dossierParent += "\\";
-			cc.addFile(file, dossierParent);
 		}
 	}
 
 	public String rebuildNodeString(DefaultMutableTreeNode selectedNode) {
 		boolean isroot = false;
 		ArrayList<String> rebuildStrings = new ArrayList<String>();
+		if(selectedNode.toString().equals("DisBox")){
+			isroot=true;
+		}
 		while (!isroot) {
 			rebuildStrings.add(selectedNode.toString());
+			
 			if (!(selectedNode.getParent().toString().equals("DisBox"))) {
 				selectedNode = (DefaultMutableTreeNode) selectedNode
 						.getParent();

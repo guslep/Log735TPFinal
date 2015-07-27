@@ -141,13 +141,14 @@ public class FileServerListener implements Runnable{
 		// new
 		MessageNewFile mnf = new MessageNewFile(fileSize, filename.replace(FileManager.getInstance().getLocalDir()+"\\",""));
         ActiveFileServer afs = ActiveFileServer.getInstance();
-        if(caller==null){
+		if(clientConnection!=null){
+			clientConnection.sendMessage(mnf);
+		}
+		else if(caller==null){
 
 
 		afs.pushToAllServer(mnf);}
-		else if(clientConnection!=null){
-			clientConnection.sendMessage(mnf);
-		}
+
         else{
             caller.sendMessage(mnf);
         }
@@ -162,12 +163,13 @@ public class FileServerListener implements Runnable{
 
 			FileMessage messageEnvoi = new FileMessage(listeBytes.get(i),
 					filename, (i * NBBYTEPARMESSAGE));
-            if(caller==null){
+			if(clientConnection!=null){
+				clientConnection.sendMessage(messageEnvoi);
+			}
+			else if(caller==null){
                 ActiveFileServer.getInstance().pushToAllServer(messageEnvoi);
 
-            } else if(clientConnection!=null){
-				clientConnection.sendMessage(mnf);
-			}else{
+            } else{
                 caller.sendMessage(messageEnvoi);
             }
             numberPacketSent++;
@@ -189,11 +191,11 @@ public class FileServerListener implements Runnable{
 		}
 		//message final pour terminer la connexion
 		FileMessage messageFinal = new FileMessage(null, filename, 0);
-		if(caller==null){
+		if(clientConnection!=null){
+			clientConnection.sendMessage(messageFinal);
+		} else if(caller==null){
             afs.getInstance().pushToAllServer(messageFinal);
-        }else if(clientConnection!=null){
-			clientConnection.sendMessage(mnf);
-		}
+        }
 		else{
             caller.sendMessage(messageFinal);
         }

@@ -10,16 +10,16 @@ import FileServerEntity.Server.ActiveFileServer;
 import GUI.ServerConnectionThread;
 
 public class ClientDownloadFile {
-	private static final String FOLDER_DESTINATION = "\\Downloads\\";
+	private static final String FOLDER_DESTINATION = "Downloads\\";
 	 private String nom;
 	 private ServerConnectionThread connectionThread;
 	 private byte[] byteArray;
-	 private String localDirName = ActiveFileServer.getInstance().getThisFileServer().getNom();
+	 private String localDirName = FOLDER_DESTINATION;
 	 private String localDir = System.getProperty("user.dir") + "\\files - " + localDirName ;	
 
 	 public ClientDownloadFile(ServerConnectionThread connectionThread, String nom, int byteSize) {
 	     this.connectionThread=connectionThread;
-	     this.nom = FOLDER_DESTINATION + nom;
+	     this.nom =  nom;
 	     this.byteArray = new byte [byteSize];
 	 }
 	 
@@ -36,9 +36,13 @@ public class ClientDownloadFile {
 	    }
 
 	 private void writeFile() {
-		 creerFichier(byteArray, nom);
-		 File currentFile = new File(nom);
-		 ClientOpenFile.openFile(currentFile);
+		File currentFile= creerFichier(byteArray, nom);
+
+		if(currentFile!=null){
+			ClientOpenFile.openFile(currentFile);
+
+		}
+
 		 connectionThread.fileWasWritten(nom);
 	 }
 	 
@@ -46,7 +50,7 @@ public class ClientDownloadFile {
 	     return nom;
 	 }
 	 
-	 public boolean creerFichier(byte[] fichier, String fileName) {
+	 public File creerFichier(byte[] fichier, String fileName) {
 			System.out.println("maybe pls?");
 			String fullfilename = localDir + fileName;
 	        File newFile=new File(fullfilename);
@@ -54,6 +58,13 @@ public class ClientDownloadFile {
 	        if(!newFile.exists()&&newFile.getParentFile()!=null){
 	            newFile.getParentFile().mkdirs();
 	        }
+		 if(newFile.exists()){
+			 try {
+				 newFile.delete();
+			 } catch (Exception e){
+				 return newFile;
+			 }
+		 }
 
 	        try {
 				FileOutputStream fos = new FileOutputStream(fullfilename,true);
@@ -63,10 +74,10 @@ public class ClientDownloadFile {
 			} catch (FileNotFoundException e) {
 
 
-				return false;
+				newFile=null;
 			} catch (IOException e) {
-				return false;
+				newFile =null;
 			}
-			return true;
+			return newFile;
 		}
 }
