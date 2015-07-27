@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Observable;
 import java.util.Observer;
+import javax.swing.JProgressBar;
 
 public class MainClient implements Observer {
 	boolean isConnected = false;
@@ -111,84 +112,61 @@ public class MainClient implements Observer {
 		final JPanel panelItems = new JPanel();
 
 		JPanel PanelItems = new JPanel();
+		
+		JPanel panel = new JPanel();
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		GroupLayout groupLayout = new GroupLayout(
 				frmDistributedbox.getContentPane());
-		groupLayout
-				.setHorizontalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addGap(11)
-										.addComponent(panelItems,
-												GroupLayout.PREFERRED_SIZE,
-												290, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addComponent(
-																				panelButtons,
-																				GroupLayout.PREFERRED_SIZE,
-																				109,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addPreferredGap(
-																				ComponentPlacement.UNRELATED)
-																		.addComponent(
-																				pnlConnection,
-																				GroupLayout.PREFERRED_SIZE,
-																				125,
-																				GroupLayout.PREFERRED_SIZE))
-														.addComponent(
-																PanelItems,
-																GroupLayout.PREFERRED_SIZE,
-																534,
-																GroupLayout.PREFERRED_SIZE))
-										.addContainerGap(74, Short.MAX_VALUE)));
-		groupLayout
-				.setVerticalGroup(groupLayout
-						.createParallelGroup(Alignment.TRAILING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.TRAILING)
-														.addComponent(
-																panelItems,
-																GroupLayout.DEFAULT_SIZE,
-																577,
-																Short.MAX_VALUE)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(34)
-																		.addComponent(
-																				pnlConnection,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(39)
-																		.addComponent(
-																				PanelItems,
-																				GroupLayout.DEFAULT_SIZE,
-																				478,
-																				Short.MAX_VALUE)))
-										.addGap(34))
-						.addGroup(
-								Alignment.LEADING,
-								groupLayout
-										.createSequentialGroup()
-										.addComponent(panelButtons,
-												GroupLayout.PREFERRED_SIZE, 97,
-												GroupLayout.PREFERRED_SIZE)
-										.addContainerGap(514, Short.MAX_VALUE)));
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(11)
+					.addComponent(panelItems, GroupLayout.PREFERRED_SIZE, 290, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+									.addComponent(pnlConnection, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+								.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 276, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(PanelItems, GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE))
+					.addContainerGap(38, GroupLayout.PREFERRED_SIZE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(panelItems, GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
+						.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+							.addGap(13)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(pnlConnection, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(PanelItems, GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)))
+					.addGap(34))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(486, Short.MAX_VALUE))
+		);
+		
+		JLabel lblProgression = new JLabel("transfert du fichier : ");
+		lblProgression.setHorizontalAlignment(SwingConstants.CENTER);
+		lblProgression.setForeground(Color.BLACK);
+		panel_1.add(lblProgression);
+		panel.setLayout(new BorderLayout(0, 0));
+		
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setValue(0);
+		panel.add(progressBar);
 		PanelItems.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -264,13 +242,14 @@ public class MainClient implements Observer {
 						.getLastSelectedPathComponent();
 
 				String dossierParent = " ";
-
+				// rebuild du open au niveau du selected Node
 				if (selectedNode != null) {
+					dossierParent = "";
 					String temp = rebuildNodeString(selectedNode);
 					System.out.println(temp);
 					if (temp.contains("\\")) {
 
-						String[] tempSplit = temp.replace("\\","/").split("/");
+						String[] tempSplit = temp.replace("\\", "/").split("/");
 						for (int i = 0; i < tempSplit.length; i++) {
 
 							if (!tempSplit[i].contains(".")) {
@@ -281,36 +260,18 @@ public class MainClient implements Observer {
 								dossierParent += tempSplit[i];
 							}
 						}
-						System.out.println(dossierParent);
 					}
 				}
 
-				// if (returnVal == JFileChooser.APPROVE_OPTION) {
-				// File fichierOuDossier = chooser.getSelectedFile();
-				// txtLogs.append("\nFichier sélectionné, envoi en cours");
-				// if(fichierOuDossier.isDirectory()){
-				// File[] filesInDirectory = fichierOuDossier.listFiles();
-				// for ( File file : filesInDirectory ) {
-				// System.out.println("envoie de " + file.getName());
-				// cc.addFile(file, dossierParent);
-				//
-				// //mettre le nom du dossier dans le "" + récursif
-				// //cc.addFile(file, "NouveauDossier/");
-				// }
-				// }
-				// else{
-				// cc.addFile(fichierOuDossier, dossierParent);
-				// }
-				// // envoie le fichier Ã  ajouter et le path. le path est le
-				// // path choisie par l'utilisateur ex
-				// // root/bleu/nouvveaufichier.txt
-				//
-				//
-				//
-				// // send file/dossier to server
-				// } else {
-				// txtLogs.append("\najout annulï¿½ par l'utilisateur");
-				// }
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File fichierOuDossier = chooser.getSelectedFile();
+					txtLogs.append("\nFichier sélectionné, envoi en cours");
+
+					recurseFolder(cc, fichierOuDossier, dossierParent);
+
+				} else {
+					txtLogs.append("\najout annulï¿½ par l'utilisateur");
+				}
 			}
 		});
 		btnSupprimer.addActionListener(new ActionListener() {
@@ -408,6 +369,23 @@ public class MainClient implements Observer {
 				btnAjouter.setEnabled(isConnected);
 			}
 		});
+	}
+
+	private void recurseFolder(ClientConnector cc, File file,
+			String dossierParent) {
+		if (file.isDirectory()) {
+			dossierParent += "\\" + file.getName();
+			File[] filesInDirectory = file.listFiles();
+			for (File f : filesInDirectory) {
+
+				recurseFolder(cc, file, dossierParent);
+			}
+		} else {
+			System.out.println("écriture du fichier" + file.getName() + " dans " + dossierParent);
+			if(dossierParent.lastIndexOf("\\") != dossierParent.length() - 1)
+				dossierParent += "\\";
+			cc.addFile(file, dossierParent);
+		}
 	}
 
 	public String rebuildNodeString(DefaultMutableTreeNode selectedNode) {
