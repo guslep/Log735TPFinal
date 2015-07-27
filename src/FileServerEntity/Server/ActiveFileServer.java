@@ -106,7 +106,7 @@ public class ActiveFileServer {
 	}
 
 
-    public void pushToAllClient(Message message){
+    public synchronized void pushToAllClient(Message message){
 
         Iterator iter = connectionClient.iterator();
 
