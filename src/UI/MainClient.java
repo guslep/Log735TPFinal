@@ -216,10 +216,12 @@ public class MainClient implements Observer {
 		final JButton btnSupprimer = new JButton("Supp");
 
 		btnSupprimer.setEnabled(false);
+		
 		btnSupprimer.setHorizontalAlignment(SwingConstants.RIGHT);
 		panelButtons.add(btnSupprimer);
 
-		JButton btnOuvrir = new JButton("Ouvrir");
+		final JButton btnOuvrir = new JButton("Ouvrir");
+		btnOuvrir.setEnabled(false);
 
 		btnOuvrir.setHorizontalAlignment(SwingConstants.RIGHT);
 		btnOuvrir.setEnabled(false);
@@ -230,6 +232,7 @@ public class MainClient implements Observer {
 				System.out.println("something happens");
 				boolean somethingIsSelected = !(treeItems.isSelectionEmpty());
 				btnSupprimer.setEnabled(somethingIsSelected);
+				btnOuvrir.setEnabled(somethingIsSelected);
 
 			}
 		});
@@ -374,25 +377,31 @@ public class MainClient implements Observer {
 	private void recurseFolder(ClientConnector cc, File file,
 			String dossierParent) {
 		if (file.isDirectory()) {
-			dossierParent += "\\" + file.getName();
+			if(dossierParent != ""){
+				dossierParent += "\\";
+			}
+			dossierParent += file.getName();
 			File[] filesInDirectory = file.listFiles();
 			for (File f : filesInDirectory) {
-
 				recurseFolder(cc, file, dossierParent);
 			}
 		} else {
-			System.out.println("écriture du fichier" + file.getName() + " dans " + dossierParent);
+			System.out.println("écriture du fichier " + file.getName() + " dans " + dossierParent);
+			cc.addFile(file, dossierParent);
 			if(dossierParent.lastIndexOf("\\") != dossierParent.length() - 1)
 				dossierParent += "\\";
-			cc.addFile(file, dossierParent);
 		}
 	}
 
 	public String rebuildNodeString(DefaultMutableTreeNode selectedNode) {
 		boolean isroot = false;
 		ArrayList<String> rebuildStrings = new ArrayList<String>();
+		if(selectedNode.toString().equals("DisBox")){
+			isroot=true;
+		}
 		while (!isroot) {
 			rebuildStrings.add(selectedNode.toString());
+			
 			if (!(selectedNode.getParent().toString().equals("DisBox"))) {
 				selectedNode = (DefaultMutableTreeNode) selectedNode
 						.getParent();
