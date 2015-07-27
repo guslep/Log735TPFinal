@@ -20,7 +20,7 @@ import java.util.Date;
  */
 public class ThreadUploadFile implements Runnable{
     private final static int NBBYTEPARMESSAGE = 2048;
-    private final static int  NBBYTEMAXTHETHERYNG=1000000;
+    private final static int  NBBYTEMAXTHETHERYNG=10000000;
 
     private File fileUploaded;
     private String fileName;

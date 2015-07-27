@@ -23,6 +23,8 @@ public class InitSymchronizerMessage extends Message implements Serializable {
 
 
 
+
+
     public InitSymchronizerMessage(ArrayList<File> listeFichiers, String localDir) {
         this.listContainedFile = listeFichiers;
         this.rootDirectory = localDir;

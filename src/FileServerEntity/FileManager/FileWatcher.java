@@ -155,6 +155,14 @@ public class FileWatcher {
 								x.printStackTrace();
 							}
 							// to prevent endless loops
+
+							InitSymchronizerMessage allFile = new InitSymchronizerMessage(FileManager.getInstance()
+									.getListeFichiers(), false,
+									FileManager.getInstance()
+											.getLocalDir());
+							ActiveFileServer.getInstance()
+									.pushToAllClient(allFile);
+
 							if (nomHashMap.containsKey(HashMapPath.toString())) {
 								nomHashMap.remove(HashMapPath.toString());
 							} else {
@@ -164,12 +172,6 @@ public class FileWatcher {
 								if (nouveauFichier != null) {
 									new Thread(new FileServerListener(
 											nouveauFichier, HashMapPath)).start();
-								InitSymchronizerMessage allFile = new InitSymchronizerMessage(FileManager.getInstance()
-												.getListeFichiers(), false,
-										FileManager.getInstance()
-												.getLocalDir());
-									ActiveFileServer.getInstance()
-										.pushToAllClient(allFile);
 
 									System.out.println("envoie du fichier "
 											+ child.toString());
