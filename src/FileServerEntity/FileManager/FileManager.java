@@ -183,7 +183,13 @@ public class FileManager {
 			if(directory!=null){
 				while(!done)
 				try{
-				done = directory.delete();
+					File existBeforeDelete=new File(localDir+"\\"+nomFichier);
+					if(existBeforeDelete.exists()){
+				done = directory.delete();}
+					else{
+						done=true;
+					}
+
 				
 				}catch(Exception e){
 					try {
