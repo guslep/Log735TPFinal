@@ -61,6 +61,7 @@ public class MainClient implements Observer {
 	JTree treeItems = new JTree();
 	private JLabel lblProgression;
 	private JProgressBar progressBar;
+	private JLabel lblConnexion = null;
 
 	/**
 	 * Launch the application.
@@ -180,7 +181,7 @@ public class MainClient implements Observer {
 		scrollPane.setViewportView(txtLogs);
 		pnlConnection.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		final JLabel lblConnexion = new JLabel("D�connect�");
+		lblConnexion = new JLabel("D�connect�");
 		lblConnexion.setForeground(Color.RED);
 		lblConnexion.setHorizontalAlignment(SwingConstants.CENTER);
 		pnlConnection.add(lblConnexion);
@@ -431,7 +432,15 @@ public class MainClient implements Observer {
 
 		if(arg==null){
 		updateFileList(ClientConnector.getInstance().getListFileAvailaible());
-		}else{
+		String serverName = ClientConnector.getInstance().getServerName();
+		int serverPort = ClientConnector.getInstance().getServerPort();
+		System.out.println("test connexion");
+		if (serverName != null && !serverName.equals("")){
+			lblConnexion.setText
+			("Connecte: " + serverName + " sur le port " + serverPort);
+		}
+		
+		}else{	
 
 			if(FileProgressUpdate.class.isInstance(arg)){
 				FileProgressUpdate update=(FileProgressUpdate)arg;

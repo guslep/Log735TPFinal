@@ -22,6 +22,9 @@ public class ClientConnector extends Observable {
 
 	private ServerConnectionThread serverConnectedTo;
 	private ArrayList<String> listFileAvailaible;
+	
+	private String serverName;
+    private int serverPort;
 
 	private ClientConnector() {
 	}
@@ -102,6 +105,22 @@ public class ClientConnector extends Observable {
 
 	public Integer getNameNodeportNumber() {
 		return nameNodeportNumber;
+	}
+	
+	public String getServerName() {
+		return serverName;
+	}
+
+	public void setServerName(String serverName) {
+		this.serverName = serverName;
+	}
+
+	public int getServerPort() {
+		return serverPort;
+	}
+
+	public void setServerPort(String serverPort) {
+		this.serverPort = Integer.parseInt(serverPort);
 	}
 
 	public void updateProgressBar(FileProgressUpdate update){
