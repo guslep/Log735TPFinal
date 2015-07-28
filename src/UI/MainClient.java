@@ -320,7 +320,7 @@ public class MainClient implements Observer {
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeItems
 						.getLastSelectedPathComponent();
 
-				String dossierParent = " ";
+				String dossierParent = "";
 				// rebuild du open au niveau du selected Node
 				if (selectedNode != null) {
 
@@ -459,18 +459,30 @@ public class MainClient implements Observer {
 	private void recurseFolder(ClientConnector cc, File file,
 			String dossierParent) {
 		if (file.isDirectory()) {
-			if (dossierParent != "") {
+			char lastChar=dossierParent.charAt(dossierParent.length()-1);
+			if (dossierParent != ""&&lastChar!='\\') {
 				dossierParent += "\\";
 			}
 			dossierParent += file.getName();
 			File[] filesInDirectory = file.listFiles();
 			for (File f : filesInDirectory) {
-				recurseFolder(cc, file, dossierParent);
+				if(f.isDirectory())
+				{
+					String test=f.getName();
+				recurseFolder(cc, f, dossierParent+"\\"+f.getName());
+				}
+				else{
+					cc.addFile(f, dossierParent+"\\");
+					System.out.println("�criture du fichier " + file.getName()
+							+ " dans " + dossierParent +"\\");
+
+
+				}
 			}
 		} else {
 			System.out.println("�criture du fichier " + file.getName()
 					+ " dans " + dossierParent);
-			if (dossierParent != " ") {
+			if (dossierParent != "") {
 				if (dossierParent.lastIndexOf("\\") != dossierParent.length() - 1)
 					dossierParent += "\\";
 			}

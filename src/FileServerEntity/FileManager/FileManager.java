@@ -257,6 +257,7 @@ public class FileManager {
 			fos.write(fichier);
 			fos.close();
 
+
 		} catch (FileNotFoundException e) {
 
 
@@ -266,6 +267,7 @@ public class FileManager {
 		}
 
 		updatelisteFichiers();
+			ActiveFileServer.getInstance().fileWritten(fileName);
 		return true;
 	}
 
@@ -301,5 +303,15 @@ public class FileManager {
 
 	public HashMap<String, String> getNomFichierDelete() {
 		return nomFichierDelete;
+	}
+
+	public Boolean exist(String fileName) {
+
+		File directory=new File(localDir+"\\"+fileName);
+		if(directory.exists()){
+			return true;
+		}else {
+			return false;
+		}
 	}
 }

@@ -1,10 +1,13 @@
 package FileServerEntity.Server;
 
+import FileServerEntity.FileManager.FileManager;
+import FileServerEntity.Message.ServerMessage.MessageFileWriteFail;
 import NameNode.FileServer;
 
 
 import FileServerEntity.Message.Message;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,10 +17,13 @@ public class ActiveFileServer {
 
 	FileServer thisFileServer;
 	private final Object lockListeClient = new Object();
+	private  final Object lockFileWriteAttempt=new Object();
 	private final Object lockListeServer = new Object();
 	static HashMap<Integer, FileServerClient> listeSuccursale = new HashMap<Integer, FileServerClient>();
     private ArrayList<ClientResponseThread> connectionClient=new ArrayList<ClientResponseThread>();
 	private String portNumber;
+
+	private HashMap<String,String> listFileReserved=new  HashMap<String,String>();
 
 	public HashMap<Integer, FileServerClient> getListeSuccursale() {
 
@@ -146,4 +152,36 @@ public class ActiveFileServer {
 		synchronized (lockListeClient){
         return connectionClient;}
     }
+
+	public boolean reserveFileName(String fileName){
+		synchronized (lockFileWriteAttempt) {
+			Boolean exist = FileManager.getInstance().exist(fileName);
+			if (exist) {
+				pushToAllServer(new MessageFileWriteFail(fileName));
+				return false;
+			} else if (listFileReserved.get(fileName) != null) {
+
+				pushToAllServer(new MessageFileWriteFail(fileName));
+				return false;
+			} else {
+				listFileReserved.put(fileName, fileName);
+				return true;
+
+			}
+		}
+
+	}
+	public void reserveFileFailed(String filename){
+		synchronized (lockFileWriteAttempt){
+			listFileReserved.remove(filename);
+		}
+
+	}
+	public void fileWritten(String filename){
+		synchronized (lockFileWriteAttempt){
+			listFileReserved.remove(filename);
+		}
+
+	}
+
 }

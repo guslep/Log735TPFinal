@@ -6,6 +6,7 @@ import FileServerEntity.FileManager.InitFileSynchronizer;
 import FileServerEntity.FileManager.MissingFileSender;
 import FileServerEntity.FileManager.TransitFile;
 import FileServerEntity.Message.ClientMessage.ClientListFile;
+import FileServerEntity.Message.ClientMessage.ErrorUploading;
 import FileServerEntity.Message.Message;
 import FileServerEntity.Message.ServerMessage.FileMessage;
 import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
@@ -20,11 +21,12 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.HashMap;
+import java.util.Observable;
 
 /**
  * Created by Gus on 7/16/2015.
  */
-public class ServerConnectionThread implements Runnable {
+public class ServerConnectionThread extends Observable implements Runnable {
     private FileServer server;
     private ObjectOutputStream messageSender;
     private Socket echoSocket = null;
@@ -77,6 +79,13 @@ public class ServerConnectionThread implements Runnable {
                 else if(FileMessage.class.isInstance(messageReceived)){
                 	FileMessage msg = (FileMessage) messageReceived;
                 	fileBeingWritten.get(msg.getFileName()).addByte(msg.getByteArray(), msg.getPosition());
+                }else if(ErrorUploading.class.isInstance(messageReceived)){
+
+                    ErrorUploading msg=(ErrorUploading)messageReceived;
+                    this.setChanged();
+                    this.notifyObservers(msg);
+
+
                 }
 
 

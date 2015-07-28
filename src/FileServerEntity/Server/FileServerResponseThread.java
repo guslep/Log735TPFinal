@@ -120,6 +120,16 @@ public class FileServerResponseThread implements Runnable {
 				else if(MessageDelete.class.isInstance(messageReceived)){
 					FileManager.getInstance().supprimerFichier(((MessageDelete)messageReceived).getFileName());
 				}
+				else if(MessageFileWriteAttempt.class.isInstance(messageReceived)){
+					MessageFileWriteAttempt msg=(MessageFileWriteAttempt) messageReceived;
+					ActiveFileServer.getInstance().reserveFileName(msg.getFileName());
+
+				}else if(MessageFileWriteFail.class.isInstance((messageReceived))){
+
+					MessageFileWriteFail msg=(MessageFileWriteFail) messageReceived;
+					ActiveFileServer.getInstance().reserveFileFailed(msg.getFileName());
+
+				}
 
             }
         } catch (SocketException e){

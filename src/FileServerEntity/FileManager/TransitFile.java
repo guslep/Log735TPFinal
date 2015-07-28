@@ -37,6 +37,7 @@ public class TransitFile {
             byteArray[i+position]=byteArrayReceived[i];
 
         }}
+
     }
 
     /**
