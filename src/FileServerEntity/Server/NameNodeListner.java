@@ -159,7 +159,7 @@ public class NameNodeListner implements Runnable{
                 }else if(!fileServer.getNom().equals(ActiveFileServer.getInstance().getThisFileServer().getNom())) {
                     FileServerClient newSuccursale= new FileServerClient(fileServer.getSuccursaleIPAdresse(),fileServer.getNom(),fileServer.getPort(),fileServer.getClientPort());
                     newSuccursale.setId(fileServer.getId());
-                    ActiveFileServer.getInstance().getListeSuccursale().put(newSuccursale.getId(),newSuccursale);
+                    ActiveFileServer.getInstance().ajouterServeur(newSuccursale);
 
                 }
             }

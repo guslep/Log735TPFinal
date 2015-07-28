@@ -36,7 +36,7 @@ public class ClientResponseThread implements Runnable {
             messageReader = new ObjectInputStream((echoSocket.getInputStream()));
 
 
-            ActiveFileServer.getInstance().getConnectionClient().add(this);
+            ActiveFileServer.getInstance().ajouterClient(this);
 
 
         } catch (IOException e) {
