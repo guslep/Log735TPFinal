@@ -46,7 +46,9 @@ public class ServerConnectionThread implements Runnable {
             echoSocket = new Socket(server.getSuccursaleIPAdresse(),Integer.parseInt(server.getClientPort()) );
             messageSender = new ObjectOutputStream(echoSocket.getOutputStream());
             messageReader = new ObjectInputStream(echoSocket.getInputStream());
-            System.out.println("ClientConnected To "+server.getNom()+":"+server.getClientPort() );
+            
+            ClientConnector.getInstance().setServerName(server.getNom());
+            ClientConnector.getInstance().setServerPort(server.getClientPort());
             messageSender.writeObject(new ClientListFile());
         } catch (IOException e) {
             e.printStackTrace();

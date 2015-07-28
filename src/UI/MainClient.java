@@ -61,6 +61,7 @@ public class MainClient implements Observer {
 	JTree treeItems = new JTree();
 	private JLabel lblProgression;
 	private JProgressBar progressBar;
+	private JLabel lblConnexion = null;
 
 	/**
 	 * Launch the application.
@@ -118,7 +119,6 @@ public class MainClient implements Observer {
 		JPanel panel = new JPanel();
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		GroupLayout groupLayout = new GroupLayout(
 				frmDistributedbox.getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -127,44 +127,43 @@ public class MainClient implements Observer {
 					.addGap(11)
 					.addComponent(panelItems, GroupLayout.PREFERRED_SIZE, 290, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
+							.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-									.addComponent(pnlConnection, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
-									.addGap(18)
-									.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 276, GroupLayout.PREFERRED_SIZE)))
-						.addComponent(PanelItems, GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE))
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(pnlConnection, GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
+								.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+						.addComponent(PanelItems, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 					.addContainerGap(38, GroupLayout.PREFERRED_SIZE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(panelItems, GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-						.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-							.addGap(13)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(pnlConnection, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(PanelItems, GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(panelItems, GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addContainerGap()
+									.addComponent(pnlConnection, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(11)
+									.addComponent(panel, GroupLayout.PREFERRED_SIZE, 19, Short.MAX_VALUE))
+								.addComponent(panelButtons, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
+							.addGap(21)
+							.addComponent(PanelItems, GroupLayout.PREFERRED_SIZE, 412, GroupLayout.PREFERRED_SIZE)))
 					.addGap(34))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(486, Short.MAX_VALUE))
 		);
+		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		lblProgression = new JLabel("transfert du fichier : ");
 		lblProgression.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProgression.setForeground(Color.BLACK);
 		panel_1.add(lblProgression);
-		panel.setLayout(new BorderLayout(0, 0));
+		 panel.setLayout(new BorderLayout(0, 0));
 		
 		 progressBar = new JProgressBar();
 		progressBar.setValue(0);
@@ -180,7 +179,7 @@ public class MainClient implements Observer {
 		scrollPane.setViewportView(txtLogs);
 		pnlConnection.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		final JLabel lblConnexion = new JLabel("D�connect�");
+		lblConnexion = new JLabel("D�connect�");
 		lblConnexion.setForeground(Color.RED);
 		lblConnexion.setHorizontalAlignment(SwingConstants.CENTER);
 		pnlConnection.add(lblConnexion);
@@ -208,6 +207,7 @@ public class MainClient implements Observer {
 
 			}
 		}));
+		panelButtons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		final JButton btnAjouter = new JButton("Ajout");
 
@@ -393,9 +393,10 @@ public class MainClient implements Observer {
 			}
 		} else {
 			System.out.println("�criture du fichier " + file.getName() + " dans " + dossierParent);
-			cc.addFile(file, dossierParent);
-			if(dossierParent.lastIndexOf("\\") != dossierParent.length() - 1)
+			if(dossierParent.lastIndexOf("\\") != dossierParent.length()-1)
 				dossierParent += "\\";
+			cc.addFile(file, dossierParent);
+			
 		}
 	}
 
@@ -431,7 +432,15 @@ public class MainClient implements Observer {
 
 		if(arg==null){
 		updateFileList(ClientConnector.getInstance().getListFileAvailaible());
-		}else{
+		String serverName = ClientConnector.getInstance().getServerName();
+		int serverPort = ClientConnector.getInstance().getServerPort();
+		System.out.println("test connexion");
+		if (serverName != null && !serverName.equals("")){
+			lblConnexion.setText
+			("Connecte: " + serverName + " sur le port " + serverPort);
+		}
+		
+		}else{	
 
 			if(FileProgressUpdate.class.isInstance(arg)){
 				FileProgressUpdate update=(FileProgressUpdate)arg;

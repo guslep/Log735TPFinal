@@ -28,7 +28,7 @@ public class SystemConnector implements Runnable {
 
 
     private InetAddress succursaleIPAdresse;
-     private Integer portNumber;
+    private Integer portNumber;
 
     public SystemConnector(InetAddress succursaleIPAdresse, Integer portNumber) {
         this.succursaleIPAdresse = succursaleIPAdresse;
