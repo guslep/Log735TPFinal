@@ -115,57 +115,131 @@ public class MainClient implements Observer {
 		final JPanel panelItems = new JPanel();
 
 		JPanel PanelItems = new JPanel();
-		
+
 		JPanel panel = new JPanel();
-		
+
 		JPanel panel_1 = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(
 				frmDistributedbox.getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(11)
-					.addComponent(panelItems, GroupLayout.PREFERRED_SIZE, 290, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(pnlConnection, GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
-								.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-						.addComponent(PanelItems, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addContainerGap(38, GroupLayout.PREFERRED_SIZE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(panelItems, GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addContainerGap()
-									.addComponent(pnlConnection, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addGap(11)
-									.addComponent(panel, GroupLayout.PREFERRED_SIZE, 19, Short.MAX_VALUE))
-								.addComponent(panelButtons, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
-							.addGap(21)
-							.addComponent(PanelItems, GroupLayout.PREFERRED_SIZE, 412, GroupLayout.PREFERRED_SIZE)))
-					.addGap(34))
-		);
+		groupLayout
+				.setHorizontalGroup(groupLayout
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								groupLayout
+										.createSequentialGroup()
+										.addGap(11)
+										.addComponent(panelItems,
+												GroupLayout.PREFERRED_SIZE,
+												290, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
+										.addGroup(
+												groupLayout
+														.createParallelGroup(
+																Alignment.LEADING,
+																false)
+														.addGroup(
+																groupLayout
+																		.createSequentialGroup()
+																		.addComponent(
+																				panelButtons,
+																				GroupLayout.PREFERRED_SIZE,
+																				105,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED)
+																		.addGroup(
+																				groupLayout
+																						.createParallelGroup(
+																								Alignment.LEADING,
+																								false)
+																						.addComponent(
+																								pnlConnection,
+																								GroupLayout.DEFAULT_SIZE,
+																								411,
+																								Short.MAX_VALUE)
+																						.addComponent(
+																								panel_1,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								Short.MAX_VALUE)
+																						.addComponent(
+																								panel,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								Short.MAX_VALUE)))
+														.addComponent(
+																PanelItems,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE))
+										.addContainerGap(38,
+												GroupLayout.PREFERRED_SIZE)));
+		groupLayout
+				.setVerticalGroup(groupLayout
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								groupLayout
+										.createSequentialGroup()
+										.addGroup(
+												groupLayout
+														.createParallelGroup(
+																Alignment.LEADING)
+														.addComponent(
+																panelItems,
+																GroupLayout.DEFAULT_SIZE,
+																561,
+																Short.MAX_VALUE)
+														.addGroup(
+																groupLayout
+																		.createSequentialGroup()
+																		.addGroup(
+																				groupLayout
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addGroup(
+																								groupLayout
+																										.createSequentialGroup()
+																										.addContainerGap()
+																										.addComponent(
+																												pnlConnection,
+																												GroupLayout.DEFAULT_SIZE,
+																												GroupLayout.DEFAULT_SIZE,
+																												Short.MAX_VALUE)
+																										.addPreferredGap(
+																												ComponentPlacement.RELATED)
+																										.addComponent(
+																												panel_1,
+																												GroupLayout.PREFERRED_SIZE,
+																												GroupLayout.DEFAULT_SIZE,
+																												GroupLayout.PREFERRED_SIZE)
+																										.addGap(11)
+																										.addComponent(
+																												panel,
+																												GroupLayout.PREFERRED_SIZE,
+																												19,
+																												Short.MAX_VALUE))
+																						.addComponent(
+																								panelButtons,
+																								GroupLayout.DEFAULT_SIZE,
+																								128,
+																								Short.MAX_VALUE))
+																		.addGap(21)
+																		.addComponent(
+																				PanelItems,
+																				GroupLayout.PREFERRED_SIZE,
+																				412,
+																				GroupLayout.PREFERRED_SIZE)))
+										.addGap(34)));
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
+
 		lblProgression = new JLabel("transfert du fichier : ");
 		lblProgression.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProgression.setForeground(Color.BLACK);
 		panel_1.add(lblProgression);
-		 panel.setLayout(new BorderLayout(0, 0));
-		
-		 progressBar = new JProgressBar();
+		panel.setLayout(new BorderLayout(0, 0));
+
+		progressBar = new JProgressBar();
 		progressBar.setValue(0);
 		panel.add(progressBar);
 		PanelItems.setLayout(new BorderLayout(0, 0));
@@ -218,7 +292,7 @@ public class MainClient implements Observer {
 		final JButton btnSupprimer = new JButton("Supp");
 
 		btnSupprimer.setEnabled(false);
-		
+
 		btnSupprimer.setHorizontalAlignment(SwingConstants.RIGHT);
 		panelButtons.add(btnSupprimer);
 
@@ -249,28 +323,30 @@ public class MainClient implements Observer {
 				String dossierParent = " ";
 				// rebuild du open au niveau du selected Node
 				if (selectedNode != null) {
-					dossierParent = "";
-					String temp = rebuildNodeString(selectedNode);
-					System.out.println(temp);
-					if (temp.contains("\\")) {
 
-						String[] tempSplit = temp.replace("\\", "/").split("/");
-						for (int i = 0; i < tempSplit.length; i++) {
+					if (!(selectedNode.toString().equals("DisBox"))) {
+						dossierParent = "";
+						String temp = rebuildNodeString(selectedNode);
+						System.out.println(temp);
+						if (temp.contains("\\")) {
 
-							if (!tempSplit[i].contains(".")) {
+							String[] tempSplit = temp.replace("\\", "/").split(
+									"/");
+							for (int i = 0; i < tempSplit.length; i++) {
 
-								if (i != 0) {
-									dossierParent += "\\";
+								if (!tempSplit[i].contains(".")) {
+
+									if (i != 0) {
+										dossierParent += "\\";
+									}
+									dossierParent += tempSplit[i];
 								}
-								dossierParent += tempSplit[i];
 							}
+						} else if (selectedNode.getChildCount() > 0) {
+							dossierParent += selectedNode.toString() + "\\";
 						}
 					}
-					else if(selectedNode.getChildCount() > 0){
-						dossierParent += selectedNode.toString() + "\\";
-					}
 				}
-
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File fichierOuDossier = chooser.getSelectedFile();
 					txtLogs.append("\nFichier s�lectionn�, envoi en cours");
@@ -383,7 +459,7 @@ public class MainClient implements Observer {
 	private void recurseFolder(ClientConnector cc, File file,
 			String dossierParent) {
 		if (file.isDirectory()) {
-			if(dossierParent != ""){
+			if (dossierParent != "") {
 				dossierParent += "\\";
 			}
 			dossierParent += file.getName();
@@ -392,23 +468,26 @@ public class MainClient implements Observer {
 				recurseFolder(cc, file, dossierParent);
 			}
 		} else {
-			System.out.println("�criture du fichier " + file.getName() + " dans " + dossierParent);
-			if(dossierParent.lastIndexOf("\\") != dossierParent.length()-1)
-				dossierParent += "\\";
+			System.out.println("�criture du fichier " + file.getName()
+					+ " dans " + dossierParent);
+			if (dossierParent != " ") {
+				if (dossierParent.lastIndexOf("\\") != dossierParent.length() - 1)
+					dossierParent += "\\";
+			}
 			cc.addFile(file, dossierParent);
-			
+
 		}
 	}
 
 	public String rebuildNodeString(DefaultMutableTreeNode selectedNode) {
 		boolean isroot = false;
 		ArrayList<String> rebuildStrings = new ArrayList<String>();
-		if(selectedNode.toString().equals("DisBox")){
-			isroot=true;
+		if (selectedNode.toString().equals("DisBox")) {
+			isroot = true;
 		}
 		while (!isroot) {
 			rebuildStrings.add(selectedNode.toString());
-			
+
 			if (!(selectedNode.getParent().toString().equals("DisBox"))) {
 				selectedNode = (DefaultMutableTreeNode) selectedNode
 						.getParent();
@@ -429,30 +508,30 @@ public class MainClient implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 
+		if (arg == null) {
+			updateFileList(ClientConnector.getInstance()
+					.getListFileAvailaible());
+			String serverName = ClientConnector.getInstance().getServerName();
+			int serverPort = ClientConnector.getInstance().getServerPort();
+			System.out.println("test connexion");
+			if (serverName != null && !serverName.equals("")) {
+				lblConnexion.setText("Connecte: " + serverName
+						+ " sur le port " + serverPort);
+			}
 
-		if(arg==null){
-		updateFileList(ClientConnector.getInstance().getListFileAvailaible());
-		String serverName = ClientConnector.getInstance().getServerName();
-		int serverPort = ClientConnector.getInstance().getServerPort();
-		System.out.println("test connexion");
-		if (serverName != null && !serverName.equals("")){
-			lblConnexion.setText
-			("Connecte: " + serverName + " sur le port " + serverPort);
-		}
-		
-		}else{	
+		} else {
 
-			if(FileProgressUpdate.class.isInstance(arg)){
-				FileProgressUpdate update=(FileProgressUpdate)arg;
-				lblProgression.setText("Transfert du fichier : "+update.getFileName());
+			if (FileProgressUpdate.class.isInstance(arg)) {
+				FileProgressUpdate update = (FileProgressUpdate) arg;
+				lblProgression.setText("Transfert du fichier : "
+						+ update.getFileName());
 				progressBar.setValue(update.getPercent());
-					progressBar.setStringPainted(true);
+				progressBar.setStringPainted(true);
 				progressBar.repaint();
 
 			}
 
 		}
-
 
 	}
 
