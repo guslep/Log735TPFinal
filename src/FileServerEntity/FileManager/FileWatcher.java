@@ -67,8 +67,13 @@ public class FileWatcher {
 		// register folder to watch
 		try {
 			toWatch.register(myWatcher, ENTRY_CREATE, ENTRY_DELETE);
+			registerAll(toWatch);
 		} catch (IOException e) {
 		}
+		
+		//add all existing folders to watcher
+		
+		
 
 	}
 
