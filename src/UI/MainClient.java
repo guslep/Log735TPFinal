@@ -266,6 +266,9 @@ public class MainClient implements Observer {
 							}
 						}
 					}
+					else if(selectedNode.getChildCount() > 0){
+						dossierParent += selectedNode.toString() + "\\";
+					}
 				}
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
