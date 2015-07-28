@@ -13,13 +13,16 @@ import java.util.Map;
 public class ActiveFileServer {
 
 	FileServer thisFileServer;
-
+	private final Object lockListeClient = new Object();
+	private final Object lockListeServer = new Object();
 	static HashMap<Integer, FileServerClient> listeSuccursale = new HashMap<Integer, FileServerClient>();
     private ArrayList<ClientResponseThread> connectionClient=new ArrayList<ClientResponseThread>();
 	private String portNumber;
 
 	public HashMap<Integer, FileServerClient> getListeSuccursale() {
-		return listeSuccursale;
+
+		synchronized (lockListeServer){
+		return listeSuccursale;}
 	}
 
 	static ActiveFileServer instance;
@@ -85,9 +88,22 @@ public class ActiveFileServer {
 		this.portNumber = portNumber;
 	}
 
+		public void ajouterClient(ClientResponseThread client){
+			synchronized (lockListeClient){
+				connectionClient.add(client);
+			}
 
+		}
 
-	public synchronized void pushToAllServer(Message message) {
+	public void ajouterServeur(FileServerClient nouveauServeut){
+		synchronized (lockListeServer){
+			listeSuccursale.put(nouveauServeut.getId(),nouveauServeut);
+		}
+
+	}
+
+	public  void pushToAllServer(Message message) {
+		synchronized (lockListeServer){
 		Iterator iter = listeSuccursale.entrySet().iterator();
 
 		while (iter.hasNext()) {
@@ -102,31 +118,32 @@ public class ActiveFileServer {
 
 
 
-		}
+		}}
 	}
 
 
-    public synchronized void pushToAllClient(Message message){
-
-        Iterator iter = connectionClient.iterator();
-
-        while (iter.hasNext()) {
-            ClientResponseThread client= (ClientResponseThread) iter.next();
-
-            if(client==null||client.isConnectionDestroyed()){
-                connectionClient.remove(client);
-            }else{
-                client.sendMessage(message);
-
-            }
+    public  void pushToAllClient(Message message){
+		synchronized (lockListeClient) {
+			Iterator iter = connectionClient.iterator();
 
 
+			while (iter.hasNext()) {
+				ClientResponseThread client = (ClientResponseThread) iter.next();
 
-        }
+				if (client == null || client.isConnectionDestroyed()) {
+					iter.remove();
+				} else {
+					client.sendMessage(message);
 
+				}
+
+
+			}
+		}
     }
 
     public ArrayList getConnectionClient() {
-        return connectionClient;
+		synchronized (lockListeClient){
+        return connectionClient;}
     }
 }
