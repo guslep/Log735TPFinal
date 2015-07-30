@@ -65,7 +65,7 @@ public class MainClient implements Observer {
 	private JLabel lblProgression;
 	private JProgressBar progressBar;
 	private JLabel lblConnexion = null;
-
+	private JTextArea txtLogs;
 	/**
 	 * Launch the application.
 	 */
@@ -250,13 +250,13 @@ public class MainClient implements Observer {
 		JScrollPane scrollPane = new JScrollPane();
 		PanelItems.add(scrollPane);
 
-		final JTextArea txtLogs = new JTextArea();
+		 txtLogs = new JTextArea();
 		txtLogs.setEditable(false);
-		txtLogs.setText("Connectez-vous au name node pour dï¿½buter");
+		txtLogs.setText("Connectez-vous au name node pour débuter");
 		scrollPane.setViewportView(txtLogs);
 		pnlConnection.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		lblConnexion = new JLabel("Dï¿½connectï¿½");
+		lblConnexion = new JLabel("Déconnecté");
 		lblConnexion.setForeground(Color.RED);
 		lblConnexion.setHorizontalAlignment(SwingConstants.CENTER);
 		pnlConnection.add(lblConnexion);
@@ -352,12 +352,12 @@ public class MainClient implements Observer {
 				}
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File fichierOuDossier = chooser.getSelectedFile();
-					txtLogs.append("\nFichier sï¿½lectionnï¿½, envoi en cours");
+					txtLogs.append("\nValidation en cours.");
 
 					recurseFolder(cc, fichierOuDossier, dossierParent);
 
 				} else {
-					txtLogs.append("\najout annulï¿½ par l'utilisateur");
+					txtLogs.append("\najout annulé par l'utilisateur");
 				}
 			}
 		});
@@ -373,7 +373,7 @@ public class MainClient implements Observer {
 				System.out.println(rebuild);
 				cc.deleteFile(rebuild);
 
-				txtLogs.append("\nSupression de l'ï¿½lï¿½ment, " + rebuild);
+				txtLogs.append("\nSupression de l'élément, " + rebuild);
 
 			}
 		});
@@ -398,9 +398,13 @@ public class MainClient implements Observer {
 					// cc.setServerConnectedTo(null); //??
 
 					// change name of button back to Connect
-					mnConnection.setText("Connecte");
-					lblConnexion.setText("Dï¿½connectï¿½");
+					menuItemConnect.setText("Connecte");
+					lblConnexion.setText("Déconnecté");
 					lblConnexion.setForeground(Color.RED);
+					
+					treeItems.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(
+							"DisBox") {}));
+					txtLogs.setText("Connexion terminée, veuillez vous reconnecter pour continuer");
 
 				} else {
 					// popup avec info du nameNode -- needed?
@@ -432,14 +436,14 @@ public class MainClient implements Observer {
 
 							// Connect to Server
 							txtLogs.setText("");
-							txtLogs.append("Connexion ï¿½tablie avec le serveur");
+							txtLogs.append("Connexion établie avec le serveur");
 
 							// set isConnected True
 							isConnected = true;
 							cc.getListFileAvailaible();
 							lblConnexion.setText("Connecte");
 							lblConnexion.setForeground(Color.GREEN);
-							mnConnection.setText("Deconnecte");
+							menuItemConnect.setText("Deconnecte");
 							// refresh treeItems
 						} catch (Exception e) {
 							txtLogs.append("\nEchec de connexion, "
@@ -477,7 +481,7 @@ public class MainClient implements Observer {
 					recurseFolder(cc, f, dossierParent + "\\" + f.getName());
 				} else {
 					cc.addFile(f, dossierParent + "\\");
-					System.out.println("ï¿½criture du fichier "
+					System.out.println("écriture du fichier "
 							+ file.getName() + " dans " + dossierParent + "\\");
 
 				}
@@ -552,13 +556,14 @@ public class MainClient implements Observer {
                 ErrorUploading msg=(ErrorUploading)arg;
 
                 //dit que le file upload a fail  msg.getFilename()
-
+                txtLogs.append("\necriture du fichier " + msg.getFilename() + " a échoué." );
 
             }
             else if (ClientAcceptUpload.class.isInstance(arg)){
                 ClientAcceptUpload msg=(ClientAcceptUpload)arg;
 
                 //dit que le file upload commence  msg.getFilename()
+                txtLogs.append("\nenvoie du fichier " + msg.getFilename());
 
 
             }
