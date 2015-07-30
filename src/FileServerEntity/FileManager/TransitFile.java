@@ -1,5 +1,6 @@
 package FileServerEntity.FileManager;
 
+import FileServerEntity.Server.ActiveFileServer;
 import FileServerEntity.Server.ClientResponseThread;
 import FileServerEntity.Server.FileServerResponseThread;
 
@@ -47,7 +48,11 @@ public class TransitFile {
      */
     private void writeFile() {
         if(comesFromClient){
+            String exist=ActiveFileServer.getInstance().getListFileReserved().get(nom);
+            if(exist!=null&& !exist.equals("")){
             FileManager.getInstance().creerFichier(byteArray, nom, true);
+            }
+
 
         }
         else{FileManager.getInstance().creerFichier(byteArray, nom);

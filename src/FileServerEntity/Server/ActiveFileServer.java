@@ -174,6 +174,7 @@ public class ActiveFileServer {
 	public void reserveFileFailed(String filename){
 		synchronized (lockFileWriteAttempt){
 			listFileReserved.remove(filename);
+
 		}
 
 	}
@@ -184,4 +185,8 @@ public class ActiveFileServer {
 
 	}
 
+    public HashMap<String, String> getListFileReserved() {
+        synchronized (lockFileWriteAttempt){
+        return listFileReserved;}
+    }
 }
