@@ -459,23 +459,23 @@ public class MainClient implements Observer {
 	private void recurseFolder(ClientConnector cc, File file,
 			String dossierParent) {
 		if (file.isDirectory()) {
-			char lastChar=dossierParent.charAt(dossierParent.length()-1);
-			if (dossierParent != ""&&lastChar!='\\') {
-				dossierParent += "\\";
+			if (!dossierParent.equals("")){
+				char lastChar = dossierParent.charAt(dossierParent.length() - 1);	
+				if (dossierParent != "" && lastChar != '\\') {
+					dossierParent += "\\";
+				}
 			}
+			
 			dossierParent += file.getName();
 			File[] filesInDirectory = file.listFiles();
 			for (File f : filesInDirectory) {
-				if(f.isDirectory())
-				{
-					String test=f.getName();
-				recurseFolder(cc, f, dossierParent+"\\"+f.getName());
-				}
-				else{
-					cc.addFile(f, dossierParent+"\\");
-					System.out.println("�criture du fichier " + file.getName()
-							+ " dans " + dossierParent +"\\");
-
+				if (f.isDirectory()) {
+					String test = f.getName();
+					recurseFolder(cc, f, dossierParent + "\\" + f.getName());
+				} else {
+					cc.addFile(f, dossierParent + "\\");
+					System.out.println("�criture du fichier "
+							+ file.getName() + " dans " + dossierParent + "\\");
 
 				}
 			}
