@@ -24,10 +24,15 @@ public class ClientAddFile extends Message implements Serializable,MessageExecut
 
     @Override
     public void execute(ClientResponseThread caller) {
+
        if(ActiveFileServer.getInstance().reserveFileName(fileName)){
+           TransitFile transit=new TransitFile(caller,fileName,byteLength);
+           ActiveFileServer.getInstance().newVotePending(transit);
            ActiveFileServer.getInstance().pushToAllServer(new MessageFileWriteAttempt(fileName));
-        TransitFile transit=new TransitFile(caller,fileName,byteLength);
+           ActiveFileServer.getInstance().voteReceived(fileName);
+
         caller.getFileBeingWritten().put(transit.getNom(), transit);
+
         }else{
             caller.sendMessage(new ErrorUploading(fileName));
         }

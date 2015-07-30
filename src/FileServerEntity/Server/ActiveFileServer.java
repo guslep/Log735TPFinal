@@ -1,6 +1,8 @@
 package FileServerEntity.Server;
 
 import FileServerEntity.FileManager.FileManager;
+import FileServerEntity.FileManager.TransitFile;
+import FileServerEntity.Message.ClientMessage.ClientAddFile;
 import FileServerEntity.Message.ServerMessage.MessageFileWriteFail;
 import NameNode.FileServer;
 
@@ -19,11 +21,14 @@ public class ActiveFileServer {
 	private final Object lockListeClient = new Object();
 	private  final Object lockFileWriteAttempt=new Object();
 	private final Object lockListeServer = new Object();
-	static HashMap<Integer, FileServerClient> listeSuccursale = new HashMap<Integer, FileServerClient>();
+    private final Object lockVoteList = new Object();
+
+    static HashMap<Integer, FileServerClient> listeSuccursale = new HashMap<Integer, FileServerClient>();
     private ArrayList<ClientResponseThread> connectionClient=new ArrayList<ClientResponseThread>();
 	private String portNumber;
 
 	private HashMap<String,String> listFileReserved=new  HashMap<String,String>();
+    private HashMap<String,TransitFile> listFileVotePenting=new  HashMap<String,TransitFile>();
 
 	public HashMap<Integer, FileServerClient> getListeSuccursale() {
 
@@ -165,6 +170,7 @@ public class ActiveFileServer {
 				return false;
 			} else {
 				listFileReserved.put(fileName, fileName);
+
 				return true;
 
 			}
@@ -176,17 +182,43 @@ public class ActiveFileServer {
 			listFileReserved.remove(filename);
 
 		}
+        synchronized (lockVoteList){
+            listFileVotePenting.remove(filename);}
+
 
 	}
 	public void fileWritten(String filename){
 		synchronized (lockFileWriteAttempt){
 			listFileReserved.remove(filename);
 		}
+        synchronized (lockVoteList){
+            listFileVotePenting.remove(filename);}
 
 	}
 
     public HashMap<String, String> getListFileReserved() {
         synchronized (lockFileWriteAttempt){
         return listFileReserved;}
+
     }
+
+    public void voteReceived(String filename){
+        synchronized (lockVoteList){
+        TransitFile messageRequest=listFileVotePenting.get(filename);
+        if(messageRequest!=null){
+            messageRequest.addVote();
+        }
+        }
+
+    }
+
+    public void newVotePending(TransitFile transit){
+
+        listFileVotePenting.put(transit.getNom(),transit);
+    }
+
+
+
+
+
 }

@@ -116,6 +116,7 @@ System.out.println("lel");
             }
 
         }
+
         FileServer bestFileServer=listFileServer.get(0);
         Iterator itr = listFileServer.iterator();
         while (itr.hasNext()){

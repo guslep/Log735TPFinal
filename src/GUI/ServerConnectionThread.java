@@ -5,6 +5,7 @@ import FileServerEntity.FileManager.FileManager;
 import FileServerEntity.FileManager.InitFileSynchronizer;
 import FileServerEntity.FileManager.MissingFileSender;
 import FileServerEntity.FileManager.TransitFile;
+import FileServerEntity.Message.ClientMessage.ClientAcceptUpload;
 import FileServerEntity.Message.ClientMessage.ClientListFile;
 import FileServerEntity.Message.ClientMessage.ErrorUploading;
 import FileServerEntity.Message.Message;
@@ -84,6 +85,14 @@ public class ServerConnectionThread extends Observable implements Runnable {
                     ErrorUploading msg=(ErrorUploading)messageReceived;
                     this.setChanged();
                     this.notifyObservers(msg);
+
+
+                }
+                else if(ClientAcceptUpload.class.isInstance(messageReceived)){
+
+                    ClientAcceptUpload msg=(ClientAcceptUpload)messageReceived;
+                    this.setChanged();
+                    this.notifyObservers(messageReceived);
 
 
                 }

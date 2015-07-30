@@ -1,6 +1,7 @@
 package GUI;
 
 import FileServerEntity.FileManager.FileManager;
+import FileServerEntity.Message.ClientMessage.ClientAcceptUpload;
 import FileServerEntity.Message.ClientMessage.ClientAddFile;
 import FileServerEntity.Message.ClientMessage.ClientUploadPartFile;
 import FileServerEntity.Message.ClientMessage.ErrorUploading;
@@ -33,6 +34,7 @@ public class ThreadUploadFile implements Runnable, Observer {
     private ServerConnectionThread serverConnectedTo;
     private JProgressBar progressBar;
     private  boolean stopUploading=false;
+    private boolean uploadAccepted=false;
 
     public ThreadUploadFile(File fileUploaded, String path) {
         this.fileUploaded = fileUploaded;
@@ -125,7 +127,13 @@ public class ThreadUploadFile implements Runnable, Observer {
 
         // new
 
-
+        while (!uploadAccepted){
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         // cr�ation des messages pour les diff�rents byte array(FileMessage)
         Date lastMesureTook=new Date();
@@ -175,6 +183,13 @@ public class ThreadUploadFile implements Runnable, Observer {
             if(fileName.equals(msg.getFilename())){
                 this.stopUploading=true;
             }
+        }
+        else if(arg!=null&& ClientAcceptUpload.class.isInstance(arg)){
+            ClientAcceptUpload message=(ClientAcceptUpload)arg;
+            if (message.getFilename().equals(fileName)){
+                this.uploadAccepted=true;
+            }
+
         }
     }
 }

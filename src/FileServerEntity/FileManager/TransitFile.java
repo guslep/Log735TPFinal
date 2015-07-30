@@ -1,5 +1,6 @@
 package FileServerEntity.FileManager;
 
+import FileServerEntity.Message.ClientMessage.ClientAcceptUpload;
 import FileServerEntity.Server.ActiveFileServer;
 import FileServerEntity.Server.ClientResponseThread;
 import FileServerEntity.Server.FileServerResponseThread;
@@ -13,6 +14,7 @@ public class TransitFile {
     private FileServerResponseThread connectionThread;
     private ClientResponseThread clientConnectionThread;
     private  Boolean comesFromClient=false;
+    private int vote;
 
 
     public TransitFile(FileServerResponseThread fileServerResponseThread, String nom, int byteSize) {
@@ -72,6 +74,17 @@ public class TransitFile {
 
     public String getNom() {
         return nom;
+    }
+
+    public void addVote(){
+        vote++;
+        double ratio= (double)vote /((double)ActiveFileServer.getInstance().getListeSuccursale().size()+1);
+        String file=ActiveFileServer.getInstance().getListFileReserved().get(nom);
+        if(vote==1&&file!=null&&!file.equals("")){
+            clientConnectionThread.sendMessage(new ClientAcceptUpload(nom));
+
+        }
+
     }
 
 
