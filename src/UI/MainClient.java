@@ -35,7 +35,10 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import FileServerEntity.FileManager.InitFileSynchronizer;
+import FileServerEntity.Message.ClientMessage.ClientAcceptUpload;
+import FileServerEntity.Message.ClientMessage.ErrorUploading;
 import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
+import FileServerEntity.Server.ActiveFileServer;
 import GUI.ClientConnector;
 import GUI.SystemConnector;
 
@@ -520,6 +523,10 @@ public class MainClient implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 
+        if(ClientConnector.getInstance().getServerConnectedTo()!=null){
+            ClientConnector.getInstance().getServerConnectedTo().addObserver(this);
+        }
+
 		if (arg == null) {
 			updateFileList(ClientConnector.getInstance()
 					.getListFileAvailaible());
@@ -541,7 +548,20 @@ public class MainClient implements Observer {
 				progressBar.setStringPainted(true);
 				progressBar.repaint();
 
-			}
+			} else if (ErrorUploading.class.isInstance(arg)){
+                ErrorUploading msg=(ErrorUploading)arg;
+
+                //dit que le file upload a fail  msg.getFilename()
+
+
+            }
+            else if (ClientAcceptUpload.class.isInstance(arg)){
+                ClientAcceptUpload msg=(ClientAcceptUpload)arg;
+
+                //dit que le file upload commence  msg.getFilename()
+
+
+            }
 
 		}
 
