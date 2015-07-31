@@ -12,8 +12,8 @@ import FileServerEntity.Server.ActiveFileServer;
 
 /***
  * la classe FileManager permet de monitorer les changements sur le dossier
- * files, ainsi que s'updater si des changements sont apport�s manuellement, �
- * l'aide de FileWatcher
+ * files, ainsi que s'updater si des changements sont apport�s manuellement,
+ * � l'aide de FileWatcher
  * 
  * @author Marc
  *
@@ -24,8 +24,10 @@ public class FileManager {
 	private HashMap<String, String> nomhashMap = new HashMap<String, String>();
 	private HashMap<String, String> nomFichierDelete = new HashMap<String, String>();
 	private static FileManager instance;
-	private String localDirName = ActiveFileServer.getInstance().getThisFileServer().getNom();
-	private String localDir = System.getProperty("user.dir") + "\\files - " + localDirName ;
+	private String localDirName = ActiveFileServer.getInstance()
+			.getThisFileServer().getNom();
+	private String localDir = System.getProperty("user.dir") + "\\files - "
+			+ localDirName;
 	private FileWatcher fw;
 
 	/***
@@ -34,10 +36,8 @@ public class FileManager {
 	private FileManager() {
 
 		File test = new File(localDir);
-		
+
 		System.out.println(" not stuck");
-
-
 
 		if (!test.exists()) {
 			boolean success;
@@ -57,13 +57,15 @@ public class FileManager {
 			}
 
 		} else {
-			System.out.println("Serveur instanci�, utilisation du r�pertoire "
-					+ localDir);
+			System.out
+					.println("Serveur instanci�, utilisation du r�pertoire "
+							+ localDir);
 			updatelisteFichiers();
 		}
 
-		// d�marrage du fileWatcher pour monitorer les changements du dossier, le constructeur se charge de d�marrer un thread
-				fw = new FileWatcher(localDir);
+		// d�marrage du fileWatcher pour monitorer les changements du dossier,
+		// le constructeur se charge de d�marrer un thread
+		fw = new FileWatcher(localDir);
 
 	}
 
@@ -107,42 +109,39 @@ public class FileManager {
 	 * @return liste des fichiers du serveur
 	 */
 	public ArrayList<File> getListeFichiers() {
-		//updatelisteFichiers();
+		// updatelisteFichiers();
 		return listeFichiers;
 	}
 
-	
 	/**
 	 * permet d'obtenir les fichiers disponibles sur le serveur
 	 */
 	public void updatelisteFichiers() {
-        Path rootDir=FileSystems.getDefault().getPath(localDir);
-        ArrayList<File> list=new ArrayList<File>();
-        getfileInDirectory(rootDir,list);
-        this.listeFichiers=list;
+		Path rootDir = FileSystems.getDefault().getPath(localDir);
+		ArrayList<File> list = new ArrayList<File>();
+		getfileInDirectory(rootDir, list);
+		this.listeFichiers = list;
 
-    }
-    private void getfileInDirectory(Path directory,   ArrayList<File> list){
+	}
 
-        try {
-            DirectoryStream<Path> stream = Files.newDirectoryStream(directory);
-            for(Path path:stream){
-                if(Files.isDirectory(path)){
-                    getfileInDirectory(path,list);
-                }
-                else{
-                    list.add(path.toFile());
-                }
+	private void getfileInDirectory(Path directory, ArrayList<File> list) {
 
+		try {
+			DirectoryStream<Path> stream = Files.newDirectoryStream(directory);
+			for (Path path : stream) {
+				if (Files.isDirectory(path)) {
+					getfileInDirectory(path, list);
+				} else {
+					list.add(path.toFile());
+				}
 
+			}
+			stream.close();
 
-            }
-            stream.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * retourne le nombre de fichiers disponibles sur le serveur
@@ -157,8 +156,6 @@ public class FileManager {
 			return 0;
 	}
 
-
-
 	/**
 	 * permet de supprimer un fichier en fonction de son nom
 	 * 
@@ -169,29 +166,32 @@ public class FileManager {
 		boolean done = false;
 		int cpt = 0;
 
-//		while (done == false && cpt < listeFichiers.size()) {
-//				///A Optimiser pas mal sur que le code du bas marche toujours
-//
-//			if ((localDir+"\\"+nomFichier).equals(listeFichiers.get(cpt).getAbsolutePath())  ) {
-//				done = listeFichiers.get(cpt).delete();
-//				listeFichiers.remove(cpt);
-//			}
-//			cpt++;
-//		}
-			
-			File directory=new File(localDir+"\\"+nomFichier);
-			if(directory!=null){
-				while(!done)
-				try{
-					File existBeforeDelete=new File(localDir+"\\"+nomFichier);
-					if(existBeforeDelete.exists()){
-				done = directory.delete();}
-					else{
-						done=true;
+		// while (done == false && cpt < listeFichiers.size()) {
+		// ///A Optimiser pas mal sur que le code du bas marche toujours
+		//
+		// if
+		// ((localDir+"\\"+nomFichier).equals(listeFichiers.get(cpt).getAbsolutePath())
+		// ) {
+		// done = listeFichiers.get(cpt).delete();
+		// listeFichiers.remove(cpt);
+		// }
+		// cpt++;
+		// }
+
+		File directory = new File(localDir + "\\" + nomFichier);
+		if (directory != null) {
+			while (!done)
+				try {
+					File existBeforeDelete = new File(localDir + "\\"
+							+ nomFichier);
+					if (existBeforeDelete.exists()) {
+						done = recurseDelete(directory);
+//						done  = directory.delete();
+					} else {
+						done = true;
 					}
 
-				
-				}catch(Exception e){
+				} catch (Exception e) {
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e1) {
@@ -199,11 +199,31 @@ public class FileManager {
 						e1.printStackTrace();
 					}
 				}
-				
-			}
-		
-		
+
+		}
+		System.out.println("all deletions done REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 		updatelisteFichiers();
+		return done;
+	}
+
+	private boolean recurseDelete(File directory) throws IOException{
+		boolean done = false;
+		System.out.println("delete : " + directory.getName());
+		if (directory.isDirectory()) {
+			File[] listeFiles = directory.listFiles();
+
+			if (listeFiles.length > 0) {
+				for (File f : listeFiles) {
+					recurseDelete(f);
+				}
+			}
+			else{
+//				done = directory.delete();
+			}
+
+		} else {
+			done = directory.delete();
+		}
 		return done;
 	}
 
@@ -236,30 +256,35 @@ public class FileManager {
 	 * @return true si cr��, false si une erreur ou existe d�j�
 	 */
 	public synchronized boolean creerFichier(byte[] fichier, String fileName) {
-		return creerFichier(fichier,fileName,false);
+		return creerFichier(fichier, fileName, false);
 	}
 
-		public synchronized boolean creerFichier(byte[] fichier, String fileName,Boolean updateSystem) {
-		if(!updateSystem){
-		fw.fileReceived(fileName);
+	public synchronized boolean creerFichier(byte[] fichier, String fileName,
+			Boolean updateSystem) {
+		if (!updateSystem) {
+			fw.fileReceived(fileName);
 		}
-		System.out.println("maybe pls?");
 		String fullfilename = localDir + "\\" + fileName;
-        File newFile=new File(fullfilename);
-        if(!newFile.exists()&&newFile.getParentFile()!=null){
+		File newFile = new File(fullfilename);
+		if (!newFile.exists() && newFile.getParentFile() != null) {
 
-            newFile.getParentFile().mkdirs();
+			newFile.getParentFile().mkdirs();
 
-        }
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-        try {
-			FileOutputStream fos = new FileOutputStream(fullfilename,true);
+		}
+
+		try {
+			FileOutputStream fos = new FileOutputStream(fullfilename, true);
 			fos.write(fichier);
 			fos.close();
 
-
 		} catch (FileNotFoundException e) {
-
 
 			return false;
 		} catch (IOException e) {
@@ -267,7 +292,7 @@ public class FileManager {
 		}
 
 		updatelisteFichiers();
-			ActiveFileServer.getInstance().fileWritten(fileName);
+		ActiveFileServer.getInstance().fileWritten(fileName);
 		return true;
 	}
 
@@ -280,26 +305,24 @@ public class FileManager {
 	 */
 	public File getFichier(String filename) {
 		File fichier = null;
-		//updatelisteFichiers();
+		// updatelisteFichiers();
 		boolean done = false;
 		int cpt = 0;
 
+		while (done == false && cpt < listeFichiers.size()) {
+			// String test=listeFichiers.get(cpt);
+			if (filename.equals(listeFichiers.get(cpt).getAbsolutePath())) {
+				fichier = listeFichiers.get(cpt);
 
-
-        while (done == false && cpt < listeFichiers.size()) {
-//            String test=listeFichiers.get(cpt);
-            if (filename.equals(listeFichiers.get(cpt).getAbsolutePath()) ) {
-                fichier = listeFichiers.get(cpt);
-
-            }
-            cpt++;
-        }
-        return fichier;
+			}
+			cpt++;
+		}
+		return fichier;
 	}
 
-    public String getLocalDir() {
-        return localDir;
-    }
+	public String getLocalDir() {
+		return localDir;
+	}
 
 	public HashMap<String, String> getNomFichierDelete() {
 		return nomFichierDelete;
@@ -307,10 +330,10 @@ public class FileManager {
 
 	public Boolean exist(String fileName) {
 
-		File directory=new File(localDir+"\\"+fileName);
-		if(directory.exists()){
+		File directory = new File(localDir + "\\" + fileName);
+		if (directory.exists()) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}

@@ -18,7 +18,9 @@ import java.nio.file.attribute.*;
 import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
 import FileServerEntity.Message.ServerMessage.MessageDelete;
 import FileServerEntity.Server.ActiveFileServer;
+import FileServerEntity.Server.DifferedUpdate;
 import FileServerEntity.Server.FileServerListener;
+import FileServerEntity.Server.NameNodeListner;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 
@@ -38,6 +40,7 @@ public class FileWatcher {
 	static WatchService myWatcher;
 	static String pathlocal;
 	static Path toWatch;
+	static DifferedUpdate du= null;
 
 
 	public FileWatcher(String path) {
@@ -161,13 +164,18 @@ public class FileWatcher {
 							}
 							// to prevent endless loops
 
-							InitSymchronizerMessage allFile = new InitSymchronizerMessage(FileManager.getInstance()
-									.getListeFichiers(), false,
-									FileManager.getInstance()
-											.getLocalDir());
-							ActiveFileServer.getInstance()
-									.pushToAllClient(allFile);
-
+							if(du == null){ 
+							 new Thread(
+						                du =new DifferedUpdate()
+						        ).start();
+							 
+							}
+							else if(du.getIsDone() == true){
+								 new Thread(
+							                du =new DifferedUpdate()
+							        ).start();
+							}
+							
 							if (nomHashMap.containsKey(HashMapPath.toString())) {
 								nomHashMap.remove(HashMapPath.toString());
 							} else {

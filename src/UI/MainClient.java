@@ -308,7 +308,6 @@ public class MainClient implements Observer {
 		frmDistributedbox.getContentPane().setLayout(groupLayout);
 		treeItems.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
-				System.out.println("something happens");
 				boolean somethingIsSelected = !(treeItems.isSelectionEmpty());
 				btnSupprimer.setEnabled(somethingIsSelected);
 				btnOuvrir.setEnabled(somethingIsSelected);
@@ -468,7 +467,7 @@ public class MainClient implements Observer {
 		if (file.isDirectory()) {
 			if (!dossierParent.equals("")){
 				char lastChar = dossierParent.charAt(dossierParent.length() - 1);	
-				if (dossierParent != "" && lastChar != '\\') {
+				if (!dossierParent.equals("") && lastChar != '\\') {
 					dossierParent += "\\";
 				}
 			}
@@ -477,8 +476,7 @@ public class MainClient implements Observer {
 			File[] filesInDirectory = file.listFiles();
 			for (File f : filesInDirectory) {
 				if (f.isDirectory()) {
-					String test = f.getName();
-					recurseFolder(cc, f, dossierParent + "\\" + f.getName());
+					recurseFolder(cc, f, dossierParent);
 				} else {
 					cc.addFile(f, dossierParent + "\\");
 					System.out.println("écriture du fichier "
@@ -489,7 +487,7 @@ public class MainClient implements Observer {
 		} else {
 			System.out.println("ï¿½criture du fichier " + file.getName()
 					+ " dans " + dossierParent);
-			if (dossierParent != "") {
+			if (!dossierParent.equals("")) {
 				if (dossierParent.lastIndexOf("\\") != dossierParent.length() - 1)
 					dossierParent += "\\";
 			}
@@ -587,6 +585,7 @@ public class MainClient implements Observer {
 			buildTreeFromString(model, file);
 
 		}
+		treeItems.setModel(null);
 		treeItems.setModel(model);
 	}
 
