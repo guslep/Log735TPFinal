@@ -3,11 +3,12 @@ package FileServerEntity.Server;
 import FileServerEntity.FileManager.FileManager;
 import FileServerEntity.FileManager.MissingFileSender;
 import FileServerEntity.FileManager.TransitFile;
-
-import FileServerEntity.Message.*;
+import FileServerEntity.Message.Message;
 import FileServerEntity.Message.ServerMessage.*;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -103,7 +104,7 @@ public class FileServerResponseThread implements Runnable {
 
             while ((messageReceived =(Message)messageReader.readObject() ) != null)
             {
-            	System.out.println("message de type " + messageReceived);
+            	//System.out.println("message de type " + messageReceived);
                 if(MessageNewFile.class.isInstance(messageReceived)){
 
                     TransitFile transit=new TransitFile(this,((MessageNewFile)messageReceived).getFileName(),((MessageNewFile)messageReceived).getFileLength());

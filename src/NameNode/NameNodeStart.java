@@ -1,9 +1,8 @@
 package NameNode;
 
-import NameNode.ClientConnectionListener;
-
-import java.net.*;
-import java.io.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class NameNodeStart {
 	public static void main(String[] args) throws IOException {

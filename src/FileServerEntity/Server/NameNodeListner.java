@@ -1,12 +1,14 @@
 package FileServerEntity.Server;
 
-import NameNode.FileServer;
 import FileServerEntity.FileManager.InitFileSynchronizer;
 import FileServerEntity.Message.Message;
 import FileServerEntity.Message.ServerMessage.NewFileServerMessage;
 import FileServerEntity.Message.ServerMessage.UpdateListFileServer;
+import NameNode.FileServer;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;

@@ -3,7 +3,6 @@ package FileServerEntity.Message.ClientMessage;
 import FileServerEntity.FileManager.TransitFile;
 import FileServerEntity.Message.Message;
 import FileServerEntity.Message.ServerMessage.MessageFileWriteAttempt;
-import FileServerEntity.Message.ServerMessage.MessageNewFile;
 import FileServerEntity.Server.ActiveFileServer;
 import FileServerEntity.Server.ClientResponseThread;
 

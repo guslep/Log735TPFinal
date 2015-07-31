@@ -1,12 +1,12 @@
 package FileServerEntity.ServerStatus;
 
-import javax.management.InstanceNotFoundException;
-import javax.management.MalformedObjectNameException;
-import javax.management.ReflectionException;
-
 import FileServerEntity.Message.ServerMessage.MessageServerStatus;
 import FileServerEntity.Server.ActiveFileServer;
 import FileServerEntity.Server.NameNodeListner;
+
+import javax.management.InstanceNotFoundException;
+import javax.management.MalformedObjectNameException;
+import javax.management.ReflectionException;
 
 public class AutoServerStatus implements Runnable{
 

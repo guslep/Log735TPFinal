@@ -2,14 +2,10 @@ package FileServerEntity.Server;
 
 import FileServerEntity.FileManager.FileManager;
 import FileServerEntity.FileManager.TransitFile;
-import FileServerEntity.Message.ClientMessage.ClientAddFile;
+import FileServerEntity.Message.Message;
 import FileServerEntity.Message.ServerMessage.MessageFileWriteFail;
 import NameNode.FileServer;
 
-
-import FileServerEntity.Message.Message;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -121,7 +117,7 @@ public class ActiveFileServer {
 			Map.Entry pair = (Map.Entry) iter.next();
 			FileServerClient currentClient = (FileServerClient) pair.getValue();
 			if(currentClient.getConnectionThread().isConnectionDestroyed()){
-                listeSuccursale.remove(pair.getKey());
+                iter.remove();
             }else{
                 currentClient.getConnectionThread().sendMessage(message);
 

@@ -1,13 +1,12 @@
 package FileServerEntity.FileManager;
 
+import ClientFeature.ClientOpenFile;
+import GUI.ServerConnectionThread;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import ClientFeature.ClientOpenFile;
-import FileServerEntity.Server.ActiveFileServer;
-import GUI.ServerConnectionThread;
 
 public class ClientDownloadFile {
 	private static final String FOLDER_DESTINATION = "Downloads\\";
@@ -29,9 +28,7 @@ public class ClientDownloadFile {
 	          writeFile();
 	        }
 	        else {
-	            for (int i=0;i<byteArrayReceived.length;i++){
-	            byteArray[i+position]=byteArrayReceived[i];
-	            }
+                System.arraycopy(byteArrayReceived, 0, byteArray, 0 + position, byteArrayReceived.length);
 	        }
 	    }
 

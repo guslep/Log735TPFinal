@@ -1,13 +1,11 @@
 package GUI;
 
-import FileServerEntity.Message.ClientMessage.ClientAddFile;
 import FileServerEntity.Message.ClientMessage.ClientDeleteFile;
 import FileServerEntity.Message.ClientMessage.ClientReadFile;
 import UI.FileProgressUpdate;
 
 import java.io.File;
 import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -127,6 +125,6 @@ public class ClientConnector extends Observable {
 		this.setChanged();
 		this.notifyObservers(update);
 
-		System.out.println("pls update ome one");
+
 	}
 }

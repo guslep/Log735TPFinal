@@ -1,8 +1,8 @@
 package FileServerEntity.FileManager;
 
+import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
 import FileServerEntity.Server.ActiveFileServer;
 import FileServerEntity.Server.FileServerClient;
-import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
 import FileServerEntity.Server.FileServerResponseThread;
 
 import java.util.Iterator;

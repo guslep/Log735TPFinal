@@ -1,15 +1,14 @@
 package FileServerEntity.Server;
 
 
-
-import NameNode.FileServer;
 import FileServerEntity.FileManager.FileManager;
+import FileServerEntity.ServerStatus.AutoServerStatus;
+import NameNode.FileServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
-import FileServerEntity.ServerStatus.AutoServerStatus;
 
 /**
  * Created by Gus on 6/11/2015.

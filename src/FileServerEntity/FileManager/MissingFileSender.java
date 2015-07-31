@@ -1,8 +1,8 @@
 package FileServerEntity.FileManager;
 
+import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
 import FileServerEntity.Message.ServerMessage.MessageDelete;
 import FileServerEntity.Server.FileServerListener;
-import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
 import FileServerEntity.Server.FileServerResponseThread;
 
 import java.io.File;
@@ -54,7 +54,7 @@ public class MissingFileSender implements Runnable {
 
 					String relativePath = fileDistantFileServer.getPath()
 							.replace(rootDir + "\\", "");
-					File fileFound = (File) hashAllFile.get(relativePath);
+					File fileFound =  hashAllFile.get(relativePath);
 					Boolean directory = fileDistantFileServer.isDirectory();
 					if (fileFound == null
 							&& !fileDistantFileServer.isDirectory()) {

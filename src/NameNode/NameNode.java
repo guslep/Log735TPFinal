@@ -1,9 +1,8 @@
 package NameNode;
 
 
-import FileServerEntity.Message.ServerMessage.UpdateListFileServer;
 import FileServerEntity.Message.ServerMessage.MessageServerStatus;
-
+import FileServerEntity.Message.ServerMessage.UpdateListFileServer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +19,8 @@ public class NameNode {
     private ArrayList<FileServer> listFileServer=new ArrayList<FileServer>();
     private ArrayList<ResponseServerThread>listConnection = new ArrayList<ResponseServerThread>();
     private HashMap<Integer,MessageServerStatus> hashServerStatus=new HashMap<Integer, MessageServerStatus>();
+    private final Object lockListeFileServer = new Object();
+    private final Object lockListeConnection = new Object();
 
 
 
@@ -27,7 +28,7 @@ public class NameNode {
 
 
 
-         synchronized(listFileServer){
+         synchronized(lockListeFileServer){
 
              fileServer.setId(listFileServer.size()+1);
              listFileServer.add(fileServer);
@@ -44,7 +45,7 @@ public class NameNode {
 
 
     public  void addConnection( ResponseServerThread response){
-      synchronized (listConnection){
+      synchronized (lockListeConnection){
           listConnection.add(response);
 
       }

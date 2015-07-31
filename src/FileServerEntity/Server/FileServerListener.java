@@ -1,5 +1,9 @@
 package FileServerEntity.Server;
 
+import FileServerEntity.FileManager.FileManager;
+import FileServerEntity.Message.ServerMessage.FileMessage;
+import FileServerEntity.Message.ServerMessage.MessageNewFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,10 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
-
-import FileServerEntity.FileManager.FileManager;
-import FileServerEntity.Message.ServerMessage.FileMessage;
-import FileServerEntity.Message.ServerMessage.MessageNewFile;
 
 /**
  * Classe permettant d'envoyer des messages d'ex�cution pour les autres serveurs
@@ -108,9 +108,21 @@ public class FileServerListener implements Runnable{
 		ArrayList<byte[]> listeBytes = new ArrayList<byte[]>();
 
 		Path path = Paths.get(nouveauFichier.getAbsolutePath());
+        if(fileSize==0){
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 		byte[] data = null;
 		try {
 			data = Files.readAllBytes(path);
+            if(fileSize==0){
+                fileSize=data.length;
+            }
+            System.out.println("fukin size "+data.length);
+            System.out.println("mauvaise size "+ fileSize);
 		} catch (IOException e) {
 			System.out.print(e.getMessage());
 		}

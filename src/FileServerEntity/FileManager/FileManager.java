@@ -1,14 +1,17 @@
 package FileServerEntity.FileManager;
 
+import FileServerEntity.Server.ActiveFileServer;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import FileServerEntity.Server.ActiveFileServer;
 
 /***
  * la classe FileManager permet de monitorer les changements sur le dossier
@@ -243,12 +246,17 @@ public class FileManager {
 		if(!updateSystem){
 		fw.fileReceived(fileName);
 		}
-		System.out.println("maybe pls?");
+
 		String fullfilename = localDir + "\\" + fileName;
         File newFile=new File(fullfilename);
         if(!newFile.exists()&&newFile.getParentFile()!=null){
 
             newFile.getParentFile().mkdirs();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         }
 

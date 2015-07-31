@@ -1,13 +1,8 @@
 package FileServerEntity.Server;
 
-import FileServerEntity.FileManager.MissingFileSender;
 import FileServerEntity.FileManager.TransitFile;
 import FileServerEntity.Message.ClientMessage.MessageExecutor;
 import FileServerEntity.Message.Message;
-import FileServerEntity.Message.ServerMessage.FileMessage;
-import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
-import FileServerEntity.Message.ServerMessage.MessageNewFile;
-import FileServerEntity.Message.ServerMessage.SynchMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -58,7 +53,7 @@ public class ClientResponseThread implements Runnable {
 
             while ((messageReceived =(Message)messageReader.readObject() ) != null)
             {
-                System.out.println("message de type " + messageReceived);
+                //System.out.println("message de type " + messageReceived);
                 ((MessageExecutor)messageReceived).execute(this);
 
 

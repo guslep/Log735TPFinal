@@ -1,61 +1,27 @@
 package UI;
 
-import java.awt.Component;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-
-import java.awt.BorderLayout;
-
-import javax.swing.JFileChooser;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-
-import java.awt.Color;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JScrollPane;
-
-import java.awt.FlowLayout;
-
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.JTextArea;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import FileServerEntity.FileManager.InitFileSynchronizer;
 import FileServerEntity.Message.ClientMessage.ClientAcceptUpload;
 import FileServerEntity.Message.ClientMessage.ErrorUploading;
-import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
-import FileServerEntity.Server.ActiveFileServer;
 import GUI.ClientConnector;
-import GUI.SystemConnector;
 
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JProgressBar;
 
 public class MainClient implements Observer {
 	boolean isConnected = false;
@@ -252,11 +218,11 @@ public class MainClient implements Observer {
 
 		 txtLogs = new JTextArea();
 		txtLogs.setEditable(false);
-		txtLogs.setText("Connectez-vous au name node pour débuter");
+		txtLogs.setText("Connectez-vous au name node pour dï¿½buter");
 		scrollPane.setViewportView(txtLogs);
 		pnlConnection.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		lblConnexion = new JLabel("Déconnecté");
+		lblConnexion = new JLabel("Dï¿½connectï¿½");
 		lblConnexion.setForeground(Color.RED);
 		lblConnexion.setHorizontalAlignment(SwingConstants.CENTER);
 		pnlConnection.add(lblConnexion);
@@ -357,7 +323,7 @@ public class MainClient implements Observer {
 					recurseFolder(cc, fichierOuDossier, dossierParent);
 
 				} else {
-					txtLogs.append("\najout annulé par l'utilisateur");
+					txtLogs.append("\najout annulï¿½ par l'utilisateur");
 				}
 			}
 		});
@@ -373,7 +339,7 @@ public class MainClient implements Observer {
 				System.out.println(rebuild);
 				cc.deleteFile(rebuild);
 
-				txtLogs.append("\nSupression de l'élément, " + rebuild);
+				txtLogs.append("\nSupression de l'ï¿½lï¿½ment, " + rebuild);
 
 			}
 		});
@@ -399,12 +365,13 @@ public class MainClient implements Observer {
 
 					// change name of button back to Connect
 					menuItemConnect.setText("Connecte");
-					lblConnexion.setText("Déconnecté");
+					lblConnexion.setText("Dï¿½connectï¿½");
 					lblConnexion.setForeground(Color.RED);
 					
 					treeItems.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(
-							"DisBox") {}));
-					txtLogs.setText("Connexion terminée, veuillez vous reconnecter pour continuer");
+                            "DisBox") {
+                    }));
+					txtLogs.setText("Connexion terminï¿½e, veuillez vous reconnecter pour continuer");
 
 				} else {
 					// popup avec info du nameNode -- needed?
@@ -436,7 +403,7 @@ public class MainClient implements Observer {
 
 							// Connect to Server
 							txtLogs.setText("");
-							txtLogs.append("Connexion établie avec le serveur");
+							txtLogs.append("Connexion ï¿½tablie avec le serveur");
 
 							// set isConnected True
 							isConnected = true;
@@ -478,10 +445,10 @@ public class MainClient implements Observer {
 			for (File f : filesInDirectory) {
 				if (f.isDirectory()) {
 					String test = f.getName();
-					recurseFolder(cc, f, dossierParent + "\\" + f.getName());
+					recurseFolder(cc, f, dossierParent );
 				} else {
 					cc.addFile(f, dossierParent + "\\");
-					System.out.println("écriture du fichier "
+					System.out.println("ï¿½criture du fichier "
 							+ file.getName() + " dans " + dossierParent + "\\");
 
 				}
@@ -556,7 +523,7 @@ public class MainClient implements Observer {
                 ErrorUploading msg=(ErrorUploading)arg;
 
                 //dit que le file upload a fail  msg.getFilename()
-                txtLogs.append("\necriture du fichier " + msg.getFilename() + " a échoué." );
+                txtLogs.append("\necriture du fichier " + msg.getFilename() + " a ï¿½chouï¿½." );
 
             }
             else if (ClientAcceptUpload.class.isInstance(arg)){

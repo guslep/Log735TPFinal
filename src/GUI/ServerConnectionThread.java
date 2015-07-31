@@ -1,24 +1,18 @@
 package GUI;
 
 import FileServerEntity.FileManager.ClientDownloadFile;
-import FileServerEntity.FileManager.FileManager;
-import FileServerEntity.FileManager.InitFileSynchronizer;
-import FileServerEntity.FileManager.MissingFileSender;
-import FileServerEntity.FileManager.TransitFile;
 import FileServerEntity.Message.ClientMessage.ClientAcceptUpload;
 import FileServerEntity.Message.ClientMessage.ClientListFile;
 import FileServerEntity.Message.ClientMessage.ErrorUploading;
 import FileServerEntity.Message.Message;
 import FileServerEntity.Message.ServerMessage.FileMessage;
 import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
-import FileServerEntity.Message.ServerMessage.MessageDelete;
 import FileServerEntity.Message.ServerMessage.MessageNewFile;
 import NameNode.FileServer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.HashMap;

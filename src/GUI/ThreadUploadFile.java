@@ -1,14 +1,9 @@
 package GUI;
 
-import FileServerEntity.FileManager.FileManager;
 import FileServerEntity.Message.ClientMessage.ClientAcceptUpload;
 import FileServerEntity.Message.ClientMessage.ClientAddFile;
 import FileServerEntity.Message.ClientMessage.ClientUploadPartFile;
 import FileServerEntity.Message.ClientMessage.ErrorUploading;
-import FileServerEntity.Message.Message;
-import FileServerEntity.Message.ServerMessage.FileMessage;
-import FileServerEntity.Message.ServerMessage.MessageNewFile;
-import FileServerEntity.Server.ActiveFileServer;
 import UI.FileProgressUpdate;
 
 import javax.swing.*;

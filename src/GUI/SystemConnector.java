@@ -2,9 +2,7 @@ package GUI;
 
 import FileServerEntity.Message.ClientMessage.ClientDispatchAnswer;
 import FileServerEntity.Message.ClientMessage.ClientDispatchRequest;
-import FileServerEntity.Message.ClientMessage.MessageExecutor;
 import FileServerEntity.Message.Message;
-import FileServerEntity.Message.ServerMessage.SynchMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
