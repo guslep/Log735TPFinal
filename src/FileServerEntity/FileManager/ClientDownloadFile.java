@@ -1,3 +1,20 @@
+/******************************************************
+ Cours : LOG735
+ Session : Été 2015
+ Groupe : 01
+ Projet : Laboratoire #3
+ Étudiants : Guillaume Lépine
+ Marc Plamondon
+ Pier-Luc Ménard
+ Code(s) perm. : LEPG14099201
+ PLAM210908907
+ MENP27019200
+
+ Date création : 2015-07-2
+ Date dern. modif. : 2015-05-07
+ ******************************************************
+ Classe qui permet d'ouvrir un fichier avec le programme par défaut
+ ******************************************************/
 package FileServerEntity.FileManager;
 
 import ClientFeature.ClientOpenFile;
@@ -22,6 +39,15 @@ public class ClientDownloadFile {
 	     this.byteArray = new byte [byteSize];
 	 }
 	 
+	 
+	 /**
+	  * Ajout des octets du fichier à céer dans un tableau d'octets temporaire
+	  * Si le tableau recu est vide, créé le fichier avec la méthode writeFile
+	  * Sinon, on ajoute les octets dans le tableau d'octets temporaire
+	  * 
+	  * @param byteArrayReceived
+	  * @param position
+	  */
 	 public void addByte(byte[] byteArrayReceived,int position){
 	       
 	    	if(byteArrayReceived==null){
@@ -32,6 +58,7 @@ public class ClientDownloadFile {
 	        }
 	    }
 
+	 
 	 private void writeFile() {
 		File currentFile= creerFichier(byteArray, nom);
 
@@ -47,6 +74,14 @@ public class ClientDownloadFile {
 	     return nom;
 	 }
 	 
+	 /**
+	  * Création d'un fichier à ouvrir dans le dossier Downloads local du client
+	  * 
+	  * @author Pier-Luc
+	  * @param fichier
+	  * @param fileName
+	  * @return Le fichier créé
+	  */
 	 public File creerFichier(byte[] fichier, String fileName) {
 			System.out.println("maybe pls?");
 			String fullfilename = localDir + fileName;

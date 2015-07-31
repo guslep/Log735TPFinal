@@ -1,19 +1,19 @@
 /******************************************************
  Cours : LOG735
- Session : Ã‰tÃ© 2015
+ Session : Été 2015
  Groupe : 01
  Projet : Laboratoire #3
- Ã‰tudiants : Giullaume LÃ©pine
+ Étudiants : Guillaume Lépine
  Marc Plamondon
- Pier-Luc MÃ©nard
+ Pier-Luc Ménard
  Code(s) perm. : LEPG14099201
  PLAM210908907
  MENP27019200
 
- Date crÃ©ation : 2015-07-2
+ Date création : 2015-07-2
  Date dern. modif. : 2015-05-07
  ******************************************************
- Classe qui permet d'ouvrir un fichier avec le programme par dÃ©faut
+ Classe qui permet d'ouvrir un fichier avec le programme par défaut
  ******************************************************/
 
 
@@ -26,8 +26,8 @@ import java.io.IOException;
 
 public class ClientOpenFile {
     /**
-     * MÃ©thode permettant d'ouvrir un fichier avec le programme par dÃ©faut
-     * @param currentFile: Le fichier Ã  ouvrir
+     * MÃ©thode permettant d'ouvrir un fichier avec le programme par défaut
+     * @param currentFile: Le fichier à ouvrir
      */
 	public static void openFile(File currentFile){
 		try {
