@@ -40,7 +40,7 @@ import java.util.Random;
         portNumber=stdIn.readLine();
         if(portNumber==null||portNumber.equals("")){
 
-            portNumber=Integer.toString(10119+new Random().nextInt(20));
+            portNumber=Integer.toString(10119+new Random().nextInt(30));
         }
         System.out.print ("Entree le nom du FileServer: ");
         succursaleName=stdIn.readLine();
@@ -49,15 +49,12 @@ import java.util.Random;
 
             succursaleName="Test "+(rand.nextInt(9)+1);
         }
-        Random rand=new Random();
-
-        montant=rand.nextInt(1000000)+1000;
 
         System.out.print ("Entree le port d'écoute pour les clients: ");
         String clientPortNumber=stdIn.readLine();
         if(clientPortNumber==null||clientPortNumber.equals("")){
 
-            clientPortNumber=Integer.toString(10219+new Random().nextInt(20));
+            clientPortNumber=Integer.toString(10219+new Random().nextInt(40));
         }
 
 
@@ -66,7 +63,7 @@ import java.util.Random;
 
         	NameNodeListner nameNode;
         new Thread(
-                nameNode=new NameNodeListner(serverHostname,montant,succursaleName,portNumber)
+                nameNode=new NameNodeListner(serverHostname,succursaleName,portNumber)
         ).start();
 
         new Thread(new ClientConnectionListener()).start();
