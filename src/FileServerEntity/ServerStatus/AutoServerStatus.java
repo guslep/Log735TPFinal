@@ -19,12 +19,12 @@ public class AutoServerStatus implements Runnable{
     public AutoServerStatus(NameNodeListner nameNode) {
     	currentServerInfo = new SystemInfo();
     	this.nameNode = nameNode;
-    	System.out.println("load watcher started");
+
 	}
 	
 	@Override
 	public void run() {
-		System.out.println("run started");
+
 			try {
 				while (true){
 					Thread.sleep(SLEEP_TIMER * SECOND_TO_MILLISECOND);

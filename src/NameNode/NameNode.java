@@ -78,7 +78,7 @@ public class NameNode {
             UpdateListFileServer update=new UpdateListFileServer(fileServer.getNom(),fileServer.getId(),this.listFileServer);
 
 
-            System.out.println(printSucursale());
+
             if(current.isDestroyed()){
                 listConnection.remove(current);
             }else{

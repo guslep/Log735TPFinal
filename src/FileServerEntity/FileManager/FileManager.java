@@ -1,20 +1,20 @@
 /******************************************************
  Cours : LOG735
- Session : Été 2015
+ Session : ï¿½tï¿½ 2015
  Groupe : 01
  Projet : Laboratoire #3
- Étudiants : Guillaume Lépine
+ ï¿½tudiants : Guillaume Lï¿½pine
  Marc Plamondon
- Pier-Luc Ménard
+ Pier-Luc Mï¿½nard
  Code(s) perm. : LEPG14099201
  PLAM210908907
  MENP27019200
 
- Date création : 2015-07-2
+ Date crï¿½ation : 2015-07-2
  Date dern. modif. : 2015-05-07
  ******************************************************
 la classe FileManager permet de monitorer les changements sur le dossier files, ainsi que s'updater si des 
-changements sont apportées manuellement, à l'aide de FileWatcher 
+changements sont apportï¿½es manuellement, ï¿½ l'aide de FileWatcher 
  ******************************************************/
 package FileServerEntity.FileManager;
 
@@ -44,13 +44,13 @@ public class FileManager {
 	private FileWatcher fw;
 
 	/***
-	 * constructeur par dï¿½faut, appelï¿½ lors du getInstance s'il est null
+	 * constructeur par dÃ©faut, appelÃ© lors du getInstance s'il est null
 	 */
 	private FileManager() {
 
 		File test = new File(localDir);
 
-		System.out.println(" not stuck");
+
 
 		if (!test.exists()) {
 			boolean success;
@@ -58,11 +58,11 @@ public class FileManager {
 				success = new File(localDir).mkdirs();
 				if (!success) {
 					System.out
-							.println("Erreur lors de la crï¿½ation du dossier pour les fichiers,");
+							.println("Erreur lors de la crÃ©ation du dossier pour les fichiers,");
 					listeFichiers = null;
 				} else {
 					System.out
-							.println("Serveur instanciï¿½, utilisation du rï¿½pertoire "
+							.println("Serveur instanciÃ©, utilisation du rÃ©pertoire "
 									+ localDir);
 				}
 			} catch (SecurityException se) {
@@ -71,7 +71,7 @@ public class FileManager {
 
 		} else {
 			System.out
-					.println("Serveur instanciï¿½, utilisation du rï¿½pertoire "
+					.println("Serveur instanciÃ©, utilisation du rÃ©pertoire "
 							+ localDir);
 			updatelisteFichiers();
 		}
@@ -84,7 +84,7 @@ public class FileManager {
 
 	/**
 	 * singleton pour s'approprier l'instance du FileManager (puisqu'elle peut
-	 * etre rapellï¿½e par FileWatcher
+	 * etre rapellÃ©e par FileWatcher
 	 * 
 	 * @return
 	 */
@@ -100,12 +100,12 @@ public class FileManager {
 	}
 
 	/**
-	 * constructeur par dï¿½faut, va se construire en listant les items
+	 * constructeur par dÃ©faut, va se construire en listant les items
 	 * disponibles
 	 */
 
 	/**
-	 * mï¿½thode pour synchronizer les fichiers du rï¿½pertoire local avec les
+	 * mÃ©thode pour synchronizer les fichiers du rÃ©pertoire local avec les
 	 * autres serveurs.
 	 * 
 	 * @return
@@ -137,7 +137,7 @@ public class FileManager {
 
 	}
 /**
- * permet de récupérer le fichier/dossier pour l'utiliser 
+ * permet de rÃ©cupÃ©rer le fichier/dossier pour l'utiliser
  * @param directory
  * @param list
  */
@@ -177,7 +177,7 @@ public class FileManager {
 	 * permet de supprimer un fichier en fonction de son nom
 	 * 
 	 * @param nomFichier
-	 * @return true si le fichier est supprimï¿½, false si une erreur
+	 * @return true si le fichier est supprimÃ©, false si une erreur
 	 */
 	public boolean supprimerFichier(String nomFichier) {
 		boolean done = false;
@@ -215,15 +215,15 @@ public class FileManager {
 	 * 
 	 * @param fichier
 	 *            (bytes?)
-	 * @return true si crï¿½ï¿½, false si une erreur ou existe dï¿½jï¿½
+	 * @return true si crÃ©Ã©, false si une erreur ou existe dÃ©jÃ 
 	 */
 	public synchronized boolean creerFichier(byte[] fichier, String fileName) {
 		return creerFichier(fichier, fileName, false);
 	}
 
 	/**
-	 * permet de créer un fichier localement sur le dossier
-	 * @param fichier fichier à écrire
+	 * permet de crÃ©er un fichier localement sur le dossier
+	 * @param fichier fichier Ã  Ã©crire
 	 * @param fileName nom du fichier
 	 * @param updateSystem 
 	 * @return
@@ -266,15 +266,15 @@ public class FileManager {
 	}
 
 	/**
-	 * permet de rï¿½cupï¿½rer un fichier local selon son nom
+	 * permet de rÃ©cupÃ©rer un fichier local selon son nom
 	 * 
 	 * @param filename
-	 *            nom du fichier ï¿½ rï¿½cupï¿½rer
+	 *            nom du fichier Ã  rÃ©cupÃ©rer
 	 * @return File du fichier, null si le fichier est inexistant
 	 */
 	public File getFichier(String filename) {
 		File fichier = null;
-		// updatelisteFichiers();
+
 		boolean done = false;
 		int cpt = 0;
 
@@ -293,14 +293,14 @@ public class FileManager {
 		return localDir;
 	}
 /**
- * le hashmap sert à savoir quels fichiers ne sera pas resynchroniser.
+ * le hashmap sert Ã  savoir quels fichiers ne sera pas resynchroniser.
  * @return
  */
 	public HashMap<String, String> getNomFichierDelete() {
 		return nomFichierDelete;
 	}
 /**
- * retourne true si le fichier/dossier existe, pour prévenir les erreurs.
+ * retourne true si le fichier/dossier existe, pour prÃ©venir les erreurs.
  * @param fileName nom du fichier
  * @return true si existe, false si non existant
  */

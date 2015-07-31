@@ -1,19 +1,19 @@
 /******************************************************
  Cours : LOG735
- Session : Été 2015
+ Session : ï¿½tï¿½ 2015
  Groupe : 01
  Projet : Laboratoire #3
- Étudiants : Guillaume Lépine
+ ï¿½tudiants : Guillaume Lï¿½pine
  Marc Plamondon
- Pier-Luc Ménard
+ Pier-Luc Mï¿½nard
  Code(s) perm. : LEPG14099201
  PLAM210908907
  MENP27019200
 
- Date création : 2015-07-2
+ Date crï¿½ation : 2015-07-2
  Date dern. modif. : 2015-05-07
  ******************************************************
- Classe qui permet d'ouvrir un fichier avec le programme par défaut
+ Classe qui permet d'ouvrir un fichier avec le programme par dï¿½faut
  ******************************************************/
 package FileServerEntity.FileManager;
 
@@ -37,12 +37,13 @@ public class ClientDownloadFile {
 	     this.connectionThread=connectionThread;
 	     this.nom =  nom;
 	     this.byteArray = new byte [byteSize];
+
 	 }
 	 
 	 
 	 /**
-	  * Ajout des octets du fichier à céer dans un tableau d'octets temporaire
-	  * Si le tableau recu est vide, créé le fichier avec la méthode writeFile
+	  * Ajout des octets du fichier ï¿½ cï¿½er dans un tableau d'octets temporaire
+	  * Si le tableau recu est vide, crï¿½ï¿½ le fichier avec la mï¿½thode writeFile
 	  * Sinon, on ajoute les octets dans le tableau d'octets temporaire
 	  * 
 	  * @param byteArrayReceived
@@ -75,15 +76,14 @@ public class ClientDownloadFile {
 	 }
 	 
 	 /**
-	  * Création d'un fichier à ouvrir dans le dossier Downloads local du client
+	  * Crï¿½ation d'un fichier ï¿½ ouvrir dans le dossier Downloads local du client
 	  * 
 	  * @author Pier-Luc
 	  * @param fichier
 	  * @param fileName
-	  * @return Le fichier créé
+	  * @return Le fichier crï¿½ï¿½
 	  */
 	 public File creerFichier(byte[] fichier, String fileName) {
-			System.out.println("maybe pls?");
 			String fullfilename = localDir + fileName;
 	        File newFile=new File(fullfilename);
 	        

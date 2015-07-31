@@ -121,8 +121,7 @@ public class FileServerListener implements Runnable{
             if(fileSize==0){
                 fileSize=data.length;
             }
-            System.out.println("fukin size "+data.length);
-            System.out.println("mauvaise size "+ fileSize);
+
 		} catch (IOException e) {
 			System.out.print(e.getMessage());
 		}

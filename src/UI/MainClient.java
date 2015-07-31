@@ -202,7 +202,7 @@ public class MainClient implements Observer {
 										.addGap(34)));
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		lblProgression = new JLabel("transfert du fichier : ");
+		lblProgression = new JLabel("Transfert du fichier : ");
 		lblProgression.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProgression.setForeground(Color.BLACK);
 		panel_1.add(lblProgression);
@@ -218,11 +218,11 @@ public class MainClient implements Observer {
 
 		 txtLogs = new JTextArea();
 		txtLogs.setEditable(false);
-		txtLogs.setText("Connectez-vous au name node pour d�buter");
+		txtLogs.setText("Connectez-vous au name node pour débuter");
 		scrollPane.setViewportView(txtLogs);
 		pnlConnection.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		lblConnexion = new JLabel("D�connect�");
+		lblConnexion = new JLabel("Déconnecté");
 		lblConnexion.setForeground(Color.RED);
 		lblConnexion.setHorizontalAlignment(SwingConstants.CENTER);
 		pnlConnection.add(lblConnexion);
@@ -274,7 +274,7 @@ public class MainClient implements Observer {
 		frmDistributedbox.getContentPane().setLayout(groupLayout);
 		treeItems.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
-				System.out.println("something happens");
+
 				boolean somethingIsSelected = !(treeItems.isSelectionEmpty());
 				btnSupprimer.setEnabled(somethingIsSelected);
 				btnOuvrir.setEnabled(somethingIsSelected);
@@ -323,7 +323,7 @@ public class MainClient implements Observer {
 					recurseFolder(cc, fichierOuDossier, dossierParent);
 
 				} else {
-					txtLogs.append("\najout annul� par l'utilisateur");
+					txtLogs.append("\nAjout annulé par l'utilisateur");
 				}
 			}
 		});
@@ -339,7 +339,7 @@ public class MainClient implements Observer {
 				System.out.println(rebuild);
 				cc.deleteFile(rebuild);
 
-				txtLogs.append("\nSupression de l'�l�ment, " + rebuild);
+				txtLogs.append("\nSupression de l'élément, " + rebuild);
 
 			}
 		});
@@ -365,13 +365,13 @@ public class MainClient implements Observer {
 
 					// change name of button back to Connect
 					menuItemConnect.setText("Connecte");
-					lblConnexion.setText("D�connect�");
+					lblConnexion.setText("Déconnecté");
 					lblConnexion.setForeground(Color.RED);
 					
 					treeItems.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(
                             "DisBox") {
                     }));
-					txtLogs.setText("Connexion termin�e, veuillez vous reconnecter pour continuer");
+					txtLogs.setText("Connexion terminée, veuillez vous reconnecter pour continuer");
 
 				} else {
 					// popup avec info du nameNode -- needed?
@@ -403,7 +403,7 @@ public class MainClient implements Observer {
 
 							// Connect to Server
 							txtLogs.setText("");
-							txtLogs.append("Connexion �tablie avec le serveur");
+							txtLogs.append("Connexion établie avec le serveur");
 
 							// set isConnected True
 							isConnected = true;
@@ -448,13 +448,13 @@ public class MainClient implements Observer {
 					recurseFolder(cc, f, dossierParent );
 				} else {
 					cc.addFile(f, dossierParent + "\\");
-					System.out.println("�criture du fichier "
+					System.out.println("écriture du fichier "
 							+ file.getName() + " dans " + dossierParent + "\\");
 
 				}
 			}
 		} else {
-			System.out.println("�criture du fichier " + file.getName()
+			System.out.println("écriture du fichier " + file.getName()
 					+ " dans " + dossierParent);
 			if (dossierParent != "") {
 				if (dossierParent.lastIndexOf("\\") != dossierParent.length() - 1)
@@ -503,7 +503,7 @@ public class MainClient implements Observer {
 					.getListFileAvailaible());
 			String serverName = ClientConnector.getInstance().getServerName();
 			int serverPort = ClientConnector.getInstance().getServerPort();
-			System.out.println("test connexion");
+
 			if (serverName != null && !serverName.equals("")) {
 				lblConnexion.setText("Connecte: " + serverName
 						+ " sur le port " + serverPort);
@@ -523,7 +523,7 @@ public class MainClient implements Observer {
                 ErrorUploading msg=(ErrorUploading)arg;
 
                 //dit que le file upload a fail  msg.getFilename()
-                txtLogs.append("\necriture du fichier " + msg.getFilename() + " a �chou�." );
+                txtLogs.append("\necriture du fichier " + msg.getFilename() + " a échoué." );
 
             }
             else if (ClientAcceptUpload.class.isInstance(arg)){

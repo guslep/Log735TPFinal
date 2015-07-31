@@ -1,19 +1,19 @@
 /******************************************************
  Cours : LOG735
- Session : Été 2015
+ Session : ï¿½tï¿½ 2015
  Groupe : 01
  Projet : Laboratoire #3
- Étudiants : Guillaume Lépine
+ ï¿½tudiants : Guillaume Lï¿½pine
  Marc Plamondon
- Pier-Luc Ménard
+ Pier-Luc Mï¿½nard
  Code(s) perm. : LEPG14099201
  PLAM210908907
  MENP27019200
 
- Date création : 2015-07-2
+ Date crï¿½ation : 2015-07-2
  Date dern. modif. : 2015-05-07
  ******************************************************
-Cette classe est utilisée pour updater automatiquement les listes du FileManager,
+Cette classe est utilisï¿½e pour updater automatiquement les listes du FileManager,
 advenant le cas ou des modifications sont faites manuellementdans le dossier
  ******************************************************/
 package FileServerEntity.FileManager;
@@ -46,8 +46,8 @@ public class FileWatcher {
 
 
 	/**
-	 * constructeur avec le dossier à monitorer
-	 * @param path chemin à surveiller
+	 * constructeur avec le dossier Ã  monitorer
+	 * @param path chemin Ã  surveiller
 	 */
 	public FileWatcher(String path) {
 		this.pathlocal = path;
@@ -87,7 +87,7 @@ public class FileWatcher {
 	}
 /**
  * 
- * @param dir chemin à rajouter au monitoring
+ * @param dir chemin ï¿½ rajouter au monitoring
  * @throws IOException
  */
 	private static void register(Path dir) throws IOException {
@@ -141,10 +141,10 @@ public class FileWatcher {
 		public void run() {
 			try {
 				System.out.println("in thread");
-				// on récupère la racine à monitorer
+				// on rï¿½cupï¿½re la racine ï¿½ monitorer
 				WatchKey key = myWatcher.take();
 				while (key != null) {
-					// on récupère tous les états
+					// on rï¿½cupï¿½re tous les ï¿½tats
 					for (WatchEvent event : key.pollEvents()) {
 						System.out.println("Received " + event.kind()
 								+ " event for file: " + event.context());
@@ -154,7 +154,7 @@ public class FileWatcher {
 						Path name = (Path) key.watchable();
 						Path child = name.resolve((Path) event.context());
 						String HashMapPath = child.toString().replace(pathlocal + "\\", "");
-						//si l'événement est la création d'un fichier.
+						//si l'ï¿½vï¿½nement est la crï¿½ation d'un fichier.
 						if (event.kind().toString().equals("ENTRY_CREATE")) {
 
 							try {
@@ -181,7 +181,7 @@ public class FileWatcher {
 								        ).start();
 								}
 
-							// pour éviter de boucler à l'infini, on regarde si le fichier est dans le hashmap, permettant ainsi d'empêcher la copie 
+							// pour ï¿½viter de boucler ï¿½ l'infini, on regarde si le fichier est dans le hashmap, permettant ainsi d'empï¿½cher la copie 
 							if (nomHashMap.containsKey(HashMapPath.toString())) {
 								nomHashMap.remove(HashMapPath.toString());
 							} else {
@@ -196,32 +196,29 @@ public class FileWatcher {
 											+ child.toString());
 								} else {
 									// ajouter le dossier qui vient d'Ãªtre
-									// créé au file watcher
+									// crï¿½ï¿½ au file watcher
 								}
 
 							}
-							// gère les suppressions
+							// gï¿½re les suppressions
 						} else if (event.kind().toString()
 								.equals("ENTRY_DELETE")) {
 							fm = FileManager.getInstance();
 							//boolean existe = fm.fichierExiste(filename);
-							if (true) {
 
-								FileManager.getInstance().getNomFichierDelete().put(HashMapPath, HashMapPath);
-								//TODO: envoie d'une commande de delete
-								ActiveFileServer.getInstance().pushToAllServer(new MessageDelete(HashMapPath));
-                                InitSymchronizerMessage allFile = new InitSymchronizerMessage(FileManager.getInstance()
-                                        .getListeFichiers(), false,
-                                        FileManager.getInstance()
-                                                .getLocalDir());
+                            FileManager.getInstance().getNomFichierDelete().put(HashMapPath, HashMapPath);
+                            //TODO: envoie d'une commande de delete
+                            ActiveFileServer.getInstance().pushToAllServer(new MessageDelete(HashMapPath));
+                            InitSymchronizerMessage allFile = new InitSymchronizerMessage(FileManager.getInstance()
+                                    .getListeFichiers(), false,
+                                    FileManager.getInstance()
+                                            .getLocalDir());
 
-                                ActiveFileServer.getInstance()
-                                        .pushToAllClient(allFile);
+                            ActiveFileServer.getInstance()
+                                    .pushToAllClient(allFile);
 
 
-							}
-
-						}
+                        }
 
 						key.reset();
 						key = myWatcher.take();
