@@ -1,4 +1,22 @@
 package NameNode;
+/******************************************************
+ Cours : LOG735
+ Session : Été 2015
+ Groupe : 01
+ Projet : Laboratoire #3
+ Étudiants : Guillaume Lépine
+ Marc Plamondon
+ Pier-Luc Ménard
+ Code(s) perm. : LEPG14099201
+ PLAM210908907
+ MENP27019200
+
+ Date création : 2015-07-2
+ Date dern. modif. : 2015-05-07
+ ******************************************************
+ Represente un fileserver dans le reseau
+ ******************************************************/
+
 
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -7,15 +25,34 @@ import java.net.InetAddress;
  * Created by Gus on 6/4/2015.
  */
 public class FileServer implements Serializable {
-
+    /**
+     * id du serveur
+     */
 	private int id;
-
+    /**
+     * ip du serveur
+     */
 	private InetAddress succursaleIPAdresse;
-
+    /**
+     * nom du serveur
+     */
 	private String nom;
+    /**
+     * port sur lequel il ecoute pour les autres serveurs
+     */
 	private String port;
+    /**
+     * port surlesquels les clients se connectent
+     */
     private String clientPort;
 
+    /**
+     *
+     * @param succursaleIPAdresse adresse ip du serveur
+     * @param nom nom du serveur
+     * @param portNumber port du serveur
+     * @param clientPort port surlesquel les clients
+     */
 	public FileServer(InetAddress succursaleIPAdresse, String nom,
                       String portNumber, String clientPort) {
 		this.succursaleIPAdresse = succursaleIPAdresse;
@@ -71,35 +108,4 @@ public class FileServer implements Serializable {
 
 
 
-    // public synchronized int doWHitdraw(int whitdraw){
-	// if(whitdraw<0){
-	// return -1;
-	// }
-	//
-	// try {
-	// montantLock.lock();
-	// } catch (InterruptedException e) {
-	// e.printStackTrace();
-	// }
-	// try{
-	// if(montant-whitdraw<0)
-	// {
-	// return -1;//retourne -1 si le retrait a été impossible
-	//
-	// }else{
-	// System.out.println("Montant avant retrait "+montant);
-	// montant-=whitdraw;}
-	//
-	// }finally {
-	//
-	// montantLock.unlock();
-	// System.out.println("Montant total de la succursale est de "+
-	// montant+" "+whitdraw +" ont été retiré");
-	//
-	// }
-	//
-	//
-	//
-	// return whitdraw;
-	// }
 }

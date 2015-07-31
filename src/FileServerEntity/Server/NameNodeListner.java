@@ -1,12 +1,14 @@
 package FileServerEntity.Server;
 
-import NameNode.FileServer;
 import FileServerEntity.FileManager.InitFileSynchronizer;
 import FileServerEntity.Message.Message;
 import FileServerEntity.Message.ServerMessage.NewFileServerMessage;
 import FileServerEntity.Message.ServerMessage.UpdateListFileServer;
+import NameNode.FileServer;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -25,7 +27,7 @@ public class NameNodeListner implements Runnable{
     private boolean firstRun=true;
     Socket echoSocket = null;
     String succursaleName;
-    public NameNodeListner(String serverHostname, Integer montant, String succursaleName, String portNumber) {
+    public NameNodeListner(String serverHostname, String succursaleName, String portNumber) {
 
 
         System.out.println ("Essai de se connecter a l'hote " +

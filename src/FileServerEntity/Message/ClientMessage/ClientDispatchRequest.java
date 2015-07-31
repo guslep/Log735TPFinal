@@ -1,7 +1,6 @@
 package FileServerEntity.Message.ClientMessage;
 
 import FileServerEntity.Message.Message;
-import NameNode.FileServer;
 
 import java.io.Serializable;
 

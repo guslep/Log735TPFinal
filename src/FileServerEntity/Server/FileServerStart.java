@@ -1,15 +1,14 @@
 package FileServerEntity.Server;
 
 
-
-import NameNode.FileServer;
 import FileServerEntity.FileManager.FileManager;
+import FileServerEntity.ServerStatus.AutoServerStatus;
+import NameNode.FileServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
-import FileServerEntity.ServerStatus.AutoServerStatus;
 
 /**
  * Created by Gus on 6/11/2015.
@@ -41,7 +40,7 @@ import FileServerEntity.ServerStatus.AutoServerStatus;
         portNumber=stdIn.readLine();
         if(portNumber==null||portNumber.equals("")){
 
-            portNumber=Integer.toString(10119+new Random().nextInt(20));
+            portNumber=Integer.toString(10119+new Random().nextInt(30));
         }
         System.out.print ("Entree le nom du FileServer: ");
         succursaleName=stdIn.readLine();
@@ -50,15 +49,12 @@ import FileServerEntity.ServerStatus.AutoServerStatus;
 
             succursaleName="Test "+(rand.nextInt(9)+1);
         }
-        Random rand=new Random();
-
-        montant=rand.nextInt(1000000)+1000;
 
         System.out.print ("Entree le port d'écoute pour les clients: ");
         String clientPortNumber=stdIn.readLine();
         if(clientPortNumber==null||clientPortNumber.equals("")){
 
-            clientPortNumber=Integer.toString(10219+new Random().nextInt(20));
+            clientPortNumber=Integer.toString(10219+new Random().nextInt(40));
         }
 
 
@@ -67,7 +63,7 @@ import FileServerEntity.ServerStatus.AutoServerStatus;
 
         	NameNodeListner nameNode;
         new Thread(
-                nameNode=new NameNodeListner(serverHostname,montant,succursaleName,portNumber)
+                nameNode=new NameNodeListner(serverHostname,succursaleName,portNumber)
         ).start();
 
         new Thread(new ClientConnectionListener()).start();

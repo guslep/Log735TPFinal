@@ -1,7 +1,8 @@
 package FileServerEntity.Message.ServerMessage;
-import java.io.Serializable;
 
 import FileServerEntity.Message.Message;
+
+import java.io.Serializable;
 
 public class MessageServerStatus extends Message implements Serializable{
 

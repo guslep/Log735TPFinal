@@ -1,9 +1,10 @@
 package FileServerEntity.Server;
 
-import NameNode.FileServer;
-
-
+import FileServerEntity.FileManager.FileManager;
+import FileServerEntity.FileManager.TransitFile;
 import FileServerEntity.Message.Message;
+import FileServerEntity.Message.ServerMessage.MessageFileWriteFail;
+import NameNode.FileServer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,10 +15,16 @@ public class ActiveFileServer {
 
 	FileServer thisFileServer;
 	private final Object lockListeClient = new Object();
+	private  final Object lockFileWriteAttempt=new Object();
 	private final Object lockListeServer = new Object();
-	static HashMap<Integer, FileServerClient> listeSuccursale = new HashMap<Integer, FileServerClient>();
+    private final Object lockVoteList = new Object();
+
+    static HashMap<Integer, FileServerClient> listeSuccursale = new HashMap<Integer, FileServerClient>();
     private ArrayList<ClientResponseThread> connectionClient=new ArrayList<ClientResponseThread>();
 	private String portNumber;
+
+	private HashMap<String,String> listFileReserved=new  HashMap<String,String>();
+    private HashMap<String,TransitFile> listFileVotePenting=new  HashMap<String,TransitFile>();
 
 	public HashMap<Integer, FileServerClient> getListeSuccursale() {
 
@@ -110,7 +117,7 @@ public class ActiveFileServer {
 			Map.Entry pair = (Map.Entry) iter.next();
 			FileServerClient currentClient = (FileServerClient) pair.getValue();
 			if(currentClient.getConnectionThread().isConnectionDestroyed()){
-                listeSuccursale.remove(pair.getKey());
+                iter.remove();
             }else{
                 currentClient.getConnectionThread().sendMessage(message);
 
@@ -146,4 +153,68 @@ public class ActiveFileServer {
 		synchronized (lockListeClient){
         return connectionClient;}
     }
+
+	public boolean reserveFileName(String fileName){
+		synchronized (lockFileWriteAttempt) {
+			Boolean exist = FileManager.getInstance().exist(fileName);
+			if (exist) {
+				pushToAllServer(new MessageFileWriteFail(fileName));
+				return false;
+			} else if (listFileReserved.get(fileName) != null) {
+
+				pushToAllServer(new MessageFileWriteFail(fileName));
+				return false;
+			} else {
+				listFileReserved.put(fileName, fileName);
+
+				return true;
+
+			}
+		}
+
+	}
+	public void reserveFileFailed(String filename){
+		synchronized (lockFileWriteAttempt){
+			listFileReserved.remove(filename);
+
+		}
+        synchronized (lockVoteList){
+            listFileVotePenting.remove(filename);}
+
+
+	}
+	public void fileWritten(String filename){
+		synchronized (lockFileWriteAttempt){
+			listFileReserved.remove(filename);
+		}
+        synchronized (lockVoteList){
+            listFileVotePenting.remove(filename);}
+
+	}
+
+    public HashMap<String, String> getListFileReserved() {
+        synchronized (lockFileWriteAttempt){
+        return listFileReserved;}
+
+    }
+
+    public void voteReceived(String filename){
+        synchronized (lockVoteList){
+        TransitFile messageRequest=listFileVotePenting.get(filename);
+        if(messageRequest!=null){
+            messageRequest.addVote();
+        }
+        }
+
+    }
+
+    public void newVotePending(TransitFile transit){
+
+        listFileVotePenting.put(transit.getNom(),transit);
+    }
+
+
+
+
+
 }

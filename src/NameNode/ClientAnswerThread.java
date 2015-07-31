@@ -1,10 +1,27 @@
+/******************************************************
+ Cours : LOG735
+ Session : Été 2015
+ Groupe : 01
+ Projet : Laboratoire #3
+ Étudiants : Giullaume Lépine
+ Marc Plamondon
+ Pier-Luc Ménard
+ Code(s) perm. : LEPG14099201
+ PLAM210908907
+ MENP27019200
+
+ Date création : 2015-07-2
+ Date dern. modif. : 2015-05-07
+ ******************************************************
+ Classe qui permet de renvoyer au client le serveur qui doit lui répondre
+
+ ******************************************************/
+
 package NameNode;
 
 import FileServerEntity.Message.ClientMessage.ClientDispatchAnswer;
 import FileServerEntity.Message.ClientMessage.ClientDispatchRequest;
 import FileServerEntity.Message.Message;
-import FileServerEntity.Message.ServerMessage.MessageServerStatus;
-import FileServerEntity.Message.ServerMessage.NewFileServerMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -22,7 +39,10 @@ public class ClientAnswerThread implements Runnable{
     private boolean isFinished=false;
     ObjectOutputStream out = null;
 
-        // the thread will wait for client input and send it back in uppercase
+
+    /**
+     * recoit une connection  d'un client
+     */
     @Override
     public void run() {
         System.out.println ("connexion reussie pour le client");
@@ -34,7 +54,7 @@ public class ClientAnswerThread implements Runnable{
 
             ObjectInputStream in = new ObjectInputStream(( sucursaleSocket.getInputStream()));
 
-            String inputLine;
+
 
             Message messageReceived;
             try {
@@ -82,6 +102,12 @@ public class ClientAnswerThread implements Runnable{
 
 
     }
+
+    /**
+     * envoie un message
+     * @param message message à envoyer
+     *
+     */
     public void sendMessage(Message message){
         try {
             if(!isFinished){
@@ -94,6 +120,11 @@ public class ClientAnswerThread implements Runnable{
 
     }
 
+    /**
+     *
+     * @param sucursaleSocket socket connecte
+     * @param nameNode namenode
+     */
     public ClientAnswerThread(Socket sucursaleSocket, NameNode nameNode) {
         this.sucursaleSocket = sucursaleSocket;
         this.nameNode = nameNode;

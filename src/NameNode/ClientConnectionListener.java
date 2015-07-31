@@ -1,3 +1,23 @@
+/******************************************************
+ Cours : LOG735
+ Session : Été 2015
+ Groupe : 01
+ Projet : Laboratoire #3
+ Étudiants : Giullaume Lépine
+ Marc Plamondon
+ Pier-Luc Ménard
+ Code(s) perm. : LEPG14099201
+ PLAM210908907
+ MENP27019200
+
+ Date création : 2015-07-2
+ Date dern. modif. : 2015-05-07
+ ******************************************************
+ Classe qui ecoute pour les connections d'u client
+ ******************************************************/
+
+
+
 package NameNode;
 
 
@@ -7,6 +27,7 @@ import java.net.Socket;
 
 /**
  * Created by Guillaume on 2015-07-12.
+ * Ecoute sur le pourt 10111 pour des conenctions de clients puis cree un nouveau thread par client
  */
 public class ClientConnectionListener implements Runnable{
 

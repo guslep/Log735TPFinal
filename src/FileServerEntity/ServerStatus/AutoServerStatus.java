@@ -1,12 +1,12 @@
 package FileServerEntity.ServerStatus;
 
-import javax.management.InstanceNotFoundException;
-import javax.management.MalformedObjectNameException;
-import javax.management.ReflectionException;
-
 import FileServerEntity.Message.ServerMessage.MessageServerStatus;
 import FileServerEntity.Server.ActiveFileServer;
 import FileServerEntity.Server.NameNodeListner;
+
+import javax.management.InstanceNotFoundException;
+import javax.management.MalformedObjectNameException;
+import javax.management.ReflectionException;
 
 public class AutoServerStatus implements Runnable{
 
@@ -19,12 +19,12 @@ public class AutoServerStatus implements Runnable{
     public AutoServerStatus(NameNodeListner nameNode) {
     	currentServerInfo = new SystemInfo();
     	this.nameNode = nameNode;
-    	System.out.println("load watcher started");
+
 	}
 	
 	@Override
 	public void run() {
-		System.out.println("run started");
+
 			try {
 				while (true){
 					Thread.sleep(SLEEP_TIMER * SECOND_TO_MILLISECOND);

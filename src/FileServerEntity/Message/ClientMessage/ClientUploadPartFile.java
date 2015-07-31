@@ -1,5 +1,6 @@
 package FileServerEntity.Message.ClientMessage;
 
+import FileServerEntity.FileManager.TransitFile;
 import FileServerEntity.Message.Message;
 import FileServerEntity.Server.ClientResponseThread;
 
@@ -24,7 +25,13 @@ public class ClientUploadPartFile extends Message implements Serializable,Messag
 
     @Override
     public void execute(ClientResponseThread caller) {
+        TransitFile file=caller.getFileBeingWritten().get(filename);
 
-        caller.getFileBeingWritten().get(filename).addByte(byteArray,position);
+       if(file!=null) {
+           file.addByte(byteArray, position);
+       }else{
+           caller.fileWasWritten(filename);
+       }
+
     }
 }

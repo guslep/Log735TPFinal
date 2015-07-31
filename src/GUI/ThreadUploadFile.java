@@ -1,11 +1,9 @@
 package GUI;
 
-import FileServerEntity.FileManager.FileManager;
+import FileServerEntity.Message.ClientMessage.ClientAcceptUpload;
 import FileServerEntity.Message.ClientMessage.ClientAddFile;
 import FileServerEntity.Message.ClientMessage.ClientUploadPartFile;
-import FileServerEntity.Message.ServerMessage.FileMessage;
-import FileServerEntity.Message.ServerMessage.MessageNewFile;
-import FileServerEntity.Server.ActiveFileServer;
+import FileServerEntity.Message.ClientMessage.ErrorUploading;
 import UI.FileProgressUpdate;
 
 import javax.swing.*;
@@ -16,11 +14,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by Gus on 7/23/2015.
  */
-public class ThreadUploadFile implements Runnable{
+public class ThreadUploadFile implements Runnable, Observer {
     private final static int NBBYTEPARMESSAGE = 2048;
     private final static int  NBBYTEMAXTHETHERYNG=10000000;
 
@@ -28,11 +28,14 @@ public class ThreadUploadFile implements Runnable{
     private String fileName;
     private ServerConnectionThread serverConnectedTo;
     private JProgressBar progressBar;
+    private  boolean stopUploading=false;
+    private boolean uploadAccepted=false;
 
     public ThreadUploadFile(File fileUploaded, String path) {
         this.fileUploaded = fileUploaded;
         this.fileName = path+fileUploaded.getName();
         serverConnectedTo=ClientConnector.getInstance().getServerConnectedTo();
+        serverConnectedTo.addObserver(this);
     }
 
     @Override
@@ -52,7 +55,7 @@ public class ThreadUploadFile implements Runnable{
 
 
         boolean hack=true;
-        while(hack){
+        while(hack&&!stopUploading){
             try{
                 hack=false;
                 int sfe=(int)fileUploaded.length();
@@ -73,6 +76,8 @@ public class ThreadUploadFile implements Runnable{
 
 
         // si succ�s, retourne true
+
+        serverConnectedTo.deleteObserver(this);
 
     }
     // >MaxValue
@@ -117,12 +122,21 @@ public class ThreadUploadFile implements Runnable{
 
         // new
 
-
+        while (!uploadAccepted){
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         // cr�ation des messages pour les diff�rents byte array(FileMessage)
         Date lastMesureTook=new Date();
         int numberPacketSent=0;
         for (int i = 0; i < listeBytes.size(); i++) {
+            if(stopUploading){
+                return;
+            }
 
             ClientUploadPartFile messageEnvoi=new ClientUploadPartFile(listeBytes.get(i),fileName,(i * NBBYTEPARMESSAGE));
 
@@ -155,5 +169,22 @@ public class ThreadUploadFile implements Runnable{
         serverConnectedTo.sendMessage(messageFinal);
 
 
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if(arg!=null&& ErrorUploading.class.isInstance(arg)){
+            ErrorUploading msg=(ErrorUploading)arg;
+            if(fileName.equals(msg.getFilename())){
+                this.stopUploading=true;
+            }
+        }
+        else if(arg!=null&& ClientAcceptUpload.class.isInstance(arg)){
+            ClientAcceptUpload message=(ClientAcceptUpload)arg;
+            if (message.getFilename().equals(fileName)){
+                this.uploadAccepted=true;
+            }
+
+        }
     }
 }

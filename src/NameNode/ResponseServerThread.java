@@ -1,10 +1,31 @@
+/******************************************************
+ Cours : LOG735
+ Session : Été 2015
+ Groupe : 01
+ Projet : Laboratoire #3
+ Étudiants : Giullaume Lépine
+ Marc Plamondon
+ Pier-Luc Ménard
+ Code(s) perm. : LEPG14099201
+ PLAM210908907
+ MENP27019200
+
+ Date création : 2015-07-2
+ Date dern. modif. : 2015-05-07
+ ******************************************************
+ Thread pour communiquer avec un file server
+ ******************************************************/
+
+
 package NameNode;
 
-import FileServerEntity.Message.ServerMessage.MessageServerStatus;
 import FileServerEntity.Message.Message;
+import FileServerEntity.Message.ServerMessage.MessageServerStatus;
 import FileServerEntity.Message.ServerMessage.NewFileServerMessage;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
@@ -80,6 +101,11 @@ public class ResponseServerThread implements Runnable{
 
 
     }
+
+    /**
+     *
+     * @param message envoie un message
+     */
     public void sendMessage(Message message){
         try {
             if(!isDestroyed){
@@ -92,12 +118,21 @@ public class ResponseServerThread implements Runnable{
 
     }
 
+    /**
+     * consturcteur
+     * @param sucursaleSocket
+     * @param nameNode
+     */
     public ResponseServerThread(Socket sucursaleSocket, NameNode nameNode) {
         this.sucursaleSocket = sucursaleSocket;
         this.nameNode = nameNode;
         nameNode.addConnection(this);
     }
 
+    /**
+     *
+     * @return permet de savoir si la connection a lache
+     */
     public boolean isDestroyed() {
         return isDestroyed;
     }

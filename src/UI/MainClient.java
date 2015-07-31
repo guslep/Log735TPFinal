@@ -1,58 +1,27 @@
 package UI;
 
-import java.awt.Component;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-
-import java.awt.BorderLayout;
-
-import javax.swing.JFileChooser;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-
-import java.awt.Color;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JScrollPane;
-
-import java.awt.FlowLayout;
-
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.JTextArea;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import FileServerEntity.FileManager.InitFileSynchronizer;
-import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
+import FileServerEntity.Message.ClientMessage.ClientAcceptUpload;
+import FileServerEntity.Message.ClientMessage.ErrorUploading;
 import GUI.ClientConnector;
-import GUI.SystemConnector;
 
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JProgressBar;
 
 public class MainClient implements Observer {
 	boolean isConnected = false;
@@ -62,7 +31,7 @@ public class MainClient implements Observer {
 	private JLabel lblProgression;
 	private JProgressBar progressBar;
 	private JLabel lblConnexion = null;
-
+	private JTextArea txtLogs;
 	/**
 	 * Launch the application.
 	 */
@@ -233,7 +202,7 @@ public class MainClient implements Observer {
 										.addGap(34)));
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		lblProgression = new JLabel("transfert du fichier : ");
+		lblProgression = new JLabel("Transfert du fichier : ");
 		lblProgression.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProgression.setForeground(Color.BLACK);
 		panel_1.add(lblProgression);
@@ -247,13 +216,13 @@ public class MainClient implements Observer {
 		JScrollPane scrollPane = new JScrollPane();
 		PanelItems.add(scrollPane);
 
-		final JTextArea txtLogs = new JTextArea();
+		 txtLogs = new JTextArea();
 		txtLogs.setEditable(false);
-		txtLogs.setText("Connectez-vous au name node pour d�buter");
+		txtLogs.setText("Connectez-vous au name node pour débuter");
 		scrollPane.setViewportView(txtLogs);
 		pnlConnection.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		lblConnexion = new JLabel("D�connect�");
+		lblConnexion = new JLabel("Déconnecté");
 		lblConnexion.setForeground(Color.RED);
 		lblConnexion.setHorizontalAlignment(SwingConstants.CENTER);
 		pnlConnection.add(lblConnexion);
@@ -305,7 +274,7 @@ public class MainClient implements Observer {
 		frmDistributedbox.getContentPane().setLayout(groupLayout);
 		treeItems.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
-				System.out.println("something happens");
+
 				boolean somethingIsSelected = !(treeItems.isSelectionEmpty());
 				btnSupprimer.setEnabled(somethingIsSelected);
 				btnOuvrir.setEnabled(somethingIsSelected);
@@ -320,7 +289,7 @@ public class MainClient implements Observer {
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeItems
 						.getLastSelectedPathComponent();
 
-				String dossierParent = " ";
+				String dossierParent = "";
 				// rebuild du open au niveau du selected Node
 				if (selectedNode != null) {
 
@@ -349,12 +318,12 @@ public class MainClient implements Observer {
 				}
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File fichierOuDossier = chooser.getSelectedFile();
-					txtLogs.append("\nFichier s�lectionn�, envoi en cours");
+					txtLogs.append("\nValidation en cours.");
 
 					recurseFolder(cc, fichierOuDossier, dossierParent);
 
 				} else {
-					txtLogs.append("\najout annul� par l'utilisateur");
+					txtLogs.append("\nAjout annulé par l'utilisateur");
 				}
 			}
 		});
@@ -370,7 +339,7 @@ public class MainClient implements Observer {
 				System.out.println(rebuild);
 				cc.deleteFile(rebuild);
 
-				txtLogs.append("\nSupression de l'�l�ment, " + rebuild);
+				txtLogs.append("\nSupression de l'élément, " + rebuild);
 
 			}
 		});
@@ -395,9 +364,14 @@ public class MainClient implements Observer {
 					// cc.setServerConnectedTo(null); //??
 
 					// change name of button back to Connect
-					mnConnection.setText("Connecte");
-					lblConnexion.setText("D�connect�");
+					menuItemConnect.setText("Connecte");
+					lblConnexion.setText("Déconnecté");
 					lblConnexion.setForeground(Color.RED);
+					
+					treeItems.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(
+                            "DisBox") {
+                    }));
+					txtLogs.setText("Connexion terminée, veuillez vous reconnecter pour continuer");
 
 				} else {
 					// popup avec info du nameNode -- needed?
@@ -429,14 +403,14 @@ public class MainClient implements Observer {
 
 							// Connect to Server
 							txtLogs.setText("");
-							txtLogs.append("Connexion �tablie avec le serveur");
+							txtLogs.append("Connexion établie avec le serveur");
 
 							// set isConnected True
 							isConnected = true;
 							cc.getListFileAvailaible();
 							lblConnexion.setText("Connecte");
 							lblConnexion.setForeground(Color.GREEN);
-							mnConnection.setText("Deconnecte");
+							menuItemConnect.setText("Deconnecte");
 							// refresh treeItems
 						} catch (Exception e) {
 							txtLogs.append("\nEchec de connexion, "
@@ -459,18 +433,30 @@ public class MainClient implements Observer {
 	private void recurseFolder(ClientConnector cc, File file,
 			String dossierParent) {
 		if (file.isDirectory()) {
-			if (dossierParent != "") {
-				dossierParent += "\\";
+			if (!dossierParent.equals("")){
+				char lastChar = dossierParent.charAt(dossierParent.length() - 1);	
+				if (dossierParent != "" && lastChar != '\\') {
+					dossierParent += "\\";
+				}
 			}
+			
 			dossierParent += file.getName();
 			File[] filesInDirectory = file.listFiles();
 			for (File f : filesInDirectory) {
-				recurseFolder(cc, file, dossierParent);
+				if (f.isDirectory()) {
+					String test = f.getName();
+					recurseFolder(cc, f, dossierParent );
+				} else {
+					cc.addFile(f, dossierParent + "\\");
+					System.out.println("écriture du fichier "
+							+ file.getName() + " dans " + dossierParent + "\\");
+
+				}
 			}
 		} else {
-			System.out.println("�criture du fichier " + file.getName()
+			System.out.println("écriture du fichier " + file.getName()
 					+ " dans " + dossierParent);
-			if (dossierParent != " ") {
+			if (dossierParent != "") {
 				if (dossierParent.lastIndexOf("\\") != dossierParent.length() - 1)
 					dossierParent += "\\";
 			}
@@ -508,12 +494,16 @@ public class MainClient implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 
+        if(ClientConnector.getInstance().getServerConnectedTo()!=null){
+            ClientConnector.getInstance().getServerConnectedTo().addObserver(this);
+        }
+
 		if (arg == null) {
 			updateFileList(ClientConnector.getInstance()
 					.getListFileAvailaible());
 			String serverName = ClientConnector.getInstance().getServerName();
 			int serverPort = ClientConnector.getInstance().getServerPort();
-			System.out.println("test connexion");
+
 			if (serverName != null && !serverName.equals("")) {
 				lblConnexion.setText("Connecte: " + serverName
 						+ " sur le port " + serverPort);
@@ -529,7 +519,21 @@ public class MainClient implements Observer {
 				progressBar.setStringPainted(true);
 				progressBar.repaint();
 
-			}
+			} else if (ErrorUploading.class.isInstance(arg)){
+                ErrorUploading msg=(ErrorUploading)arg;
+
+                //dit que le file upload a fail  msg.getFilename()
+                txtLogs.append("\necriture du fichier " + msg.getFilename() + " a échoué." );
+
+            }
+            else if (ClientAcceptUpload.class.isInstance(arg)){
+                ClientAcceptUpload msg=(ClientAcceptUpload)arg;
+
+                //dit que le file upload commence  msg.getFilename()
+                txtLogs.append("\nenvoie du fichier " + msg.getFilename());
+
+
+            }
 
 		}
 

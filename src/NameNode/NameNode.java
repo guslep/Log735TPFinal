@@ -1,9 +1,8 @@
 package NameNode;
 
 
-import FileServerEntity.Message.ServerMessage.UpdateListFileServer;
 import FileServerEntity.Message.ServerMessage.MessageServerStatus;
-
+import FileServerEntity.Message.ServerMessage.UpdateListFileServer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,18 +15,31 @@ import java.util.Map;
  */
 public class NameNode {
 
-
+    /**
+     * liste de file server
+     */
     private ArrayList<FileServer> listFileServer=new ArrayList<FileServer>();
+    /**
+     * liste des connections des serveurs
+     */
     private ArrayList<ResponseServerThread>listConnection = new ArrayList<ResponseServerThread>();
+    /**
+     * liste du status de chaque serveur, contient l'etat de chaque serveur
+     */
     private HashMap<Integer,MessageServerStatus> hashServerStatus=new HashMap<Integer, MessageServerStatus>();
+    private final Object lockListeFileServer = new Object();
+    private final Object lockListeConnection = new Object();
 
 
-
+    /**
+     *
+     * @param fileServer ajout de d'un nouveau fileServer
+     */
      public  void addSucursale(FileServer fileServer){
 
 
 
-         synchronized(listFileServer){
+         synchronized(lockListeFileServer){
 
              fileServer.setId(listFileServer.size()+1);
              listFileServer.add(fileServer);
@@ -42,9 +54,12 @@ public class NameNode {
     }
 
 
-
+    /**
+     *
+     * @param response ajout d'unde connection
+     */
     public  void addConnection( ResponseServerThread response){
-      synchronized (listConnection){
+      synchronized (lockListeConnection){
           listConnection.add(response);
 
       }
@@ -52,6 +67,10 @@ public class NameNode {
 
     }
 
+    /**
+     *
+     * @param fileServer envoie a tous les serveurs le nouveau serveurs qiu c'est connecte
+     */
     private void pushToClient(FileServer fileServer){
         Iterator itr = listConnection.iterator();
         while (itr.hasNext()){
@@ -59,7 +78,7 @@ public class NameNode {
             UpdateListFileServer update=new UpdateListFileServer(fileServer.getNom(),fileServer.getId(),this.listFileServer);
 
 
-            System.out.println(printSucursale());
+
             if(current.isDestroyed()){
                 listConnection.remove(current);
             }else{
@@ -71,6 +90,10 @@ public class NameNode {
          
     }
 
+    /**
+     * utile pour le deubg
+     * @return
+     */
     private  String printSucursale( ){
         String listSucursaleSTR="";
         Iterator itr= this.listFileServer.iterator();
@@ -85,6 +108,10 @@ public class NameNode {
         return  listSucursaleSTR;
     }
 
+    /**
+     *
+     * @param deadConnection delete un serveur
+     */
     public  void removeSuccursale(ResponseServerThread deadConnection){
         int indexRemove=listConnection.indexOf(deadConnection);
         listConnection.remove(indexRemove);
@@ -94,14 +121,23 @@ public class NameNode {
 
 
     }
+
+    /**
+     *
+     * @param msg recoit une update du s'atus d'un serveur
+     */
     public void updateServerStatus(MessageServerStatus msg){
         hashServerStatus.put(msg.getIdServer(),msg);
 
     }
+
+    /**
+     *
+     * @return envoie un nouveaux clients vers le serveur le plus optimale
+     */
     public FileServer dispatchToAvailaibleServer(){
         Iterator iter=hashServerStatus.entrySet().iterator();
         MessageServerStatus bestServer=null;
-System.out.println("lel");
         while (iter.hasNext()){
 
 
@@ -116,6 +152,7 @@ System.out.println("lel");
             }
 
         }
+
         FileServer bestFileServer=listFileServer.get(0);
         Iterator itr = listFileServer.iterator();
         while (itr.hasNext()){

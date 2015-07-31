@@ -1,7 +1,6 @@
 package FileServerEntity.Message.ClientMessage;
 
 import FileServerEntity.FileManager.FileManager;
-import FileServerEntity.FileManager.InitFileSynchronizer;
 import FileServerEntity.Message.Message;
 import FileServerEntity.Message.ServerMessage.InitSymchronizerMessage;
 import FileServerEntity.Server.ClientResponseThread;

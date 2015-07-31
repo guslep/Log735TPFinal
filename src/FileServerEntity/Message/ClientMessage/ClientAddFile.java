@@ -2,7 +2,8 @@ package FileServerEntity.Message.ClientMessage;
 
 import FileServerEntity.FileManager.TransitFile;
 import FileServerEntity.Message.Message;
-import FileServerEntity.Message.ServerMessage.MessageNewFile;
+import FileServerEntity.Message.ServerMessage.MessageFileWriteAttempt;
+import FileServerEntity.Server.ActiveFileServer;
 import FileServerEntity.Server.ClientResponseThread;
 
 import java.io.Serializable;
@@ -22,7 +23,18 @@ public class ClientAddFile extends Message implements Serializable,MessageExecut
 
     @Override
     public void execute(ClientResponseThread caller) {
-        TransitFile transit=new TransitFile(caller,fileName,byteLength);
+
+       if(ActiveFileServer.getInstance().reserveFileName(fileName)){
+           TransitFile transit=new TransitFile(caller,fileName,byteLength);
+           ActiveFileServer.getInstance().newVotePending(transit);
+           ActiveFileServer.getInstance().pushToAllServer(new MessageFileWriteAttempt(fileName));
+           ActiveFileServer.getInstance().voteReceived(fileName);
+
         caller.getFileBeingWritten().put(transit.getNom(), transit);
+
+        }else{
+            caller.sendMessage(new ErrorUploading(fileName));
+        }
+
     }
 }

@@ -2,10 +2,8 @@ package FileServerEntity.Message.ClientMessage;
 
 import FileServerEntity.FileManager.FileManager;
 import FileServerEntity.Message.Message;
-import FileServerEntity.Server.ActiveFileServer;
 import FileServerEntity.Server.ClientResponseThread;
 import FileServerEntity.Server.FileServerListener;
-import NameNode.FileServer;
 
 import java.io.File;
 import java.io.Serializable;
