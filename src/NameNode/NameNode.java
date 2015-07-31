@@ -138,7 +138,6 @@ public class NameNode {
     public FileServer dispatchToAvailaibleServer(){
         Iterator iter=hashServerStatus.entrySet().iterator();
         MessageServerStatus bestServer=null;
-System.out.println("lel");
         while (iter.hasNext()){
 
 

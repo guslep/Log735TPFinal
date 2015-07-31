@@ -27,7 +27,7 @@ public class NameNodeListner implements Runnable{
     private boolean firstRun=true;
     Socket echoSocket = null;
     String succursaleName;
-    public NameNodeListner(String serverHostname, Integer montant, String succursaleName, String portNumber) {
+    public NameNodeListner(String serverHostname, String succursaleName, String portNumber) {
 
 
         System.out.println ("Essai de se connecter a l'hote " +
